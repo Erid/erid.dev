@@ -1,0 +1,22 @@
+---
+import { getEntry } from 'astro:content'
+
+const profile = await getEntry('profile', 'profile')
+if (!profile) throw new Error('Missing profile content: src/content/profile.yaml')
+const { name, headline } = profile.data
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{name}</title>
+  </head>
+  <body>
+    <main>
+      <h1>{name}</h1>
+      <p>{headline}</p>
+    </main>
+  </body>
+</html>
+

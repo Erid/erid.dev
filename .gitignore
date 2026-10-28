@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.sst/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage/
+playwright-report/
+test-results/
+
+# Original profile extraction: provenance material that must stay out of the public repo.
+profile/
+
