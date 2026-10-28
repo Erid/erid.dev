@@ -113,7 +113,11 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
               <ul class="skill-list">
                 {resume.skillDetails.map((skill) => (
                   <li class="skill-item">
-                    <span class="skill-name">{skill.name}</span>
+                    <span
+                      class:list={['skill-name', { 'skill-name-compact': skill.name.length > 15 }]}
+                    >
+                      {skill.name}
+                    </span>
                     {skill.duration && <span class="skill-duration">{skill.duration}</span>}
                   </li>
                 ))}
@@ -450,10 +454,16 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
   .skill-name {
     font-weight: 600;
     color: var(--ink);
-    white-space: nowrap;
+    min-width: 0;
+  }
+
+  .skill-name-compact {
+    font-size: 0.8rem;
+    letter-spacing: -0.01em;
   }
 
   .skill-duration {
+    flex-shrink: 0;
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--accent-strong);
@@ -688,14 +698,20 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     }
 
     .skill-item {
-      padding: 0.18rem 0.38rem;
+      gap: 0.25rem;
+      padding: 0.18rem 0.35rem;
       font-size: 8.5pt;
       print-color-adjust: exact;
       -webkit-print-color-adjust: exact;
     }
 
-    .skill-duration {
+    .skill-name-compact {
       font-size: 7.5pt;
+      letter-spacing: -0.015em;
+    }
+
+    .skill-duration {
+      font-size: 7.4pt;
       padding: 0.04rem 0.32rem;
       print-color-adjust: exact;
       -webkit-print-color-adjust: exact;

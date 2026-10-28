@@ -179,6 +179,23 @@ async function verifyRenderedResumeDom(
       throw new Error(`Résumé DOM is missing role "${role.title}, ${role.employer}"`)
     }
   }
+
+  await page.emulateMedia({ media: 'print' })
+  await page.setViewportSize({ width: 700, height: 950 })
+  const overflowingSkill = await page.evaluate(() => {
+    for (const item of document.querySelectorAll<HTMLElement>('.skill-item')) {
+      const itemRect = item.getBoundingClientRect()
+      const badge = item.querySelector<HTMLElement>('.skill-duration')
+      if (item.scrollWidth > item.clientWidth + 1) return item.textContent?.trim() ?? 'unknown'
+      if (badge && badge.getBoundingClientRect().right > itemRect.right) {
+        return item.textContent?.trim() ?? 'unknown'
+      }
+    }
+    return null
+  })
+  if (overflowingSkill) {
+    throw new Error(`Résumé skill item overflows in print layout: "${overflowingSkill}"`)
+  }
 }
 
 function startStaticServer(root: string): Promise<{ server: Server; origin: string }> {
