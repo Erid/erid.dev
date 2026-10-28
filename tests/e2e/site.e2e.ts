@@ -54,6 +54,22 @@ describe('production site', () => {
     await page.close()
   })
 
+  it('navigates between pages smoothly without a full document reload', async () => {
+    const page = await browser.newPage()
+    await page.goto(origin)
+    await page.evaluate(() => {
+      ;(window as unknown as { __navMarker?: boolean }).__navMarker = true
+    })
+    await page.locator('header nav a[href="/about/"]').click()
+    await page.waitForURL(`${origin}/about/`)
+    assert.match((await page.locator('h1').textContent()) ?? '', /Hi, I['’‘]m/)
+    const preserved = await page.evaluate(
+      () => (window as unknown as { __navMarker?: boolean }).__navMarker === true,
+    )
+    assert.equal(preserved, true, 'expected ClientRouter to preserve window state across nav')
+    await page.close()
+  })
+
   it('does not overflow horizontally on a mobile viewport', async () => {
     const context = await browser.newContext({ viewport: { width: 375, height: 800 } })
     const page = await context.newPage()

@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions'
 import '../styles/global.css'
 import SiteFooter from '../components/SiteFooter.astro'
 import SiteHeader from '../components/SiteHeader.astro'
@@ -47,7 +48,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site)
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
-    <link rel="expect" href="#main" {...({ blocking: 'render' } as Record<string, string>)} />
+    <ClientRouter />
     {structuredData && (
       <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}

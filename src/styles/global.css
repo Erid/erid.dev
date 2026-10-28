@@ -287,6 +287,9 @@ img {
     navigation: none;
   }
 
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*),
   *,
   *::before,
   *::after {
