@@ -1,0 +1,20 @@
+entry: Empat Speech — Full Stack Engineer
+employer: Empat Speech
+title: Full Stack Engineer
+start: 2023-12
+location: Remote
+contributions:
+  - Built a speech therapy platform from the ground up, combining video communication, online
+    gaming, data collection, and progress analysis.
+  - Worked across architecture, DevOps, and LLM technologies, using Storybook and Playwright for
+    consistency and regression prevention, and SST and AWS for infrastructure.
+technologies:
+  - TypeScript
+  - React
+  - Storybook
+  - Playwright
+  - SST
+  - AWS
+links: []
+published: true
+

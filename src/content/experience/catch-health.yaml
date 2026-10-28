@@ -1,0 +1,24 @@
+entry: (catch) health — Sr. Full Stack Engineer
+employer: (catch) health
+title: Sr. Full Stack Engineer
+start: 2022-09
+end: 2024-02
+location: Remote
+contributions:
+  - Developed a healthcare platform with real-time communication and payments.
+  - Worked across a TypeScript frontend and a Node.js, GraphQL, Hasura, and Prisma backend.
+technologies:
+  - React
+  - Preact
+  - Next.js
+  - Tailwind
+  - Storybook
+  - Playwright
+  - TypeScript
+  - Node.js
+  - GraphQL
+  - Hasura
+  - Prisma
+links: []
+published: true
+

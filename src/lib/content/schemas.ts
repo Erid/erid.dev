@@ -1,0 +1,79 @@
+import { z } from 'astro/zod'
+
+// Single source of truth for content shape. Used by Astro collections and by
+// scripts/content-check.ts. Keystatic's forms are declared separately in
+// keystatic.config.ts; tests/keystatic-schema.test.ts keeps the field names aligned.
+
+/** Keystatic saves untouched optional text fields as ''; treat that as "not provided". */
+const emptyToUndefined = (value: unknown) => (value === '' ? undefined : value)
+
+function optional<T extends z.ZodType>(schema: T) {
+  return z.preprocess(emptyToUndefined, schema.optional())
+}
+
+const monthDate = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, 'Use YYYY-MM')
+const yearDate = z.string().regex(/^\d{4}$/, 'Use YYYY')
+const url = z.url({ protocol: /^https?$/ })
+const textList = z.array(z.string().min(1)).default([])
+
+export const profileSchema = z.object({
+  name: z.string().min(1),
+  headline: z.string().min(1),
+  location: z.string().min(1),
+  introduction: z.string().min(1),
+  biography: optional(z.string()),
+  coreTechnologies: textList,
+  links: z.array(z.object({ label: z.string().min(1), url })).default([]),
+  languages: z
+    .array(z.object({ name: z.string().min(1), proficiency: z.string().min(1) }))
+    .default([]),
+  portrait: optional(z.string()),
+  portraitAlt: optional(z.string()),
+})
+
+export const experienceSchema = z.object({
+  entry: z.string().min(1),
+  employer: z.string().min(1),
+  title: z.string().min(1),
+  // Month precision only; a missing `end` means the role is current.
+  start: monthDate,
+  end: optional(monthDate),
+  location: optional(z.string()),
+  employmentType: optional(z.enum(['Full-time', 'Contract'])),
+  contributions: z.array(z.string().min(1)).min(1),
+  technologies: textList,
+  links: z.array(z.object({ label: z.string().min(1), url })).default([]),
+  published: z.boolean().default(true),
+})
+
+export const educationSchema = z.object({
+  entry: z.string().min(1),
+  institution: z.string().min(1),
+  qualification: z.string().min(1),
+  subject: optional(z.string()),
+  // Year precision, exactly as supplied.
+  start: yearDate,
+  end: optional(yearDate),
+  details: optional(z.string()),
+})
+
+export const resumeSchema = z.object({
+  summary: z.string().min(1),
+  // Order here is the order shown on the résumé.
+  roles: z
+    .array(
+      z.object({
+        experience: z.string().min(1),
+        // Résumé-specific wording; when empty the role's own contributions are used.
+        bullets: z.array(z.string().min(1)).default([]),
+      }),
+    )
+    .min(1),
+  education: z.array(z.string().min(1)).default([]),
+  skills: textList,
+})
+
+export type Profile = z.infer<typeof profileSchema>
+export type Experience = z.infer<typeof experienceSchema>
+export type Education = z.infer<typeof educationSchema>
+export type Resume = z.infer<typeof resumeSchema>

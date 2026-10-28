@@ -4,6 +4,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "types": ["node"]
   },
   "include": [".astro/types.d.ts", "src", "scripts", "tests", "*.config.ts", "*.config.mjs"],

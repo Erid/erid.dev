@@ -1,0 +1,25 @@
+entry: SBR NetMarketing and Consulting — Software Architect
+employer: SBR NetMarketing and Consulting S.A.
+title: Software Architect
+start: 2016-08
+end: 2017-06
+location: Santa Ana, Costa Rica
+employmentType: Full-time
+contributions:
+  - Guided architecture and development across teams, improving maintainability, performance,
+    engineering processes, and standards.
+  - Worked on database- and language-agnostic microservices shared across multiple applications.
+technologies:
+  - Node.js
+  - GraphQL
+  - React
+  - Redux
+  - Postgres
+  - InfluxDB
+  - Bosum
+  - Ruby
+  - AWS
+  - WebSocket
+links: []
+published: true
+

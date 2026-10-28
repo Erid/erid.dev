@@ -1,0 +1,19 @@
+entry: Clevertech — Sr. Full Stack Developer
+employer: Clevertech
+title: Sr. Full Stack Developer
+start: 2022-06
+end: 2022-09
+contributions:
+  - Developed mobile applications and web dashboards, including a React and Ionic application
+    deployed to the Apple Store and Google Play Store.
+  - Implemented in-app purchases and subscription validation across frontend and backend.
+technologies:
+  - React
+  - Ionic
+  - Node.js
+  - Prisma
+  - GraphQL
+  - TypeScript
+links: []
+published: true
+

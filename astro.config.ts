@@ -12,4 +12,3 @@ export default defineConfig({
   integrations: [sitemap(), ...(isDevServer ? [react(), keystatic()] : [])],
   server: { host: '127.0.0.1' },
 })
-

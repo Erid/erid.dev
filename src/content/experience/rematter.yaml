@@ -1,0 +1,22 @@
+entry: ReMatter Inc. — Full Stack Engineer
+employer: ReMatter Inc.
+title: Full Stack Engineer
+start: 2021-09
+end: 2022-05
+contributions:
+  - Developed web and mobile software for the scrap metal recycling industry.
+  - Used testing and Storybook to support stability and reusable components.
+technologies:
+  - React
+  - React Native
+  - Apollo GraphQL
+  - Next.js
+  - Node.js
+  - GraphQL
+  - Sequelize
+  - PostgreSQL
+  - TypeScript
+  - Storybook
+links: []
+published: true
+

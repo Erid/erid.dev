@@ -1,3 +1,21 @@
 name: Erid Baldioceda
-headline: Software engineer
-
+headline: Senior Full Stack Engineer
+location: Costa Rica
+introduction: >-
+  Senior full stack engineer who builds web and mobile products from initial architecture through
+  delivery, with a background that includes technical leadership, software architecture, and
+  serving as a CTO.
+coreTechnologies:
+  - React
+  - Node.js
+  - GraphQL
+  - TypeScript
+  - SST
+links:
+  - label: LinkedIn
+    url: https://www.linkedin.com/in/erid/
+languages:
+  - name: English
+    proficiency: Full professional proficiency
+  - name: Spanish
+    proficiency: Native or bilingual proficiency

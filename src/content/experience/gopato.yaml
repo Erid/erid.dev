@@ -1,0 +1,22 @@
+entry: GoPato — Chief Technology Officer
+employer: GoPato
+title: Chief Technology Officer
+start: 2017-06
+end: 2018-05
+location: Cartago, Costa Rica
+contributions:
+  - Hired and led a team that built a delivery platform from scratch, including customer and
+    driver mobile applications and an internal management web application.
+  - Defined architecture and UX, built a real-time microservices platform, explored C++ drone
+    navigation integration, and worked with stakeholders.
+technologies:
+  - React
+  - React Native
+  - Node.js
+  - GraphQL
+  - Microservices
+  - C++
+  - PostGIS
+links: []
+published: true
+

@@ -1,0 +1,29 @@
+summary: >-
+  Senior full stack engineer with experience spanning software development roles since 2012,
+  including CTO, software architect, and development team lead. Builds web and mobile products
+  from initial architecture through delivery, with experience in healthcare, speech therapy,
+  recycling, workspace management, and delivery platforms. Core technologies include React,
+  Node.js, GraphQL, and TypeScript, with experience in AWS infrastructure, automated testing,
+  real-time communication, payments, and mobile subscriptions.
+roles:
+  - experience: empat-speech
+  - experience: catch-health
+  - experience: clevertech
+  - experience: rematter
+  - experience: officespace-software
+  - experience: gopato
+  - experience: sbr-software-architect
+  - experience: sbr-technical-lead
+  - experience: eleadertech
+  - experience: sbr-web-developer
+  - experience: avantica
+education:
+  - cenfotec
+skills:
+  - React.js
+  - Node.js
+  - GraphQL
+  - TypeScript
+  - Software Architecture
+  - SST
+
