@@ -44,4 +44,3 @@ caseStudy:
     The architecture keeps PII isolated from the primary databases, provides full operational visibility and recovery when external communication fails, and lets students join therapy sessions seamlessly without exposing sensitive personal information.
 featured: true
 published: true
-

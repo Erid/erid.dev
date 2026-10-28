@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { formatDate, formatDay, formatRange } from '../src/lib/content/dates.ts'
-import { educationSchema, experienceSchema, resumeSchema } from '../src/lib/content/schemas.ts'
+import {
+  educationSchema,
+  experienceSchema,
+  profileSchema,
+  resumeSchema,
+} from '../src/lib/content/schemas.ts'
+import { renderResumeDocx } from '../src/lib/resume/docx.ts'
 import { buildResume } from '../src/lib/resume/model.ts'
 
 test('date labels keep the precision they were given', () => {
@@ -48,10 +54,56 @@ test('résumé uses its own bullets when present, otherwise the role contributio
   })
 
   const model = buildResume(resume, experience, education)
+  assert.equal(model.website, 'https://erid.dev')
   assert.deepEqual(
     model.roles.map((r) => r.bullets),
     [['Résumé wording'], ['From the role']],
   )
   assert.equal(model.roles.length, 2, 'draft roles are excluded')
   assert.equal(model.education[0]?.range, '2008 – 2011')
+})
+
+test('renderResumeDocx generates a valid .docx archive from the résumé model', async () => {
+  const profile = profileSchema.parse({
+    name: 'Erid Baldioceda',
+    headline: 'Senior Full Stack Engineer',
+    location: 'Costa Rica',
+    introduction: 'Intro',
+    coreTechnologies: ['TypeScript'],
+    links: [{ label: 'GitHub', url: 'https://github.com/Erid' }],
+    languages: [{ name: 'English', proficiency: 'Full professional proficiency' }],
+  })
+  const model = buildResume(
+    resumeSchema.parse({
+      summary: 'Summary text',
+      roles: [{ experience: 'one', bullets: ['Shipped software'] }],
+      education: ['school'],
+      skills: ['TypeScript', 'React'],
+    }),
+    {
+      one: experienceSchema.parse({
+        entry: 'Acme — Engineer',
+        employer: 'Acme',
+        title: 'Engineer',
+        start: '2023-01',
+        contributions: ['Contribution'],
+      }),
+    },
+    {
+      school: educationSchema.parse({
+        entry: 'University — BSc',
+        institution: 'University',
+        qualification: 'BSc',
+        start: '2010',
+      }),
+    },
+  )
+
+  const buffer = await renderResumeDocx({ profile, resume: model })
+  // ZIP magic bytes: PK\x03\x04
+  assert.equal(buffer[0], 0x50)
+  assert.equal(buffer[1], 0x4b)
+  assert.equal(buffer[2], 0x03)
+  assert.equal(buffer[3], 0x04)
+  assert.ok(buffer.includes(Buffer.from('word/document.xml')))
 })

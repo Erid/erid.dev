@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node --env-file-if-exists=.env scripts/build-resume.ts",
     "preview": "astro preview",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --max-warnings=0 --fix",
@@ -29,6 +29,7 @@
     "@keystatic/core": "0.6.9",
     "@lucide/astro": "1.62.0",
     "astro": "7.4.2",
+    "docx": "9.15.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "yaml": "2.9.1"
@@ -44,6 +45,7 @@
     "eslint-plugin-astro": "3.2.1",
     "eslint-plugin-unused-imports": "4.4.1",
     "globals": "17.13.0",
+    "playwright": "1.62.1",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.2",
     "typescript": "npm:@typescript/typescript6@^6.0.2",

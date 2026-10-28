@@ -166,4 +166,10 @@ const encoded = encodeEmail(import.meta.env.CONTACT_EMAIL)
   .copied-label {
     color: var(--accent-strong);
   }
+
+  @media print {
+    .inline-link :global(svg) {
+      display: none;
+    }
+  }
 </style>

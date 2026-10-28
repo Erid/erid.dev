@@ -53,4 +53,10 @@ const { name, links } = Astro.props
   .legal {
     flex-basis: 100%;
   }
+
+  @media print {
+    .site-footer {
+      display: none;
+    }
+  }
 </style>

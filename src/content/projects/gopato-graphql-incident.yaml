@@ -43,4 +43,3 @@ caseStudy:
     Deploying the subscription filter patch resolved the overload within minutes and restored normal order pickup and driver acceptance. Adding stress testing afterward ensured that high-concurrency subscription behavior was validated before future releases reached production.
 featured: true
 published: true
-

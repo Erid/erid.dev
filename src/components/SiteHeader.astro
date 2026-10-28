@@ -1,6 +1,5 @@
 ---
-import FileDown from '@lucide/astro/icons/file-down'
-import { RESUME_PDF_PATH } from '../lib/site.ts'
+import ResumeDownload from './ResumeDownload.astro'
 
 interface Props {
   name: string
@@ -20,10 +19,9 @@ function isCurrent(href: string) {
     <a class="brand" href="/">
       {name}
     </a>
-    <a class="button button-primary download" href={RESUME_PDF_PATH} download>
-      <FileDown size={18} aria-hidden="true" />
-      <span>Résumé (PDF)</span>
-    </a>
+    <div class="download">
+      <ResumeDownload compact align="end" />
+    </div>
     <nav aria-label="Main">
       <ul>
         {nav.map((item) => (
@@ -99,6 +97,12 @@ function isCurrent(href: string) {
     }
     .download {
       order: 1;
+    }
+  }
+
+  @media print {
+    .site-header {
+      display: none;
     }
   }
 </style>
