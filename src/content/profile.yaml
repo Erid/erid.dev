@@ -21,9 +21,14 @@ biography: >-
   leadership.
 hobbies:
   - name: Reading
-    description: Diving into books to unwind and explore new worlds and ideas.
+    description: >-
+      I enjoy reading whenever I can; some of my favorites are Project Hail
+      Mary, The Hobbit, and Cradle.
   - name: Gaming
-    description: Playing video games for the strategy, storytelling, and shared fun with friends.
+    description: >-
+      Playing video games for the strategy, storytelling, and shared fun with
+      friends. Some of my favorites are The Legend of Zelda: ALtTP, Rocket
+      League, and Hades.
   - name: Camping
     description: Unplugging outdoors, pitching a tent, and recharging in nature.
 links:

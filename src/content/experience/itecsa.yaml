@@ -3,13 +3,17 @@ employer: ITECSA
 title: Software Engineer
 start: 2012-03
 end: 2012-08
+location: San Pedro, Costa Rica
 employmentType: Full-time
 contributions:
-  - Developed and maintained software using .NET, Oracle SQL, and Android technologies, and advised
-    clients on applications.
+  - >-
+    Developed and maintained software using .NET, Oracle SQL, and Android
+    technologies, and advised clients on applications.
 technologies:
   - .NET
   - Oracle SQL
   - Android
 links: []
+caseStudy:
+  published: false
 published: true

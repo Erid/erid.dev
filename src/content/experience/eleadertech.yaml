@@ -3,12 +3,15 @@ employer: eLeaderTech Inc.
 title: Senior Software Engineer
 start: 2014-09
 end: 2015-11
+location: Remote
 employmentType: Contract
 contributions:
-  - Built a mobile web application from scratch with React, Redux, and PhoneGap for Android,
-    iOS, and Windows Phone.
-  - Worked on .NET microservices with HATEOAS, authentication and authorization, and progressive
-    migration from a legacy architecture.
+  - >-
+    Built a mobile web application from scratch with React, Redux, and PhoneGap
+    for Android, iOS, and Windows Phone.
+  - >-
+    Worked on .NET microservices with HATEOAS, authentication and authorization,
+    and progressive migration from a legacy architecture.
 technologies:
   - React
   - Redux
@@ -17,4 +20,6 @@ technologies:
   - Microservices
   - KnockoutJS
 links: []
+caseStudy:
+  published: false
 published: true

@@ -3,6 +3,8 @@ employer: ReMatter Inc.
 title: Full Stack Engineer
 start: 2021-09
 end: 2022-05
+location: Remote
+employmentType: ''
 contributions:
   - Developed web and mobile software for the scrap metal recycling industry.
   - Used testing and Storybook to support stability and reusable components.
@@ -18,4 +20,6 @@ technologies:
   - TypeScript
   - Storybook
 links: []
+caseStudy:
+  published: false
 published: true

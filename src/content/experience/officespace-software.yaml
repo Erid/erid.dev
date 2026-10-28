@@ -4,11 +4,15 @@ title: Development Team Lead
 start: 2018-06
 end: 2021-09
 location: Escazú, Costa Rica
+employmentType: Full-time
 contributions:
-  - Led the core development team in Costa Rica for a facilities and workspace management
-    application, combining development and management responsibilities.
-  - Worked on a visual floorplan application using React and Pixi.js, backed by a Ruby on Rails
-    GraphQL API.
+  - >-
+    Led the core development team in Costa Rica for a facilities and workspace
+    management application, combining development and management
+    responsibilities.
+  - >-
+    Worked on a visual floorplan application using React and Pixi.js, backed by
+    a Ruby on Rails GraphQL API.
 technologies:
   - React
   - Pixi.js
@@ -17,4 +21,6 @@ technologies:
   - Ruby on Rails
   - GraphQL
 links: []
+caseStudy:
+  published: false
 published: true
