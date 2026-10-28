@@ -1,20 +1,30 @@
 ---
 import type { GetStaticPaths } from 'astro'
-import ArrowLeft from '@lucide/astro/icons/arrow-left'
+import ArrowLeftIcon from '@lucide/astro/icons/arrow-left'
 import CaseStudy from '../../components/CaseStudy.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { formatRange } from '../../lib/content/dates.ts'
-import { getExperience } from '../../lib/content/queries.ts'
+import { getExperience, getProjects } from '../../lib/content/queries.ts'
 
-// Detail pages exist only for roles with a published case study.
+// Detail pages exist for roles with a published case study or related project case studies.
 export const getStaticPaths = (async () => {
-  const experience = await getExperience()
+  const [experience, projects] = await Promise.all([getExperience(), getProjects()])
   return experience
-    .filter(({ data }) => data.caseStudy.published)
-    .map((entry) => ({ params: { slug: entry.id }, props: { role: entry.data } }))
+    .map((entry) => ({
+      entry,
+      studies: projects.filter(
+        (project) =>
+          project.data.relatedExperience === entry.id && project.data.caseStudy.published,
+      ),
+    }))
+    .filter(({ entry, studies }) => entry.data.caseStudy.published || studies.length > 0)
+    .map(({ entry, studies }) => ({
+      params: { slug: entry.id },
+      props: { role: entry.data, studies },
+    }))
 }) satisfies GetStaticPaths
 
-const { role } = Astro.props
+const { role, studies } = Astro.props
 ---
 
 <BaseLayout
@@ -23,15 +33,24 @@ const { role } = Astro.props
 >
   <div class="container page">
     <p>
-      <a href="/experience/">
-        <ArrowLeft size={16} aria-hidden="true" /> All experience
+      <a class="back" href="/experience/">
+        <ArrowLeftIcon size={16} aria-hidden="true" /> All experience
       </a>
     </p>
     <p class="eyebrow">{formatRange(role.start, role.end)}</p>
     <h1>
       {role.title}, {role.employer}
     </h1>
-    <CaseStudy study={role.caseStudy} />
+    {role.caseStudy.published && <CaseStudy study={role.caseStudy} />}
+    {studies.map((study) => (
+      <article class="study-block">
+        <h2>
+          <a href={`/projects/${study.id}/`}>{study.data.title}</a>
+        </h2>
+        <p class="lead prose">{study.data.summary}</p>
+        <CaseStudy study={study.data.caseStudy} />
+      </article>
+    ))}
   </div>
 </BaseLayout>
 
@@ -39,9 +58,18 @@ const { role } = Astro.props
   .page {
     padding-block: var(--space-6);
   }
-  a {
+  .back {
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
+  }
+  .study-block {
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+  .lead {
+    font-size: var(--step-1);
+    color: var(--ink-muted);
   }
 </style>

@@ -1,6 +1,7 @@
 ---
-import ArrowRight from '@lucide/astro/icons/arrow-right'
+import ArrowRightIcon from '@lucide/astro/icons/arrow-right'
 import { formatRange } from '../lib/content/dates.ts'
+import { getProjects } from '../lib/content/queries.ts'
 import type { Experience } from '../lib/content/schemas.ts'
 
 interface Props {
@@ -12,7 +13,9 @@ interface Props {
 
 const { id, role, compact = false } = Astro.props
 
-// A detail link exists only when an approved case study is published for this role.
+const relatedCaseStudies = (await getProjects()).filter(
+  ({ data }) => data.relatedExperience === id && data.caseStudy.published,
+)
 const detailHref = role.caseStudy.published ? `/experience/${id}/` : undefined
 const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
 ---
@@ -37,15 +40,26 @@ const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
         ))}
       </ul>
     )}
-    {detailHref && (
-      <p class="story">
-        <a href={detailHref}>
-          Read the case study <ArrowRight size={16} aria-hidden="true" />
-          <span class="visually-hidden">
-            for {role.title} at {role.employer}
-          </span>
-        </a>
-      </p>
+    {(detailHref || relatedCaseStudies.length > 0) && (
+      <ul class="stories" aria-label={`Case studies for ${role.employer}`}>
+        {detailHref && (
+          <li>
+            <a href={detailHref}>
+              Read the case study <ArrowRightIcon size={16} aria-hidden="true" />
+              <span class="visually-hidden">
+                for {role.title} at {role.employer}
+              </span>
+            </a>
+          </li>
+        )}
+        {relatedCaseStudies.map((study) => (
+          <li>
+            <a href={`/projects/${study.id}/`}>
+              Case study: {study.data.title} <ArrowRightIcon size={16} aria-hidden="true" />
+            </a>
+          </li>
+        ))}
+      </ul>
     )}
   </div>
 </article>
@@ -80,11 +94,16 @@ const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
   .contributions li + li {
     margin-top: var(--space-1);
   }
-  .story {
+  .stories {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    list-style: none;
     margin: var(--space-3) 0 0;
+    padding: 0;
     font-weight: 600;
   }
-  .story a {
+  .stories a {
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);

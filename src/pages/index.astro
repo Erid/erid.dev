@@ -1,18 +1,23 @@
 ---
-import ArrowRight from '@lucide/astro/icons/arrow-right'
-import MapPin from '@lucide/astro/icons/map-pin'
+import ArrowRightIcon from '@lucide/astro/icons/arrow-right'
+import MapPinIcon from '@lucide/astro/icons/map-pin'
 import Actions from '../components/Actions.astro'
 import ExperienceItem from '../components/ExperienceItem.astro'
 import Portrait from '../components/Portrait.astro'
 import ProjectCard from '../components/ProjectCard.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
-import { getExperience, getProfile, getProjects } from '../lib/content/queries.ts'
+import { formatDay } from '../lib/content/dates.ts'
+import { getExperience, getPosts, getProfile, getProjects } from '../lib/content/queries.ts'
 
 const GLANCE_ROLE_COUNT = 5
 
 const profile = await getProfile()
-const experience = await getExperience()
-const featured = (await getProjects()).filter(({ data }) => data.featured)
+const [experience, allProjects, posts] = await Promise.all([
+  getExperience(),
+  getProjects(),
+  getPosts(),
+])
+const featured = allProjects.filter(({ data }) => data.featured)
 
 const description = `${profile.name}, ${profile.headline}. ${profile.introduction}`
 const structuredData = {
@@ -43,7 +48,8 @@ const structuredData = {
           <p class="eyebrow">{profile.headline}</p>
           <h1>{profile.name}</h1>
           <p class="location muted">
-            <MapPin size={16} aria-hidden="true" /> {profile.location}
+            <MapPinIcon size={16} aria-hidden="true" />
+            {profile.location}
           </p>
         </div>
       </div>
@@ -57,26 +63,12 @@ const structuredData = {
     </div>
   </section>
 
-  <section class="section container" aria-labelledby="experience-heading">
-    <div class="section-header">
-      <h2 id="experience-heading">Experience at a glance</h2>
-      <a href="/experience/">
-        Full work history <ArrowRight size={16} aria-hidden="true" />
-      </a>
-    </div>
-    <div>
-      {experience.slice(0, GLANCE_ROLE_COUNT).map(({ id, data }) => (
-        <ExperienceItem id={id} role={data} compact />
-      ))}
-    </div>
-  </section>
-
   {featured.length > 0 && (
     <section class="section container" aria-labelledby="work-heading">
       <div class="section-header">
-        <h2 id="work-heading">Selected work</h2>
+        <h2 id="work-heading">Selected work & case studies</h2>
         <a href="/projects/">
-          All projects <ArrowRight size={16} aria-hidden="true" />
+          All projects & case studies <ArrowRightIcon size={16} aria-hidden="true" />
         </a>
       </div>
       <div class="grid">
@@ -87,13 +79,52 @@ const structuredData = {
     </section>
   )}
 
+  <section class="section container" aria-labelledby="experience-heading">
+    <div class="section-header">
+      <h2 id="experience-heading">Experience at a glance</h2>
+      <a href="/experience/">
+        Full work history <ArrowRightIcon size={16} aria-hidden="true" />
+      </a>
+    </div>
+    <div>
+      {experience.slice(0, GLANCE_ROLE_COUNT).map(({ id, data }) => (
+        <ExperienceItem id={id} role={data} compact />
+      ))}
+    </div>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="section container" aria-labelledby="writing-heading">
+      <div class="section-header">
+        <h2 id="writing-heading">Writing</h2>
+        <a href="/writing/">
+          All articles <ArrowRightIcon size={16} aria-hidden="true" />
+        </a>
+      </div>
+      <ul class="posts">
+        {posts.slice(0, 3).map((post) => (
+          <li class="card post-item">
+            <div class="post-head">
+              <h3>
+                <a href={`/writing/${post.id}/`}>{post.data.title}</a>
+              </h3>
+              {post.data.draft && <span class="chip chip-draft">Draft</span>}
+            </div>
+            <p class="muted post-meta">{formatDay(post.data.publishedOn)}</p>
+            <p class="post-summary">{post.data.summary}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
   <section class="section container" aria-labelledby="about-heading">
     <div class="card about">
       <h2 id="about-heading">A little more about me</h2>
       <p>Background, spoken languages, and ways to get in touch.</p>
       <p>
         <a href="/about/">
-          About me <ArrowRight size={16} aria-hidden="true" />
+          About me <ArrowRightIcon size={16} aria-hidden="true" />
         </a>
       </p>
     </div>
@@ -141,7 +172,33 @@ const structuredData = {
   .grid {
     display: grid;
     gap: var(--space-5);
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  }
+  .posts {
+    display: grid;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: var(--prose-width);
+  }
+  .post-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+  }
+  .post-head h3 {
+    margin: 0;
+    font-size: var(--step-1);
+  }
+  .post-meta {
+    margin-bottom: var(--space-2);
+    font-size: var(--step--1);
+  }
+  .post-summary {
+    margin: 0;
   }
   .about {
     background: var(--accent-soft);

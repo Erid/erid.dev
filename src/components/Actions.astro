@@ -1,7 +1,7 @@
 ---
-import Code from '@lucide/astro/icons/code'
-import ExternalLink from '@lucide/astro/icons/external-link'
-import FileDown from '@lucide/astro/icons/file-down'
+import CodeIcon from '@lucide/astro/icons/code'
+import ExternalLinkIcon from '@lucide/astro/icons/external-link'
+import FileDownIcon from '@lucide/astro/icons/file-down'
 import ContactEmail from './ContactEmail.astro'
 import { RESUME_PDF_PATH } from '../lib/site.ts'
 
@@ -15,16 +15,16 @@ const { links } = Astro.props
 <ul class="actions">
   <li>
     <a class="button button-primary" href={RESUME_PDF_PATH} download>
-      <FileDown size={18} aria-hidden="true" /> Download résumé (PDF)
+      <FileDownIcon size={18} aria-hidden="true" /> Download résumé (PDF)
     </a>
   </li>
   {links.map((link) => (
     <li>
       <a class="button" href={link.url} rel="me noopener">
         {link.label === 'GitHub' ? (
-          <Code size={18} aria-hidden="true" />
+          <CodeIcon size={18} aria-hidden="true" />
         ) : (
-          <ExternalLink size={18} aria-hidden="true" />
+          <ExternalLinkIcon size={18} aria-hidden="true" />
         )}
         {link.label}
       </a>

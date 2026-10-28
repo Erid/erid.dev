@@ -1,0 +1,45 @@
+entry: empat-speech-llm
+title: LLM Story Generation & Clinical Progress Reports
+summary: >-
+  Built two production LLM workflows on AWS Bedrock and Gemini: multi-page visual story generation
+  with persistent character context, dynamic student questions, and real-time SSE streaming, plus
+  schema-validated clinical progress reports linked to source sessions.
+role: Full Stack Engineer · Empat Speech
+technologies:
+  - AWS Bedrock
+  - Gemini
+  - Server-Sent Events (SSE)
+  - TypeScript
+  - React
+  - Node.js
+  - AWS
+outcomes:
+  - Maintained character and scene consistency across multi-page stories by generating and storing
+    structured actor context via AWS Bedrock prior to image generation.
+  - Built a provider-agnostic image generation adapter layer (using Gemini) with real-time
+    Server-Sent Events (SSE) notifications as text and illustrations finish rendering.
+  - Automated structured clinical progress reports from pre-calculated metrics and session notes,
+    with direct session references so clinicians can fact-check every generated statement.
+images: []
+relatedExperience: empat-speech
+caseStudy:
+  published: true
+  challenge: |-
+    Speech-language pathologists need engaging visual stories and scene activities tailored to the specific speech and language targets they are stimulating with each student, along with clear progress reports summarizing clinical sessions.
+
+    Two practical engineering challenges stood out: keeping characters and scenes visually consistent across multi-page generated stories while still personalizing questions to an individual student, and ensuring LLM-generated clinical progress reports remain accurate, predictably structured, and verifiable by therapists.
+  contribution: |-
+    I designed and implemented two focused LLM pipelines for the platform:
+
+    1. Story and scene image generation: Given therapy input, the backend uses AWS Bedrock to generate structured story context and persists metadata about the story's actors so characters and settings remain consistent across pages and illustrations. That context feeds an image generation pipeline built behind a swappable provider adapter (currently using Gemini for image generation, while allowing us to switch providers without rewriting application logic). Once a story or scene is generated, its core pages stay static, while comprehension and stimulation questions are generated dynamically using the student's personalized context and target skills. Server-Sent Events (SSE) notify the client in real time as each text segment or illustration completes.
+
+    2. Clinical progress reports: Rather than asking an LLM to do math or invent summaries from raw data, the system pre-calculates all quantitative metrics we have data for first. It then prompts AWS Bedrock—using Bedrock's structured output tooling to enforce a strict response schema—to synthesize the clinician's session notes and calculated metrics into the required report format, attaching references to the underlying therapy sessions.
+  decisions: |-
+    Separating static story/scene assets from dynamic per-student question generation gave us the best balance of consistency and personalization: stories do not need to be regenerated from scratch for every session, while prompts and questions adapt to what the student is actively practicing.
+
+    Wrapping image generation behind an adapter interface avoided locking the pipeline to a single model vendor as multimodal capabilities evolve. For progress reports, pre-calculating metrics in code and enforcing an explicit output schema in Bedrock—paired with clickable session citations—kept the LLM focused on formatting and synthesis so therapists can quickly verify every claim against the source session notes.
+  outcomes: |-
+    Clinicians can generate cohesive multi-page visual stories with real-time SSE progress updates, present personalized questions tailored to each student's therapy goals, and produce structured, fact-checkable progress reports grounded in real session records.
+featured: true
+published: true
+

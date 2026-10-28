@@ -6,7 +6,7 @@ export interface Entry<T> {
   data: T
 }
 
-/** Page-facing content queries. Drafts and unpublished entries never leave this module. */
+/** Page-facing content queries. */
 export async function getProfile(): Promise<Profile> {
   const entry = await getEntry('profile', 'profile')
   if (!entry) throw new Error('Missing profile content: src/content/profile.yaml')
@@ -36,13 +36,31 @@ export async function getEducationById(): Promise<Record<string, Education>> {
 }
 
 export async function getProjects(): Promise<Entry<Project>[]> {
-  const entries = await getCollection('projects', ({ data }) => data.published)
-  return entries.sort((a, b) => (b.data.date ?? '').localeCompare(a.data.date ?? ''))
+  const [entries, experienceById] = await Promise.all([
+    getCollection('projects', ({ data }) => data.published),
+    getAllExperienceById(),
+  ])
+  const effectiveDate = (project: Project): string => {
+    if (project.date) return project.date
+    const role = project.relatedExperience ? experienceById[project.relatedExperience] : undefined
+    if (!role) return ''
+    return role.end ?? '9999-99'
+  }
+  return entries.sort((a, b) => {
+    const byDate = effectiveDate(b.data).localeCompare(effectiveDate(a.data))
+    return byDate !== 0 ? byDate : a.data.title.localeCompare(b.data.title)
+  })
 }
 
+/**
+ * Returns published posts, newest first. While all posts are still drafts, returns the drafts so
+ * the Writing section and routes remain visible with a Draft badge until real articles publish.
+ */
 export async function getPosts() {
-  const entries = await getCollection('posts', ({ data }) => !data.draft)
-  return entries.sort((a, b) => b.data.publishedOn.localeCompare(a.data.publishedOn))
+  const all = await getCollection('posts')
+  const published = all.filter(({ data }) => !data.draft)
+  const visible = published.length > 0 ? published : all
+  return visible.sort((a, b) => b.data.publishedOn.localeCompare(a.data.publishedOn))
 }
 
 function compareExperience(a: Entry<Experience>, b: Entry<Experience>): number {

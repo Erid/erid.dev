@@ -3,22 +3,20 @@ import ProjectCard from '../../components/ProjectCard.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { getProfile, getProjects } from '../../lib/content/queries.ts'
 
-// With no published projects this route would be empty; it is not generated at all.
-export async function getStaticPaths() {
-  const projects = await getProjects()
-  return projects.length > 0 ? [{ params: { list: undefined } }] : []
-}
-
 const profile = await getProfile()
 const projects = await getProjects()
 ---
 
 <BaseLayout
-  title="Projects"
-  description={`Selected software projects by ${profile.name}, with code, demos, and case studies where available.`}
+  title="Projects & Case Studies"
+  description={`Selected software projects and architectural case studies by ${profile.name}.`}
 >
   <div class="container page">
-    <h1>Projects</h1>
+    <h1>Projects & case studies</h1>
+    <p class="muted prose">
+      Selected engineering work, architectural decisions, and incident write-ups, with links to
+      source code where public.
+    </p>
     <div class="grid">
       {projects.map(({ id, data }) => (
         <ProjectCard id={id} project={data} />
@@ -35,5 +33,6 @@ const projects = await getProjects()
     display: grid;
     gap: var(--space-5);
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    margin-top: var(--space-5);
   }
 </style>

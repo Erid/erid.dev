@@ -1,0 +1,47 @@
+entry: empat-speech-pii
+title: HIPAA-Minded PII Isolation & Access Control
+summary: >-
+  Architected external PII storage, an AWS SQS synchronization pipeline with dead-letter queueing,
+  and multi-layered Cognito and AppSync access control so sensitive student data never lives in the
+  primary database or leaks to unauthenticated therapy sessions.
+role: Full Stack Engineer · Empat Speech
+technologies:
+  - AWS SQS
+  - AWS Cognito
+  - AWS AppSync
+  - TypeScript
+  - Node.js
+  - SST
+  - AWS
+outcomes:
+  - Kept personally identifiable information (PII) outside the primary application databases via an
+    isolated ID-mapping layer and external provider synchronization.
+  - Prevented data loss during third-party or network issues using an AWS SQS queue and dead-letter
+    queue (DLQ) for failure visibility and recovery without permanent local PII storage.
+  - Enforced API-level data minimization so unauthenticated student therapy sessions never receive
+    personal data in API responses, not merely hidden in the UI.
+images: []
+relatedExperience: empat-speech
+caseStudy:
+  published: true
+  challenge: |-
+    Empat Speech connects speech-language pathologists (SLPs) and students through live video communication, interactive games, and clinical progress tracking. Because the platform handles sensitive student and clinical information, personally identifiable information (PII) could not simply be stored alongside ordinary application data in the primary databases.
+
+    At the same time, the product needed to remain frictionless for students—including supporting a workflow where a student joins a live therapy session without logging in—while guaranteeing that personal information is strictly protected across every API boundary and resilient against third-party provider outages.
+  contribution: |-
+    I designed and built both the PII isolation and synchronization pipeline and the platform's multi-layered authorization architecture:
+
+    First, the system stores all PII outside the main databases in a dedicated third-party provider. Whenever the platform needs to read or manage PII, it communicates with that external provider and links records through an isolated mapping table that correlates internal system IDs with external provider IDs.
+
+    To protect against provider downtime or transient communication failures without permanently storing PII in our own database, I built a queueing pipeline on AWS SQS backed by a dead-letter queue (DLQ). Synchronization events are held only temporarily in the queue, and any failed deliveries are captured in the DLQ so we can track, inspect, and replay failures safely without losing records.
+
+    Second, I implemented access control combining AWS Cognito for identity management, AWS AppSync authentication modes, and custom authorization logic. When a student accesses a therapy session without logging in, the API layer itself scopes the response payload so no personal information is ever returned to an unauthenticated client.
+  decisions: |-
+    A key architectural trade-off was choosing asynchronous queueing (AWS SQS with a DLQ) and an isolated ID-mapping table over caching or persisting PII locally. Relying on an external provider introduces network and availability dependencies, but buffering transitions in SQS with DLQ tracking derisked data loss during provider hiccups while keeping our primary databases free of permanent PII.
+
+    For access control, we deliberately enforced role and session boundaries inside AppSync resolvers and custom authorizers rather than relying on client-side UI filtering. Unauthenticated student sessions receive only the state needed to participate in the therapy activity, ensuring personal data is absent at the wire level.
+  outcomes: |-
+    The architecture keeps PII isolated from the primary databases, provides full operational visibility and recovery when external communication fails, and lets students join therapy sessions seamlessly without exposing sensitive personal information.
+featured: true
+published: true
+

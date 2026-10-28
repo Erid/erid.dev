@@ -17,7 +17,7 @@ approved scope and docs/development.md for setup and command details.
 - Prefer Astro and semantic HTML for public content. Add client JavaScript only
   for a specific interaction that needs it.
 - Icons come from Lucide (`@lucide/astro/icons/...`). Do not use emojis in code,
-  content, or UI.
+  content, or UI. Use Lucide component names with the `Icon` suffix (e.g. `ArrowLeftIcon`).
 
 ## Readable code
 

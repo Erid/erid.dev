@@ -1,42 +1,169 @@
 ---
-import Mail from '@lucide/astro/icons/mail'
+import CheckIcon from '@lucide/astro/icons/check'
+import CopyIcon from '@lucide/astro/icons/copy'
+import MailIcon from '@lucide/astro/icons/mail'
 import { encodeEmail } from '../lib/contact.ts'
+
+interface Props {
+  /** 'button' renders a pill with mailto + copy action; 'inline' renders a plain text link. */
+  variant?: 'button' | 'inline'
+}
+
+const { variant = 'button' } = Astro.props
 
 // Renders nothing when CONTACT_EMAIL is not configured, so a build never ships a dead control.
 const encoded = encodeEmail(import.meta.env.CONTACT_EMAIL)
 ---
 
-{encoded && (
-  <contact-email data-encoded={encoded}>
-    <button type="button" class="button" data-reveal>
-      <Mail size={18} aria-hidden="true" />
-      Show email address
-    </button>
-    <a class="button" data-link hidden />
-    <noscript>
-      <span class="muted">Email is revealed with JavaScript. Please use the links above.</span>
-    </noscript>
-  </contact-email>
-)}
+{encoded &&
+  (variant === 'inline' ? (
+    <contact-email class="inline" data-encoded={encoded}>
+      <a class="inline-link" data-link href="#contact">
+        <MailIcon size={15} aria-hidden="true" />
+        <span data-text>Email</span>
+      </a>
+    </contact-email>
+  ) : (
+    <contact-email class="pill" data-encoded={encoded}>
+      <a class="pill-link" data-link href="#contact">
+        <MailIcon size={18} aria-hidden="true" />
+        <span data-text>Email</span>
+      </a>
+      <button
+        type="button"
+        class="pill-copy"
+        data-copy
+        aria-label="Copy email address"
+        title="Copy email address"
+      >
+        <span class="icon-wrap" data-icon-copy>
+          <CopyIcon size={15} aria-hidden="true" />
+        </span>
+        <span class="icon-wrap" data-icon-check hidden>
+          <CheckIcon size={15} aria-hidden="true" />
+        </span>
+        <span class="copied-label" data-status hidden>
+          Copied
+        </span>
+      </button>
+    </contact-email>
+  ))}
 
 <script>
-  // The address is decoded only after a click, so it is never in the delivered HTML.
+  // The address is decoded in the browser from the reversed base64 attribute, so raw HTML
+  // scrapers never see a plain-text email address or mailto: href in the static output.
   class ContactEmail extends HTMLElement {
     connectedCallback() {
-      const button = this.querySelector<HTMLButtonElement>('[data-reveal]')
-      const link = this.querySelector<HTMLAnchorElement>('[data-link]')
       const encoded = this.dataset.encoded
-      if (!button || !link || !encoded) return
+      const link = this.querySelector<HTMLAnchorElement>('[data-link]')
+      const text = this.querySelector<HTMLElement>('[data-text]')
+      if (!encoded || !link || !text) return
 
-      button.addEventListener('click', () => {
-        const address = [...atob(encoded)].reverse().join('')
-        link.href = `mailto:${address}`
-        link.textContent = address
-        link.hidden = false
-        button.hidden = true
-        link.focus()
+      const address = [...atob(encoded)].reverse().join('')
+      link.href = `mailto:${address}`
+      text.textContent = address
+
+      const copyBtn = this.querySelector<HTMLButtonElement>('[data-copy]')
+      const iconCopy = this.querySelector<HTMLElement>('[data-icon-copy]')
+      const iconCheck = this.querySelector<HTMLElement>('[data-icon-check]')
+      const status = this.querySelector<HTMLElement>('[data-status]')
+      if (!copyBtn) return
+
+      let timer: number | undefined
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(address)
+          if (iconCopy) iconCopy.hidden = true
+          if (iconCheck) iconCheck.hidden = false
+          if (status) status.hidden = false
+          window.clearTimeout(timer)
+          timer = window.setTimeout(() => {
+            if (iconCopy) iconCopy.hidden = false
+            if (iconCheck) iconCheck.hidden = true
+            if (status) status.hidden = true
+          }, 2000)
+        } catch {
+          window.location.href = `mailto:${address}`
+        }
       })
     }
   }
-  customElements.define('contact-email', ContactEmail)
+
+  if (!customElements.get('contact-email')) {
+    customElements.define('contact-email', ContactEmail)
+  }
 </script>
+
+<style>
+  contact-email.inline {
+    display: inline-flex;
+    align-items: center;
+  }
+  .inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .inline-link:hover {
+    color: var(--accent-strong);
+  }
+
+  contact-email.pill {
+    display: inline-flex;
+    align-items: stretch;
+    min-height: 2.75rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.15s ease;
+  }
+  contact-email.pill:hover {
+    box-shadow: var(--shadow-md);
+  }
+  .pill-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.5rem 0.9rem 0.5rem 1.1rem;
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 999px 0 0 999px;
+  }
+  .pill-link:hover {
+    color: var(--accent-strong);
+  }
+  .pill-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem 0.85rem 0.5rem 0.7rem;
+    border: 0;
+    border-left: 1px solid var(--line);
+    border-radius: 0 999px 999px 0;
+    background: transparent;
+    color: var(--ink-muted);
+    font: inherit;
+    font-size: var(--step--1);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+  }
+  .pill-copy:hover {
+    color: var(--ink);
+    background: var(--bg-sunken);
+  }
+  .icon-wrap {
+    display: inline-flex;
+    align-items: center;
+  }
+  .copied-label {
+    color: var(--accent-strong);
+  }
+</style>
