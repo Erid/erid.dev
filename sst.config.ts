@@ -16,15 +16,12 @@ export default $config({
     // The same value configures Astro's canonical URLs, so the build matches where it is served.
     const { requireSiteDomain } = await import('./src/lib/site.ts')
     const domain = requireSiteDomain(process.env)
-    const isProduction = $app.stage === 'production'
 
     const site = new sst.cloudflare.StaticSiteV2('Site', {
       // `pnpm build` produces the site and the résumé files together; SST uploads that output.
       build: { command: 'pnpm build', output: 'dist' },
       domain: {
         name: domain,
-        // Only the production apex domain redirects its www alias.
-        ...(isProduction ? { redirects: [`www.${domain}`] } : {}),
       },
     })
 
