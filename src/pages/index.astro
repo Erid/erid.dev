@@ -66,10 +66,14 @@ const structuredData = {
           </p>
         </div>
       </div>
+      <p class="target-roles muted">
+        Open to senior engineering, software architecture, and technical leadership roles.
+      </p>
       <p class="lead">{profile.introduction}</p>
-      <CoreSkills class="stack" idPrefix="home-skill" />
-      <p class="muted">Open to senior, architecture and lead engineering roles.</p>
-      <Actions links={profile.links} />
+      <div class="hero-skills">
+        <CoreSkills idPrefix="home-skill" />
+      </div>
+      <Actions links={profile.links} includeResume={false} />
     </div>
   </section>
 
@@ -144,7 +148,9 @@ const structuredData = {
 
   <section class="section container" aria-labelledby="contact-heading">
     <h2 id="contact-heading">Get in touch</h2>
-    <p class="muted">Open to senior and lead engineering and architecture roles.</p>
+    <p class="muted">
+      Open to senior engineering, software architecture, and technical leadership roles.
+    </p>
     <Actions links={profile.links} />
     <WhatsAppContact />
   </section>
@@ -174,12 +180,15 @@ const structuredData = {
     gap: var(--space-1);
     margin: 0;
   }
+  .target-roles {
+    margin-bottom: var(--space-3);
+  }
   .lead {
     max-width: var(--prose-width);
     font-size: var(--step-1);
     line-height: 1.5;
   }
-  .stack {
+  .hero-skills {
     margin-bottom: var(--space-5);
   }
   .grid {

@@ -6,15 +6,18 @@ import ResumeDownload from './ResumeDownload.astro'
 
 interface Props {
   links: { label: string; url: string }[]
+  includeResume?: boolean
 }
 
-const { links } = Astro.props
+const { links, includeResume = true } = Astro.props
 ---
 
 <ul class="actions">
-  <li>
-    <ResumeDownload />
-  </li>
+  {includeResume && (
+    <li>
+      <ResumeDownload />
+    </li>
+  )}
   {links.map((link) => (
     <li>
       <a class="button" href={link.url} rel="me noopener">
