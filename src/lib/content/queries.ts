@@ -52,15 +52,10 @@ export async function getProjects(): Promise<Entry<Project>[]> {
   })
 }
 
-/**
- * Returns published posts, newest first. While all posts are still drafts, returns the drafts so
- * the Writing section and routes remain visible with a Draft badge until real articles publish.
- */
+/** Returns published posts, newest first. Drafts never reach routes, navigation, or the sitemap. */
 export async function getPosts() {
-  const all = await getCollection('posts')
-  const published = all.filter(({ data }) => !data.draft)
-  const visible = published.length > 0 ? published : all
-  return visible.sort((a, b) => b.data.publishedOn.localeCompare(a.data.publishedOn))
+  const published = await getCollection('posts', ({ data }) => !data.draft)
+  return published.sort((a, b) => b.data.publishedOn.localeCompare(a.data.publishedOn))
 }
 
 function compareExperience(a: Entry<Experience>, b: Entry<Experience>): number {

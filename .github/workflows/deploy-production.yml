@@ -1,0 +1,41 @@
+name: Deploy production
+
+# Runs only for commits on main (including merged pull requests). Pull requests never reach this
+# workflow, so untrusted code never sees the production secrets.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Serialize deployments so two pushes cannot change SST state at the same time.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm check
+        env:
+          CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+      # Credentials are scoped to this step only. SST runs `pnpm build` itself, which regenerates the
+      # site and PDF together from this commit.
+      - run: pnpm exec sst deploy --stage production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
+          CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}

@@ -1,6 +1,5 @@
 import { formatRange } from '../content/dates.ts'
 import type { Education, Experience, Resume } from '../content/schemas.ts'
-import { SITE_URL } from '../site.ts'
 
 export interface ResumeRole {
   id: string
@@ -35,9 +34,10 @@ export function buildResume(
   resume: Resume,
   experience: Record<string, Experience>,
   education: Record<string, Education>,
+  website: string,
 ): ResumeModel {
   return {
-    website: SITE_URL,
+    website,
     summary: resume.summary,
     roles: resume.roles.flatMap((role) => {
       const entry = experience[role.experience]

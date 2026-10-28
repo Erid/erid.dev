@@ -11,6 +11,8 @@
     "dev": "astro dev",
     "build": "astro build && node --env-file-if-exists=.env scripts/build-resume.ts",
     "preview": "astro preview",
+    "test:e2e": "node --test \"tests/e2e/*.e2e.ts\"",
+    "verify:build": "node --env-file-if-exists=.env scripts/verify-build.ts",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --max-warnings=0 --fix",
     "format": "prettier . --write",
@@ -18,8 +20,8 @@
     "fix": "pnpm lint:fix && pnpm format",
     "content:check": "node scripts/content-check.ts",
     "test": "node --test \"tests/**/*.test.ts\"",
-    "typecheck": "astro sync && node node_modules/@typescript/native/bin/tsc --noEmit -p tsconfig.json && astro check",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm content:check && pnpm test && pnpm build"
+    "typecheck": "sst install && astro sync && node node_modules/@typescript/native/bin/tsc --noEmit -p tsconfig.json && node node_modules/@typescript/native/bin/tsc --noEmit -p tsconfig.sst.json && astro check",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm content:check && pnpm test && pnpm build && pnpm verify:build && pnpm test:e2e"
   },
   "dependencies": {
     "@astrojs/check": "0.9.12",
@@ -48,6 +50,7 @@
     "playwright": "1.62.1",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.2",
+    "sst": "4.17.2",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "8.72.1"
   }

@@ -10,6 +10,8 @@ import {
 import { renderResumeDocx } from '../src/lib/resume/docx.ts'
 import { buildResume } from '../src/lib/resume/model.ts'
 
+const WEBSITE = 'https://example.test'
+
 test('date labels keep the precision they were given', () => {
   assert.equal(formatDate('2023-12'), 'Dec 2023')
   assert.equal(formatDate('2011'), '2011')
@@ -53,8 +55,8 @@ test('résumé uses its own bullets when present, otherwise the role contributio
     education: ['school'],
   })
 
-  const model = buildResume(resume, experience, education)
-  assert.equal(model.website, 'https://erid.dev')
+  const model = buildResume(resume, experience, education, WEBSITE)
+  assert.equal(model.website, WEBSITE)
   assert.deepEqual(
     model.roles.map((r) => r.bullets),
     [['Résumé wording'], ['From the role']],
@@ -97,6 +99,7 @@ test('renderResumeDocx generates a valid .docx archive from the résumé model',
         start: '2010',
       }),
     },
+    WEBSITE,
   )
 
   const buffer = await renderResumeDocx({ profile, resume: model })

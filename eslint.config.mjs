@@ -7,7 +7,17 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default defineConfig(
-  { ignores: ['dist/', '.astro/', '.sst/', 'node_modules/', 'profile/', 'pnpm-lock.yaml'] },
+  {
+    ignores: [
+      'dist/',
+      '.astro/',
+      '.sst/',
+      'node_modules/',
+      'profile/',
+      'pnpm-lock.yaml',
+      'sst-env.d.ts',
+    ],
+  },
   js.configs.recommended,
   tseslint.configs.recommended,
   astro.configs.recommended,
@@ -23,6 +33,11 @@ export default defineConfig(
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
     },
+  },
+  {
+    // SST loads its generated global types only through a triple-slash reference.
+    files: ['sst.config.ts'],
+    rules: { '@typescript-eslint/triple-slash-reference': 'off' },
   },
   // Must stay last: disables stylistic rules that conflict with Prettier.
   eslintConfigPrettier,

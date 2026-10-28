@@ -15,6 +15,7 @@ const resume = buildResume(
   await getResumeContent(),
   await getAllExperienceById(),
   await getEducationById(),
+  Astro.site?.origin ?? '',
 )
 const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
 ---

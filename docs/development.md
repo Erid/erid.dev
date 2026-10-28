@@ -18,3 +18,13 @@ tools support TypeScript 7.
 `astro.config.ts` adds Keystatic only when the process is `astro dev`. Builds and previews omit the
 integration; `dist/` contains no editor routes.
 
+
+## Checks
+
+`pnpm check` runs, in order: lint, format check, typecheck, content check, unit tests, build,
+`verify:build`, and browser tests (`test:e2e`, which needs `pnpm exec playwright install chromium`).
+`pnpm typecheck` runs `sst install` first, which downloads SST's provider types but provisions
+nothing and needs no credentials; `sst.config.ts` has its own `tsconfig.sst.json` because SST's
+generated types do not satisfy the strict site configuration.
+
+CI (`.github/workflows/ci.yml`) runs `pnpm check` without secrets. See [deployment.md](deployment.md).

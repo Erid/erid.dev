@@ -1,7 +1,12 @@
 ---
+import type { GetStaticPaths } from 'astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { formatDay } from '../../lib/content/dates.ts'
 import { getPosts, getProfile } from '../../lib/content/queries.ts'
+
+// The index exists only once a real article is published.
+export const getStaticPaths = (async () =>
+  (await getPosts()).length > 0 ? [{ params: { index: undefined } }] : []) satisfies GetStaticPaths
 
 const profile = await getProfile()
 const posts = await getPosts()

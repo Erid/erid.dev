@@ -5,3 +5,4 @@ node_modules/
 profile/
 pnpm-lock.yaml
 docs/
+sst-env.d.ts

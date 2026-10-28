@@ -13,7 +13,7 @@ import {
 } from '../src/lib/content/schemas.ts'
 import { renderResumeDocx } from '../src/lib/resume/docx.ts'
 import { buildResume, type ResumeModel } from '../src/lib/resume/model.ts'
-import { RESUME_DOCX_PATH, RESUME_PDF_PATH } from '../src/lib/site.ts'
+import { RESUME_DOCX_PATH, RESUME_PDF_PATH, requireSiteDomain, siteUrl } from '../src/lib/site.ts'
 
 const rootDir = join(import.meta.dirname, '..')
 const distDir = join(rootDir, 'dist')
@@ -49,7 +49,12 @@ async function main(): Promise<void> {
   const resumeContent = readContentFile('resume.yaml', resumeSchema)
   const experience = readContentDirectory('experience', '.yaml', experienceSchema)
   const education = readContentDirectory('education', '.yaml', educationSchema)
-  const resume = buildResume(resumeContent, experience, education)
+  const resume = buildResume(
+    resumeContent,
+    experience,
+    education,
+    siteUrl(requireSiteDomain(process.env)),
+  )
 
   const pdfOutPath = join(distDir, RESUME_PDF_PATH)
   const docxOutPath = join(distDir, RESUME_DOCX_PATH)

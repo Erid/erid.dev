@@ -1,0 +1,35 @@
+name: Deploy staging
+
+# Manual only. Production deploys from main via deploy-production.yml; this workflow is for
+# trying a change on the staging stage first; see docs/deployment.md.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
+      SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
+      CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm check
+      # SST runs `pnpm build` itself, which regenerates the site and PDF together.
+      - run: pnpm exec sst deploy --stage staging
