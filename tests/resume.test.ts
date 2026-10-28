@@ -68,7 +68,8 @@ test('résumé uses its own bullets when present, otherwise the role contributio
 
 test('renderResumeDocx generates a valid .docx archive from the résumé model', async () => {
   const profile = profileSchema.parse({
-    name: 'Erid Baldioceda',
+    firstName: 'Erid',
+    lastName: 'Baldioceda',
     headline: 'Senior Full Stack Engineer',
     location: 'Costa Rica',
     introduction: 'Intro',

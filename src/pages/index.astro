@@ -1,11 +1,12 @@
 ---
 import ArrowRightIcon from '@lucide/astro/icons/arrow-right'
 import MapPinIcon from '@lucide/astro/icons/map-pin'
-import WhatsAppContact from '../components/WhatsAppContact.astro'
 import Actions from '../components/Actions.astro'
+import CoreSkills from '../components/CoreSkills.astro'
 import ExperienceItem from '../components/ExperienceItem.astro'
 import Portrait from '../components/Portrait.astro'
 import ProjectCard from '../components/ProjectCard.astro'
+import WhatsAppContact from '../components/WhatsAppContact.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { formatDay } from '../lib/content/dates.ts'
 import {
@@ -15,6 +16,7 @@ import {
   getProjects,
   getSkills,
 } from '../lib/content/queries.ts'
+import { fullName } from '../lib/content/schemas.ts'
 
 const GLANCE_ROLE_COUNT = 3
 
@@ -25,15 +27,18 @@ const [profile, skills, experience, allProjects, posts] = await Promise.all([
   getProjects(),
   getPosts(),
 ])
+const name = fullName(profile)
 const featured = allProjects.filter(({ data }) => data.featured)
 
-const description = `${profile.name}, ${profile.headline}. ${profile.introduction}`
+const description = `${name}, ${profile.headline}. ${profile.introduction}`
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'ProfilePage',
   mainEntity: {
     '@type': 'Person',
-    name: profile.name,
+    name,
+    givenName: profile.firstName,
+    familyName: profile.lastName,
     jobTitle: profile.headline,
     url: Astro.site?.href,
     sameAs: profile.links.map((link) => link.url),
@@ -43,7 +48,7 @@ const structuredData = {
 ---
 
 <BaseLayout
-  title={`${profile.name} | ${profile.headline}`}
+  title={`${name} | ${profile.headline}`}
   description={description}
   isHome
   structuredData={structuredData}
@@ -54,7 +59,7 @@ const structuredData = {
         {profile.portrait && <Portrait path={profile.portrait} alt={profile.portraitAlt ?? ''} />}
         <div>
           <p class="eyebrow">{profile.headline}</p>
-          <h1>{profile.name}</h1>
+          <h1>{name}</h1>
           <p class="location muted">
             <MapPinIcon size={16} aria-hidden="true" />
             {profile.location}
@@ -62,12 +67,8 @@ const structuredData = {
         </div>
       </div>
       <p class="lead">{profile.introduction}</p>
-      <ul class="chips stack" aria-label="Core technologies">
-        {skills.map((skill) => (
-          <li class="chip">{skill.name}</li>
-        ))}
-      </ul>
-      <p class="muted">Open to senior and lead engineering and architecture roles.</p>
+      <CoreSkills class="stack" idPrefix="home-skill" />
+      <p class="muted">Open to senior, architecture and lead engineering roles.</p>
       <Actions links={profile.links} />
     </div>
   </section>

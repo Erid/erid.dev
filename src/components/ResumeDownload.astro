@@ -79,9 +79,9 @@ const { compact = false, align = 'start' } = Astro.props
     display: inline-flex;
     align-items: stretch;
     min-height: 2.75rem;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--cta-bg);
     border-radius: 999px;
-    background: var(--accent);
+    background: var(--cta-bg);
     color: #fff;
     box-shadow: var(--shadow-sm);
     transition: box-shadow 0.15s ease;
@@ -106,7 +106,7 @@ const { compact = false, align = 'start' } = Astro.props
   }
   .primary:hover {
     color: #fff;
-    background: var(--accent-strong);
+    background: var(--cta-bg-strong);
   }
   .more {
     display: flex;
@@ -130,7 +130,7 @@ const { compact = false, align = 'start' } = Astro.props
   }
   summary:hover,
   details[open] > summary {
-    background: var(--accent-strong);
+    background: var(--cta-bg-strong);
   }
   .chevron {
     transition: transform 0.15s ease;

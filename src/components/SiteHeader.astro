@@ -1,5 +1,6 @@
 ---
 import ResumeDownload from './ResumeDownload.astro'
+import ThemeToggle from './ThemeToggle.astro'
 
 interface Props {
   name: string
@@ -20,6 +21,7 @@ function isCurrent(href: string) {
       {name}
     </a>
     <div class="download">
+      <ThemeToggle />
       <ResumeDownload compact align="end" />
     </div>
     <nav aria-label="Main">
@@ -96,6 +98,9 @@ function isCurrent(href: string) {
     view-transition-name: nav-indicator;
   }
   .download {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
     min-height: 2.5rem;
   }
 

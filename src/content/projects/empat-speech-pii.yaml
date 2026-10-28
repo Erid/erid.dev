@@ -1,5 +1,6 @@
 entry: empat-speech-pii
 title: HIPAA-Minded PII Isolation & Access Control
+order: 2
 summary: Isolated sensitive student information from primary databases and enforced access controls
   at the API boundary. Added queued synchronization and recovery for provider outages.
 role: Full Stack Engineer · Empat Speech

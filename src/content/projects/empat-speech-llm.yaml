@@ -1,5 +1,6 @@
 entry: empat-speech-llm
 title: LLM Story Generation & Clinical Progress Reports
+order: 1
 summary: Built production workflows for personalized visual stories and clinical progress reports.
   Combined structured LLM output with calculated metrics and source-session references.
 role: Full Stack Engineer · Empat Speech

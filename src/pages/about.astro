@@ -10,12 +10,15 @@ import SparklesIcon from '@lucide/astro/icons/sparkles'
 import TentTreeIcon from '@lucide/astro/icons/tent-tree'
 import UsersIcon from '@lucide/astro/icons/users'
 import Actions from '../components/Actions.astro'
+import CoreSkills from '../components/CoreSkills.astro'
 import Portrait from '../components/Portrait.astro'
 import WhatsAppContact from '../components/WhatsAppContact.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { getProfile, getSkills } from '../lib/content/queries.ts'
+import { fullName } from '../lib/content/schemas.ts'
 
 const [profile, skills] = await Promise.all([getProfile(), getSkills()])
+const name = fullName(profile)
 const paragraphs = profile.biography?.split(/\n{2,}/) ?? []
 
 function hobbyIconKind(name: string): 'book' | 'game' | 'camp' | 'other' {
@@ -29,7 +32,7 @@ function hobbyIconKind(name: string): 'book' | 'game' | 'camp' | 'other' {
 
 <BaseLayout
   title="About"
-  description={`About ${profile.name}: background, working style, hobbies, and languages.`}
+  description={`About ${name}: background, working style, hobbies, and languages.`}
 >
   <section class="about-hero">
     <div class="container">
@@ -39,7 +42,7 @@ function hobbyIconKind(name: string): 'book' | 'game' | 'camp' | 'other' {
         )}
         <div>
           <p class="eyebrow">About me</p>
-          <h1>Hi, I&rsquo;m {profile.name.split(' ')[0]}.</h1>
+          <h1>Hi, I&rsquo;m {profile.firstName}.</h1>
           <p class="location muted">
             <MapPinIcon size={16} aria-hidden="true" />
             <span>{profile.location}</span>
@@ -103,11 +106,7 @@ function hobbyIconKind(name: string): 'book' | 'game' | 'camp' | 'other' {
         {skills.length > 0 && (
           <section class="card" aria-labelledby="skills-heading">
             <h2 id="skills-heading">Core stack</h2>
-            <ul class="chips">
-              {skills.map((skill) => (
-                <li class="chip">{skill.name}</li>
-              ))}
-            </ul>
+            <CoreSkills idPrefix="about-skill" />
             <p class="card-footer-link">
               <a href="/experience/">
                 See experience in practice <ArrowRightIcon size={15} aria-hidden="true" />

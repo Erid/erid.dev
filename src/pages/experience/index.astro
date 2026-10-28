@@ -2,6 +2,7 @@
 import ExperienceItem from '../../components/ExperienceItem.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { getExperience, getProfile } from '../../lib/content/queries.ts'
+import { fullName } from '../../lib/content/schemas.ts'
 
 const profile = await getProfile()
 const experience = await getExperience()
@@ -9,7 +10,7 @@ const experience = await getExperience()
 
 <BaseLayout
   title="Experience"
-  description={`Professional history of ${profile.name}: employers, roles, dates, and technologies.`}
+  description={`Professional history of ${fullName(profile)}: employers, roles, dates, and technologies.`}
 >
   <div class="container page">
     <h1>Experience</h1>

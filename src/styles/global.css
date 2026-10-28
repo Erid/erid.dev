@@ -1,15 +1,83 @@
 :root {
-  /* Warm neutrals with one restrained accent. Contrast checked for AA on --bg and --surface. */
-  --bg: #faf7f2;
-  --bg-sunken: #f2ede4;
-  --surface: #ffffff;
-  --ink: #1f2430;
-  --ink-muted: #565d6b;
-  --line: #e4ddd0;
-  --accent: #1d5c99;
-  --accent-strong: #154675;
-  --accent-soft: #e6eff8;
-  --focus: #b4530a;
+  color-scheme: light dark;
+
+  &:has(> head > meta[name='color-scheme'][content='dark']) {
+    color-scheme: dark;
+  }
+  &:has(> head > meta[name='color-scheme'][content='light']) {
+    color-scheme: light;
+  }
+
+  /* Light and dark palettes. Contrast checked for WCAG AA on --bg and --surface. */
+  --bg-light: #faf7f2;
+  --bg-dark: #11141c;
+  --bg-sunken-light: #f2ede4;
+  --bg-sunken-dark: #0b0e14;
+  --surface-light: #ffffff;
+  --surface-dark: #181d27;
+  --ink-light: #1f2430;
+  --ink-dark: #f1efe9;
+  --ink-muted-light: #565d6b;
+  --ink-muted-dark: #a6adbb;
+  --line-light: #e4ddd0;
+  --line-dark: #2a3142;
+  --accent-light: #1d5c99;
+  --accent-dark: #68a8e8;
+  --accent-strong-light: #154675;
+  --accent-strong-dark: #8ec0f2;
+  --accent-soft-light: #e6eff8;
+  --accent-soft-dark: #1b2c42;
+  --cta-bg-light: #1d5c99;
+  --cta-bg-dark: #2563eb;
+  --cta-bg-strong-light: #154675;
+  --cta-bg-strong-dark: #1d4ed8;
+  --focus-light: #b4530a;
+  --focus-dark: #f59e0b;
+
+  --bg: var(--bg-light);
+  --bg-sunken: var(--bg-sunken-light);
+  --surface: var(--surface-light);
+  --ink: var(--ink-light);
+  --ink-muted: var(--ink-muted-light);
+  --line: var(--line-light);
+  --accent: var(--accent-light);
+  --accent-strong: var(--accent-strong-light);
+  --accent-soft: var(--accent-soft-light);
+  --cta-bg: var(--cta-bg-light);
+  --cta-bg-strong: var(--cta-bg-strong-light);
+  --focus: var(--focus-light);
+
+  @media (prefers-color-scheme: dark) {
+    --bg: var(--bg-dark);
+    --bg-sunken: var(--bg-sunken-dark);
+    --surface: var(--surface-dark);
+    --ink: var(--ink-dark);
+    --ink-muted: var(--ink-muted-dark);
+    --line: var(--line-dark);
+    --accent: var(--accent-dark);
+    --accent-strong: var(--accent-strong-dark);
+    --accent-soft: var(--accent-soft-dark);
+    --cta-bg: var(--cta-bg-dark);
+    --cta-bg-strong: var(--cta-bg-strong-dark);
+    --focus: var(--focus-dark);
+  }
+
+  @supports (color: light-dark(white, black)) {
+    --bg: light-dark(var(--bg-light), var(--bg-dark));
+    --bg-sunken: light-dark(var(--bg-sunken-light), var(--bg-sunken-dark));
+    --surface: light-dark(var(--surface-light), var(--surface-dark));
+    --ink: light-dark(var(--ink-light), var(--ink-dark));
+    --ink-muted: light-dark(var(--ink-muted-light), var(--ink-muted-dark));
+    --line: light-dark(var(--line-light), var(--line-dark));
+    --accent: light-dark(var(--accent-light), var(--accent-dark));
+    --accent-strong: light-dark(var(--accent-strong-light), var(--accent-strong-dark));
+    --accent-soft: light-dark(var(--accent-soft-light), var(--accent-soft-dark));
+    --cta-bg: light-dark(var(--cta-bg-light), var(--cta-bg-dark));
+    --cta-bg-strong: light-dark(var(--cta-bg-strong-light), var(--cta-bg-strong-dark));
+    --focus: light-dark(var(--focus-light), var(--focus-dark));
+  }
+
+  accent-color: var(--accent);
 
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -193,20 +261,20 @@ img {
   cursor: pointer;
   transition:
     box-shadow 0.15s ease,
-    background-color 0.15s ease;
+    border-color 0.15s ease;
 }
 .button:hover {
   color: var(--ink);
   box-shadow: var(--shadow-md);
 }
 .button-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--cta-bg);
+  border-color: var(--cta-bg);
   color: #fff;
 }
 .button-primary:hover {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
+  background: var(--cta-bg-strong);
+  border-color: var(--cta-bg-strong);
   color: #fff;
 }
 
@@ -232,9 +300,9 @@ img {
   font-weight: 500;
 }
 .chip-draft {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background: light-dark(#fef3c7, #451a03);
+  color: light-dark(#92400e, #fde68a);
+  border: 1px solid light-dark(#fde68a, #78350f);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -300,6 +368,10 @@ img {
 }
 
 @media print {
+  :root {
+    color-scheme: light !important;
+  }
+
   @page {
     size: letter;
     margin: 0.55in 0.6in;

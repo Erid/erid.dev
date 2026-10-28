@@ -1,5 +1,6 @@
 entry: erid.dev
 title: erid.dev (this website)
+order: 3
 summary: Built a static professional website and a shared content pipeline for web, PDF, and Word
   résumés. Includes a local editor and automated publication checks.
 role: Creator & Maintainer

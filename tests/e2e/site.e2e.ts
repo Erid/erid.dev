@@ -91,6 +91,38 @@ describe('production site', () => {
     }
     await page.close()
   })
+
+  it('toggles dark mode and persists the color-scheme override across navigation', async () => {
+    const page = await browser.newPage()
+    await page.goto(origin)
+    const meta = page.locator('head meta[name="color-scheme"]')
+    assert.equal(await meta.getAttribute('content'), 'light dark')
+
+    await page.locator('[data-theme-toggle]').click()
+    const toggled = await meta.getAttribute('content')
+    assert.ok(toggled === 'dark' || toggled === 'light')
+
+    await page.locator('header nav a[href="/about/"]').click()
+    await page.waitForURL(`${origin}/about/`)
+    assert.equal(await meta.getAttribute('content'), toggled)
+    await page.close()
+  })
+
+  it('opens and closes a Core Skill modal with experience details on the homepage', async () => {
+    const page = await browser.newPage()
+    await page.goto(origin)
+    const reactBadge = page.locator('button.chip-skill', { hasText: 'React' }).first()
+    await reactBadge.click()
+
+    const dialog = page.locator('dialog#home-skill-react')
+    assert.equal(await dialog.getAttribute('open'), '')
+    assert.match((await dialog.textContent()) ?? '', /Total experience/)
+    assert.match((await dialog.textContent()) ?? '', /Empat Speech/)
+
+    await page.keyboard.press('Escape')
+    assert.equal(await dialog.getAttribute('open'), null)
+    await page.close()
+  })
 })
 
 async function waitForServer(): Promise<void> {

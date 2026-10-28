@@ -9,9 +9,11 @@ import {
   getResumeContent,
   getSkills,
 } from '../../lib/content/queries.ts'
+import { fullName } from '../../lib/content/schemas.ts'
 import { buildResume } from '../../lib/resume/model.ts'
 
 const profile = await getProfile()
+const name = fullName(profile)
 const resume = buildResume(
   await getResumeContent(),
   await getAllExperienceById(),
@@ -24,12 +26,12 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
 
 <BaseLayout
   title="Résumé"
-  description={`Résumé of ${profile.name}, ${profile.headline}: experience, education, and core skills.`}
+  description={`Résumé of ${name}, ${profile.headline}: experience, education, and core skills.`}
 >
   <div class="container page">
     <header class="top">
       <div>
-        <h1>{profile.name}</h1>
+        <h1>{name}</h1>
         <p class="headline">{profile.headline}</p>
         <ul class="contact" aria-label="Location and contact links">
           <li class="muted">{profile.location}</li>

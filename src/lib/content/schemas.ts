@@ -36,7 +36,8 @@ const caseStudySchema = z
   .default({ published: false })
 
 export const profileSchema = z.object({
-  name: z.string().min(1),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
   headline: z.string().min(1),
   location: z.string().min(1),
   introduction: z.string().min(1),
@@ -97,6 +98,10 @@ export const educationSchema = z.object({
 export const projectSchema = z.object({
   entry: z.string().min(1),
   title: z.string().min(1),
+  order: z.preprocess(
+    (value) => (value === '' || value === null ? undefined : value),
+    z.number().int().optional(),
+  ),
   summary: z.string().min(1),
   role: optional(z.string()),
   date: optional(monthDate),
@@ -144,6 +149,34 @@ export const resumeSchema = z.object({
 })
 
 export type Profile = z.infer<typeof profileSchema>
+
+export interface Entry<T> {
+  id: string
+  data: T
+}
+
+export function fullName(profile: Pick<Profile, 'firstName' | 'lastName'>): string {
+  return `${profile.firstName} ${profile.lastName}`
+}
+
+export function compareProjects(
+  a: Entry<Project>,
+  b: Entry<Project>,
+  experienceById: Record<string, Experience>,
+): number {
+  const aOrder = a.data.order ?? Number.POSITIVE_INFINITY
+  const bOrder = b.data.order ?? Number.POSITIVE_INFINITY
+  if (aOrder !== bOrder) return aOrder - bOrder
+
+  const effectiveDate = (project: Project): string => {
+    if (project.date) return project.date
+    const role = project.relatedExperience ? experienceById[project.relatedExperience] : undefined
+    if (!role) return ''
+    return role.end ?? '9999-99'
+  }
+  const byDate = effectiveDate(b.data).localeCompare(effectiveDate(a.data))
+  return byDate !== 0 ? byDate : a.data.title.localeCompare(b.data.title)
+}
 export type Skill = z.infer<typeof skillSchema>
 export type Skills = z.infer<typeof skillsSchema>
 export type Experience = z.infer<typeof experienceSchema>

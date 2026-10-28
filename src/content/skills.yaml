@@ -1,8 +1,31 @@
 skills:
   - name: React
+    description: >-
+      Building complex web and mobile user interfaces, interactive visual canvas
+      applications, and reusable component systems backed by Storybook and
+      Playwright.
   - name: TypeScript
+    description: >-
+      End-to-end type-safe engineering across web frontends, Node.js services,
+      GraphQL APIs, and infrastructure-as-code.
   - name: Node.js
+    description: >-
+      Designing and operating backend services, GraphQL APIs, real-time
+      event-driven pipelines, and microservices architectures.
   - name: GraphQL
+    description: >-
+      Designing schemas, subscriptions, and federated/microservice APIs using
+      Apollo, Hasura, and AWS AppSync, including high-load subscription tuning.
   - name: AWS
+    description: >-
+      Cloud infrastructure and serverless/container architectures using SST,
+      SQS with dead-letter recovery, Cognito, AppSync, and Bedrock.
   - name: PostgreSQL
+    description: >-
+      Relational data modeling, query optimization, and geospatial queries
+      (PostGIS) with Prisma, Sequelize, and Hasura.
   - name: Software Architecture
+    description: >-
+      Defining system boundaries, PII isolation, microservices, and LLM
+      pipelines while leading engineering teams from greenfield design through
+      delivery.

@@ -60,7 +60,8 @@ export default config({
       path: 'src/content/profile',
       format: 'yaml',
       schema: {
-        name: fields.text({ label: 'Name', validation: { isRequired: true } }),
+        firstName: fields.text({ label: 'First name', validation: { isRequired: true } }),
+        lastName: fields.text({ label: 'Last name', validation: { isRequired: true } }),
         headline: fields.text({ label: 'Headline', validation: { isRequired: true } }),
         location: fields.text({ label: 'Location', validation: { isRequired: true } }),
         introduction: fields.text({
@@ -187,6 +188,10 @@ export default config({
       schema: {
         entry: fields.slug({ name: { label: 'Entry name (file name becomes the URL slug)' } }),
         title: fields.text({ label: 'Title', validation: { isRequired: true } }),
+        order: fields.integer({
+          label: 'Display order (optional)',
+          description: 'Lower numbers appear first. Leave blank to sort by date.',
+        }),
         summary: fields.text({
           label: 'Summary (problem and contribution)',
           multiline: true,

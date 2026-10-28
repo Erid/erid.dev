@@ -1,5 +1,6 @@
 entry: gopato-graphql-incident
 title: Resolving a Peak-Hour GraphQL Subscription Incident
+order: 4
 summary: Resolved a launch-period GraphQL subscription overload in a delivery platform. Added
   automated stress testing to catch future fan-out regressions.
 role: Chief Technology Officer · GoPato

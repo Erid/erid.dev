@@ -11,9 +11,11 @@ contributions:
 technologies:
   - TypeScript
   - React
+  - Node.js
   - Storybook
   - Playwright
   - SST
   - AWS
+  - Software Architecture
 links: []
 published: true

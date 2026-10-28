@@ -1,0 +1,409 @@
+---
+import ArrowRightIcon from '@lucide/astro/icons/arrow-right'
+import BriefcaseIcon from '@lucide/astro/icons/briefcase'
+import ClockIcon from '@lucide/astro/icons/clock'
+import InfoIcon from '@lucide/astro/icons/info'
+import XIcon from '@lucide/astro/icons/x'
+import { getExperience, getProjects, getSkills } from '../lib/content/queries.ts'
+import { buildSkillSummaries } from '../lib/content/skills.ts'
+
+interface Props {
+  /** Additional class name for the outer skill list wrapper. */
+  class?: string
+  /** Optional prefix to ensure unique dialog IDs if rendered more than once on a page. */
+  idPrefix?: string
+}
+
+const { class: className, idPrefix = 'core-skill' } = Astro.props
+
+const [skills, experience, projects] = await Promise.all([
+  getSkills(),
+  getExperience(),
+  getProjects(),
+])
+const summaries = buildSkillSummaries(skills, experience, projects)
+---
+
+<div class:list={['core-skills', className]} data-core-skills>
+  <ul class="chips" aria-label="Core technologies — select a skill to view experience">
+    {summaries.map((skill) => {
+      const dialogId = `${idPrefix}-${skill.slug}`
+      const invokerAttrs = {
+        commandfor: dialogId,
+        command: 'show-modal',
+      } as Record<string, string>
+      return (
+        <li>
+          <button
+            type="button"
+            class="chip chip-skill"
+            aria-label={`${skill.name} (${skill.totalDuration} across ${skill.roles.length} ${skill.roles.length === 1 ? 'position' : 'positions'}) — view details`}
+            {...invokerAttrs}
+          >
+            <span>{skill.name}</span>
+            <InfoIcon class="skill-indicator" size={14} aria-hidden="true" />
+          </button>
+        </li>
+      )
+    })}
+  </ul>
+
+  {summaries.map((skill) => {
+    const dialogId = `${idPrefix}-${skill.slug}`
+    const titleId = `${dialogId}-title`
+    const dialogAttrs = { closedby: 'any' } as Record<string, string>
+    const closeAttrs = {
+      commandfor: dialogId,
+      command: 'close',
+    } as Record<string, string>
+
+    return (
+      <dialog id={dialogId} class="skill-dialog" aria-labelledby={titleId} {...dialogAttrs}>
+        <div class="dialog-inner">
+          <header class="dialog-header">
+            <div>
+              <p class="eyebrow">Core skill</p>
+              <h2 id={titleId}>{skill.name}</h2>
+            </div>
+            <button
+              type="button"
+              class="close-button"
+              aria-label={`Close ${skill.name} details`}
+              autofocus
+              {...closeAttrs}
+            >
+              <XIcon size={18} aria-hidden="true" />
+            </button>
+          </header>
+
+          <div class="stats" aria-label={`Experience summary for ${skill.name}`}>
+            <div class="stat">
+              <span class="stat-icon" aria-hidden="true">
+                <ClockIcon size={18} />
+              </span>
+              <div>
+                <span class="stat-label">Total experience</span>
+                <strong class="stat-value">{skill.totalDuration}</strong>
+              </div>
+            </div>
+            <div class="stat">
+              <span class="stat-icon" aria-hidden="true">
+                <BriefcaseIcon size={18} />
+              </span>
+              <div>
+                <span class="stat-label">Positions used</span>
+                <strong class="stat-value">
+                  {skill.roles.length} {skill.roles.length === 1 ? 'role' : 'roles'}
+                </strong>
+              </div>
+            </div>
+          </div>
+
+          {skill.description && <p class="description">{skill.description}</p>}
+
+          <div class="roles-section">
+            <h3 class="roles-heading">Positions where I used {skill.name}</h3>
+            {skill.roles.length > 0 ? (
+              <ul class="role-list">
+                {skill.roles.map((role) => (
+                  <li class="role-item">
+                    <div class="role-main">
+                      <a class="role-link" href={`/experience/#role-${role.id}`}>
+                        <strong>{role.title}</strong>
+                        <span class="employer">{role.employer}</span>
+                      </a>
+                      <div class="role-meta">
+                        <span class="muted">{role.range}</span>
+                        <span class="chip chip-quiet duration-badge">{role.duration}</span>
+                      </div>
+                    </div>
+                    {role.caseStudyHref && (
+                      <a class="case-study-link" href={role.caseStudyHref}>
+                        Case study <ArrowRightIcon size={14} aria-hidden="true" />
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="muted">Used across architecture and engineering engagements.</p>
+            )}
+          </div>
+        </div>
+      </dialog>
+    )
+  })}
+</div>
+
+<script>
+  // Progressive enhancement fallbacks for Invoker Commands (`commandfor`/`command`)
+  // and `<dialog closedby="any">` in browsers that have not shipped them natively yet.
+  function initSkillDialogs() {
+    if (!('commandForElement' in HTMLButtonElement.prototype)) {
+      if (!(window as unknown as { __skillCommandBound?: boolean }).__skillCommandBound) {
+        ;(window as unknown as { __skillCommandBound?: boolean }).__skillCommandBound = true
+        document.addEventListener('click', (event) => {
+          const target = event.target
+          if (!(target instanceof Element)) return
+          const button = target.closest<HTMLButtonElement>('button[commandfor]')
+          if (!button) return
+          const dialogId = button.getAttribute('commandfor')
+          const command = button.getAttribute('command')
+          const dialog = dialogId ? document.getElementById(dialogId) : null
+          if (!(dialog instanceof HTMLDialogElement)) return
+          if (command === 'show-modal' && !dialog.open) {
+            dialog.showModal()
+          } else if (command === 'close' && dialog.open) {
+            dialog.close()
+          }
+        })
+      }
+    }
+
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      const outside = (e: PointerEvent, dialog: HTMLDialogElement) => {
+        const r = dialog.getBoundingClientRect()
+        return (
+          e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom
+        )
+      }
+      for (const dialog of document.querySelectorAll<HTMLDialogElement>(
+        'dialog.skill-dialog[closedby="any"]',
+      )) {
+        if (dialog.dataset.lightDismissBound === 'true') continue
+        dialog.dataset.lightDismissBound = 'true'
+        let pressedOutside = false
+        dialog.addEventListener('pointerdown', (e) => {
+          pressedOutside = outside(e, dialog)
+        })
+        dialog.addEventListener('pointerup', (e) => {
+          if (pressedOutside && outside(e, dialog)) dialog.close()
+        })
+      }
+    }
+  }
+
+  initSkillDialogs()
+  document.addEventListener('astro:page-load', initSkillDialogs)
+</script>
+
+<style>
+  .chip-skill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid color-mix(in oklab, var(--accent) 28%, var(--line));
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .chip-skill:hover {
+    background: color-mix(in oklab, var(--accent-soft) 75%, var(--accent) 15%);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  .chip-skill:active {
+    transform: translateY(0);
+  }
+  .skill-indicator {
+    opacity: 0.72;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
+  }
+  .chip-skill:hover .skill-indicator {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  .skill-dialog {
+    width: min(100% - 2rem, 34rem);
+    max-height: min(85dvh, 42rem);
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow-md);
+  }
+  .skill-dialog:modal {
+    overscroll-behavior: contain;
+  }
+  .skill-dialog::backdrop {
+    background: rgb(15 19 28 / 55%);
+    backdrop-filter: blur(2px);
+    overflow: hidden;
+    overscroll-behavior: contain;
+  }
+
+  .dialog-inner {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .dialog-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .dialog-header .eyebrow {
+    margin-bottom: var(--space-1);
+    color: var(--accent-strong);
+  }
+  .dialog-header h2 {
+    margin: 0;
+    font-size: var(--step-2);
+  }
+  .close-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg-sunken);
+    color: var(--ink-muted);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .close-button:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: var(--space-3);
+  }
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--bg-sunken);
+    border: 1px solid var(--line);
+  }
+  .stat-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    flex-shrink: 0;
+  }
+  .stat-label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+  .stat-value {
+    display: block;
+    font-size: var(--step-0);
+    color: var(--ink);
+  }
+
+  .description {
+    margin: 0;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+
+  .roles-section {
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-4);
+  }
+  .roles-heading {
+    font-size: var(--step--1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+    margin: 0 0 var(--space-3);
+  }
+  .role-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .role-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: var(--bg);
+    transition: border-color 0.15s ease;
+  }
+  .role-item:hover {
+    border-color: var(--accent);
+  }
+  .role-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+    flex: 1 1 14rem;
+  }
+  .role-link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.5rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .role-link:hover strong {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .employer {
+    color: var(--accent-strong);
+    font-weight: 600;
+    font-size: var(--step--1);
+  }
+  .role-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--step--1);
+  }
+  .duration-badge {
+    font-size: 0.75rem;
+    padding: 0.1rem 0.5rem;
+  }
+  .case-study-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+</style>

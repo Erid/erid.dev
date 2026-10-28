@@ -1,0 +1,137 @@
+---
+import MoonIcon from '@lucide/astro/icons/moon'
+import SunIcon from '@lucide/astro/icons/sun'
+---
+
+<button type="button" class="theme-toggle" data-theme-toggle>
+  <span class="branch to-dark">
+    <MoonIcon size={18} aria-hidden="true" />
+    <span class="visually-hidden">Switch to dark theme</span>
+  </span>
+  <span class="branch to-light">
+    <SunIcon size={18} aria-hidden="true" />
+    <span class="visually-hidden">Switch to light theme</span>
+  </span>
+</button>
+
+<script>
+  function getMeta(): HTMLMetaElement | null {
+    return document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]')
+  }
+
+  function getSystemScheme(): 'light' | 'dark' {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
+  function getStoredScheme(): 'light' | 'dark' | null {
+    try {
+      const value = localStorage.getItem('color-scheme')
+      return value === 'light' || value === 'dark' ? value : null
+    } catch {
+      return null
+    }
+  }
+
+  function getRenderedScheme(): 'light' | 'dark' {
+    const metaContent = getMeta()?.content
+    if (metaContent === 'light' || metaContent === 'dark') return metaContent
+    return getStoredScheme() ?? getSystemScheme()
+  }
+
+  function applyScheme(value: 'light' | 'dark' | null) {
+    const meta = getMeta()
+    if (meta) {
+      meta.content = value ?? 'light dark'
+    }
+  }
+
+  if (!(window as unknown as { __themeToggleBound?: boolean }).__themeToggleBound) {
+    ;(window as unknown as { __themeToggleBound?: boolean }).__themeToggleBound = true
+
+    document.addEventListener('click', (event) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+      const button = target.closest('[data-theme-toggle]')
+      if (!button) return
+
+      const nextScheme: 'light' | 'dark' = getRenderedScheme() === 'dark' ? 'light' : 'dark'
+      const systemScheme = getSystemScheme()
+
+      if (nextScheme === systemScheme) {
+        try {
+          localStorage.removeItem('color-scheme')
+        } catch {
+          // Storage unavailable; still update the active document meta.
+        }
+        applyScheme(null)
+      } else {
+        try {
+          localStorage.setItem('color-scheme', nextScheme)
+        } catch {
+          // Storage unavailable; still update the active document meta.
+        }
+        applyScheme(nextScheme)
+      }
+    })
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'color-scheme') {
+        const next = event.newValue === 'light' || event.newValue === 'dark' ? event.newValue : null
+        applyScheme(next)
+      }
+    })
+  }
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink-muted);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .theme-toggle:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+    background: var(--bg-sunken);
+    box-shadow: var(--shadow-md);
+  }
+  .branch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Default (light): show "Switch to dark theme", hide "Switch to light theme" */
+  .to-light {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not(:has(> head > meta[name='color-scheme'][content='light']))) .to-dark {
+      display: none;
+    }
+    :global(:root:not(:has(> head > meta[name='color-scheme'][content='light']))) .to-light {
+      display: inline-flex;
+    }
+  }
+
+  :global(:root:has(> head > meta[name='color-scheme'][content='dark'])) .to-dark {
+    display: none;
+  }
+  :global(:root:has(> head > meta[name='color-scheme'][content='dark'])) .to-light {
+    display: inline-flex;
+  }
+</style>

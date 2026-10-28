@@ -1,10 +1,16 @@
 import { getCollection, getEntry } from 'astro:content'
-import type { Education, Experience, Profile, Project, Resume, Skill } from './schemas.ts'
+import {
+  compareProjects,
+  type Education,
+  type Entry,
+  type Experience,
+  type Profile,
+  type Project,
+  type Resume,
+  type Skill,
+} from './schemas.ts'
 
-export interface Entry<T> {
-  id: string
-  data: T
-}
+export { compareProjects, type Entry }
 
 /** Page-facing content queries. */
 export async function getProfile(): Promise<Profile> {
@@ -46,16 +52,7 @@ export async function getProjects(): Promise<Entry<Project>[]> {
     getCollection('projects', ({ data }) => data.published),
     getAllExperienceById(),
   ])
-  const effectiveDate = (project: Project): string => {
-    if (project.date) return project.date
-    const role = project.relatedExperience ? experienceById[project.relatedExperience] : undefined
-    if (!role) return ''
-    return role.end ?? '9999-99'
-  }
-  return entries.sort((a, b) => {
-    const byDate = effectiveDate(b.data).localeCompare(effectiveDate(a.data))
-    return byDate !== 0 ? byDate : a.data.title.localeCompare(b.data.title)
-  })
+  return entries.sort((a, b) => compareProjects(a, b, experienceById))
 }
 
 /** Returns published posts, newest first. Drafts never reach routes, navigation, or the sitemap. */

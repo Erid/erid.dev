@@ -20,7 +20,7 @@ const detailHref = role.caseStudy.published ? `/experience/${id}/` : undefined
 const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
 ---
 
-<article class="role">
+<article id={`role-${id}`} class="role">
   <div class="when">
     <p class="range">{formatRange(role.start, role.end)}</p>
     {meta && <p class="muted meta">{meta}</p>}

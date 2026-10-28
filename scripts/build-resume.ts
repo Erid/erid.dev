@@ -8,6 +8,7 @@ import type { z } from 'astro/zod'
 import {
   educationSchema,
   experienceSchema,
+  fullName,
   profileSchema,
   resumeSchema,
   skillsSchema,
@@ -70,7 +71,7 @@ async function main(): Promise<void> {
   })
   writeFileSync(docxOutPath, docxBuffer)
 
-  await renderPdfFromBuiltSite(pdfOutPath, profile.name, resume)
+  await renderPdfFromBuiltSite(pdfOutPath, fullName(profile), resume)
 
   const pdfPages = verifyPdfArtifact(pdfOutPath, resume.website, profile.links)
   verifyDocxArtifact(docxOutPath)

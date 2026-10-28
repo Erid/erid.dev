@@ -14,11 +14,12 @@ technologies:
   - GraphQL
   - React
   - Redux
-  - Postgres
+  - PostgreSQL
   - InfluxDB
   - Bosum
   - Ruby
   - AWS
   - WebSocket
+  - Software Architecture
 links: []
 published: true

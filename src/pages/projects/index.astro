@@ -2,6 +2,7 @@
 import ProjectCard from '../../components/ProjectCard.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { getProfile, getProjects } from '../../lib/content/queries.ts'
+import { fullName } from '../../lib/content/schemas.ts'
 
 const profile = await getProfile()
 const projects = await getProjects()
@@ -9,7 +10,7 @@ const projects = await getProjects()
 
 <BaseLayout
   title="Projects & Case Studies"
-  description={`Selected software projects and architectural case studies by ${profile.name}.`}
+  description={`Selected software projects and architectural case studies by ${fullName(profile)}.`}
 >
   <div class="container page">
     <h1>Projects & case studies</h1>

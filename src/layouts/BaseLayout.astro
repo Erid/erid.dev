@@ -4,6 +4,7 @@ import '../styles/global.css'
 import SiteFooter from '../components/SiteFooter.astro'
 import SiteHeader from '../components/SiteHeader.astro'
 import { getPosts, getProfile, getProjects } from '../lib/content/queries.ts'
+import { fullName } from '../lib/content/schemas.ts'
 
 interface Props {
   title: string
@@ -17,6 +18,7 @@ interface Props {
 const { title, description, isHome = false, structuredData } = Astro.props
 
 const profile = await getProfile()
+const name = fullName(profile)
 const [projects, posts] = await Promise.all([getProjects(), getPosts()])
 
 // Sections appear in navigation only when real published content exists.
@@ -29,7 +31,7 @@ const nav = [
   { href: '/resume/', label: 'Résumé' },
 ]
 
-const pageTitle = isHome ? title : `${title} | ${profile.name}`
+const pageTitle = isHome ? title : `${title} | ${name}`
 const canonical = new URL(Astro.url.pathname, Astro.site)
 ---
 
@@ -38,12 +40,29 @@ const canonical = new URL(Astro.url.pathname, Astro.site)
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      try {
+        const stored = localStorage.getItem('color-scheme')
+        const meta = document.querySelector('meta[name="color-scheme"]')
+        if (meta && (stored === 'light' || stored === 'dark')) {
+          meta.content = stored
+        }
+      } catch {
+        // Storage access blocked.
+      }
+      document.addEventListener('astro:before-swap', (event) => {
+        const current = document.querySelector('meta[name="color-scheme"]')?.getAttribute('content')
+        const nextMeta = event.newDocument.querySelector('meta[name="color-scheme"]')
+        if (current && nextMeta) nextMeta.setAttribute('content', current)
+      })
+    </script>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content={isHome ? 'profile' : 'website'} />
-    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:site_name" content={name} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -57,10 +76,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site)
     <a class="skip-link" href="#main">
       Skip to content
     </a>
-    <SiteHeader name={profile.name} nav={nav} currentPath={Astro.url.pathname} />
+    <SiteHeader name={name} nav={nav} currentPath={Astro.url.pathname} />
     <main id="main">
       <slot />
     </main>
-    <SiteFooter name={profile.name} links={profile.links} />
+    <SiteFooter name={name} links={profile.links} />
   </body>
 </html>

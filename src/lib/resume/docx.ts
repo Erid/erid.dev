@@ -8,7 +8,7 @@ import {
   type ParagraphChild,
   TextRun,
 } from 'docx'
-import type { Profile } from '../content/schemas.ts'
+import { fullName, type Profile } from '../content/schemas.ts'
 import type { ResumeEducation, ResumeModel, ResumeRole } from './model.ts'
 
 export interface ResumeDocxInput {
@@ -33,13 +33,14 @@ export async function renderResumeDocx({
   resume,
   contactEmail,
 }: ResumeDocxInput): Promise<Buffer> {
+  const name = fullName(profile)
   const children: Paragraph[] = [
     new Paragraph({
       heading: HeadingLevel.TITLE,
       spacing: { after: 40 },
       children: [
         new TextRun({
-          text: profile.name,
+          text: name,
           bold: true,
           font: FONT,
           size: 40,
@@ -100,9 +101,9 @@ export async function renderResumeDocx({
   }
 
   const doc = new Document({
-    creator: profile.name,
-    title: `${profile.name} — Résumé`,
-    description: `Résumé of ${profile.name}, ${profile.headline}`,
+    creator: name,
+    title: `${name} — Résumé`,
+    description: `Résumé of ${name}, ${profile.headline}`,
     sections: [
       {
         properties: {

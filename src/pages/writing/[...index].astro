@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { formatDay } from '../../lib/content/dates.ts'
 import { getPosts, getProfile } from '../../lib/content/queries.ts'
+import { fullName } from '../../lib/content/schemas.ts'
 
 // The index exists only once a real article is published.
 export const getStaticPaths = (async () =>
@@ -12,7 +13,10 @@ const profile = await getProfile()
 const posts = await getPosts()
 ---
 
-<BaseLayout title="Writing" description={`Articles by ${profile.name} on software engineering.`}>
+<BaseLayout
+  title="Writing"
+  description={`Articles by ${fullName(profile)} on software engineering.`}
+>
   <div class="container page">
     <h1>Writing</h1>
     <p class="muted prose">Notes and articles on software architecture and engineering.</p>
