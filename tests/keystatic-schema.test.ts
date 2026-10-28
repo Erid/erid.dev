@@ -8,12 +8,14 @@ import {
   profileSchema,
   projectSchema,
   resumeSchema,
+  skillsSchema,
 } from '../src/lib/content/schemas.ts'
 
 // Keystatic forms and Astro schemas are declared separately; keep their field names in sync.
 // The post body is the Markdown content of the file, so it is not a frontmatter field.
 const pairs = [
   ['profile', keystatic.singletons?.profile, profileSchema, []],
+  ['skills', keystatic.singletons?.skills, skillsSchema, []],
   ['resume', keystatic.singletons?.resume, resumeSchema, []],
   ['experience', keystatic.collections?.experience, experienceSchema, []],
   ['education', keystatic.collections?.education, educationSchema, []],

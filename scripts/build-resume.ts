@@ -10,6 +10,7 @@ import {
   experienceSchema,
   profileSchema,
   resumeSchema,
+  skillsSchema,
 } from '../src/lib/content/schemas.ts'
 import { renderResumeDocx } from '../src/lib/resume/docx.ts'
 import { buildResume, type ResumeModel } from '../src/lib/resume/model.ts'
@@ -46,6 +47,7 @@ async function main(): Promise<void> {
   }
 
   const profile = readContentFile('profile.yaml', profileSchema)
+  const skillsContent = readContentFile('skills.yaml', skillsSchema)
   const resumeContent = readContentFile('resume.yaml', resumeSchema)
   const experience = readContentDirectory('experience', '.yaml', experienceSchema)
   const education = readContentDirectory('education', '.yaml', educationSchema)
@@ -53,6 +55,7 @@ async function main(): Promise<void> {
     resumeContent,
     experience,
     education,
+    skillsContent.skills,
     siteUrl(requireSiteDomain(process.env)),
   )
 

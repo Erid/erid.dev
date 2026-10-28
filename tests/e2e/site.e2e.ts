@@ -57,7 +57,7 @@ describe('production site', () => {
   it('does not overflow horizontally on a mobile viewport', async () => {
     const context = await browser.newContext({ viewport: { width: 375, height: 800 } })
     const page = await context.newPage()
-    for (const path of ['/', '/experience/', '/resume/']) {
+    for (const path of ['/', '/experience/', '/about/', '/resume/']) {
       await page.goto(`${origin}${path}`)
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

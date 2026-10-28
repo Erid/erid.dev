@@ -7,12 +7,18 @@ import {
   profileSchema,
   projectSchema,
   resumeSchema,
+  skillsSchema,
 } from './lib/content/schemas.ts'
 
 // Keystatic writes singletons as bare YAML objects; the glob loader reads each as one entry.
 const profile = defineCollection({
   loader: glob({ pattern: 'profile.yaml', base: './src/content' }),
   schema: profileSchema,
+})
+
+const skills = defineCollection({
+  loader: glob({ pattern: 'skills.yaml', base: './src/content' }),
+  schema: skillsSchema,
 })
 
 const resume = defineCollection({
@@ -40,4 +46,4 @@ const posts = defineCollection({
   schema: postSchema,
 })
 
-export const collections = { profile, resume, experience, education, projects, posts }
+export const collections = { profile, skills, resume, experience, education, projects, posts }

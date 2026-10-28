@@ -33,6 +33,8 @@ names (`pnpm test` checks this).
   and need alt text.
 - **Add an article:** create `src/content/posts/<slug>.md` with frontmatter and Markdown body; clear
   `draft` when ready.
+- **Update core skills:** edit `src/content/skills.yaml`; both the homepage and the résumé (web, PDF,
+  and Word) read from this list.
 - **Change the résumé:** edit `src/content/resume.yaml`; the website and PDF read the same model.
 
 ## Verify

@@ -47,6 +47,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site)
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
+    <link rel="expect" href="#main" {...({ blocking: 'render' } as Record<string, string>)} />
     {structuredData && (
       <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}

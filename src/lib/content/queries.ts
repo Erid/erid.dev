@@ -1,5 +1,5 @@
 import { getCollection, getEntry } from 'astro:content'
-import type { Education, Experience, Profile, Project, Resume } from './schemas.ts'
+import type { Education, Experience, Profile, Project, Resume, Skill } from './schemas.ts'
 
 export interface Entry<T> {
   id: string
@@ -11,6 +11,12 @@ export async function getProfile(): Promise<Profile> {
   const entry = await getEntry('profile', 'profile')
   if (!entry) throw new Error('Missing profile content: src/content/profile.yaml')
   return entry.data
+}
+
+export async function getSkills(): Promise<Skill[]> {
+  const entry = await getEntry('skills', 'skills')
+  if (!entry) throw new Error('Missing skills content: src/content/skills.yaml')
+  return entry.data.skills
 }
 
 export async function getResumeContent(): Promise<Resume> {

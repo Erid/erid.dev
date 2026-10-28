@@ -7,6 +7,7 @@ import {
   getEducationById,
   getProfile,
   getResumeContent,
+  getSkills,
 } from '../../lib/content/queries.ts'
 import { buildResume } from '../../lib/resume/model.ts'
 
@@ -15,6 +16,7 @@ const resume = buildResume(
   await getResumeContent(),
   await getAllExperienceById(),
   await getEducationById(),
+  await getSkills(),
   Astro.site?.origin ?? '',
 )
 const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)

@@ -69,7 +69,16 @@ export default config({
           validation: { isRequired: true },
         }),
         biography: fields.text({ label: 'Biography (about page)', multiline: true }),
-        coreTechnologies: textList('Core technologies'),
+        hobbies: fields.array(
+          fields.object({
+            name: fields.text({ label: 'Hobby', validation: { isRequired: true } }),
+            description: fields.text({ label: 'Note or detail (optional)', multiline: true }),
+          }),
+          {
+            label: 'Hobbies and interests',
+            itemLabel: (props) => props.fields.name.value || 'Hobby',
+          },
+        ),
         links: links('Public links'),
         languages: fields.array(
           fields.object({
@@ -113,7 +122,23 @@ export default config({
           fields.relationship({ label: 'Education entry', collection: 'education' }),
           { label: 'Education', itemLabel: (props) => props.value ?? 'Education' },
         ),
-        skills: textList('Selected skills'),
+      },
+    }),
+    skills: singleton({
+      label: 'Core Skills',
+      path: 'src/content/skills',
+      format: 'yaml',
+      schema: {
+        skills: fields.array(
+          fields.object({
+            name: fields.text({ label: 'Skill', validation: { isRequired: true } }),
+            description: fields.text({ label: 'Description (optional)', multiline: true }),
+          }),
+          {
+            label: 'Core skills, in display order',
+            itemLabel: (props) => props.fields.name.value || 'Skill',
+          },
+        ),
       },
     }),
   },

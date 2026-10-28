@@ -1,39 +1,175 @@
 ---
-import WhatsAppContact from '../components/WhatsAppContact.astro'
+import ArrowRightIcon from '@lucide/astro/icons/arrow-right'
+import BookOpenIcon from '@lucide/astro/icons/book-open'
+import CpuIcon from '@lucide/astro/icons/cpu'
+import Gamepad2Icon from '@lucide/astro/icons/gamepad-2'
+import LanguagesIcon from '@lucide/astro/icons/languages'
+import LayersIcon from '@lucide/astro/icons/layers'
+import MapPinIcon from '@lucide/astro/icons/map-pin'
+import SparklesIcon from '@lucide/astro/icons/sparkles'
+import TentTreeIcon from '@lucide/astro/icons/tent-tree'
+import UsersIcon from '@lucide/astro/icons/users'
 import Actions from '../components/Actions.astro'
+import Portrait from '../components/Portrait.astro'
+import WhatsAppContact from '../components/WhatsAppContact.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
-import { getProfile } from '../lib/content/queries.ts'
+import { getProfile, getSkills } from '../lib/content/queries.ts'
 
-const profile = await getProfile()
+const [profile, skills] = await Promise.all([getProfile(), getSkills()])
+const paragraphs = profile.biography?.split(/\n{2,}/) ?? []
+
+function hobbyIconKind(name: string): 'book' | 'game' | 'camp' | 'other' {
+  const lower = name.toLowerCase()
+  if (lower.includes('read') || lower.includes('book')) return 'book'
+  if (lower.includes('gam')) return 'game'
+  if (lower.includes('camp') || lower.includes('hik') || lower.includes('outdoor')) return 'camp'
+  return 'other'
+}
 ---
 
 <BaseLayout
   title="About"
-  description={`About ${profile.name}: background, working style, and languages.`}
+  description={`About ${profile.name}: background, working style, hobbies, and languages.`}
 >
-  <div class="container page">
-    <h1>Hi, I’m {profile.name.split(' ')[0]}.</h1>
-    <p class="lead">Based in {profile.location}.</p>
-    <div class="prose">
-      {profile.biography?.split(/\n{2,}/).map((paragraph) => (
-        <p>{paragraph}</p>
-      ))}
+  <section class="about-hero">
+    <div class="container">
+      <div class="identity">
+        {profile.portrait && (
+          <Portrait path={profile.portrait} alt={profile.portraitAlt ?? ''} size={116} />
+        )}
+        <div>
+          <p class="eyebrow">About me</p>
+          <h1>Hi, I&lsquo;m {profile.name.split(' ')[0]}.</h1>
+          <p class="location muted">
+            <MapPinIcon size={16} aria-hidden="true" />
+            <span>{profile.location}</span>
+            <span aria-hidden="true">·</span>
+            <span>{profile.headline}</span>
+          </p>
+        </div>
+      </div>
+      <p class="lead">{profile.introduction}</p>
     </div>
-    {profile.languages.length > 0 && (
-      <section aria-labelledby="languages-heading">
-        <h2 id="languages-heading">Languages</h2>
-        <ul class="plain">
-          {profile.languages.map((language) => (
-            <li>
-              {language.name}
-              <span class="muted"> · {language.proficiency}</span>
-            </li>
+  </section>
+
+  <div class="container page">
+    <div class="about-grid">
+      <section class="card story-card" aria-labelledby="story-heading">
+        <h2 id="story-heading">Background & working style</h2>
+        <div class="prose">
+          {paragraphs.map((paragraph) => (
+            <p>{paragraph}</p>
           ))}
+        </div>
+        <ul class="pillars" aria-label="Working principles">
+          <li>
+            <span class="pillar-icon" aria-hidden="true">
+              <LayersIcon size={18} />
+            </span>
+            <div>
+              <strong>Architecture to delivery</strong>
+              <span class="muted">
+                Designing systems end-to-end and staying hands-on through implementation.
+              </span>
+            </div>
+          </li>
+          <li>
+            <span class="pillar-icon" aria-hidden="true">
+              <CpuIcon size={18} />
+            </span>
+            <div>
+              <strong>AI-accelerated, human-verified</strong>
+              <span class="muted">
+                Using modern AI tools for speed while owning architectural decisions and review.
+              </span>
+            </div>
+          </li>
+          <li>
+            <span class="pillar-icon" aria-hidden="true">
+              <UsersIcon size={18} />
+            </span>
+            <div>
+              <strong>Collaborative leadership</strong>
+              <span class="muted">
+                Partnering across engineering, product, and leadership to ship products from
+                scratch.
+              </span>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <div class="sidebar">
+        {skills.length > 0 && (
+          <section class="card" aria-labelledby="skills-heading">
+            <h2 id="skills-heading">Core stack</h2>
+            <ul class="chips">
+              {skills.map((skill) => (
+                <li class="chip">{skill.name}</li>
+              ))}
+            </ul>
+            <p class="card-footer-link">
+              <a href="/experience/">
+                See experience in practice <ArrowRightIcon size={15} aria-hidden="true" />
+              </a>
+            </p>
+          </section>
+        )}
+
+        {profile.languages.length > 0 && (
+          <section class="card" aria-labelledby="languages-heading">
+            <div class="card-heading">
+              <LanguagesIcon size={18} aria-hidden="true" />
+              <h2 id="languages-heading">Languages</h2>
+            </div>
+            <ul class="language-list">
+              {profile.languages.map((language) => (
+                <li>
+                  <span class="language-name">{language.name}</span>
+                  <span class="chip chip-quiet">{language.proficiency}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </div>
+
+    {profile.hobbies.length > 0 && (
+      <section class="section-block" aria-labelledby="hobbies-heading">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Off the clock</p>
+            <h2 id="hobbies-heading">Outside of software</h2>
+          </div>
+          <p class="muted section-sub">What I enjoy doing when I step away from the keyboard.</p>
+        </div>
+        <ul class="hobbies-grid">
+          {profile.hobbies.map((hobby) => {
+            const kind = hobbyIconKind(hobby.name)
+            return (
+              <li class="card hobby-card">
+                <span class="hobby-icon" aria-hidden="true">
+                  {kind === 'book' && <BookOpenIcon size={22} />}
+                  {kind === 'game' && <Gamepad2Icon size={22} />}
+                  {kind === 'camp' && <TentTreeIcon size={22} />}
+                  {kind === 'other' && <SparklesIcon size={22} />}
+                </span>
+                <h3>{hobby.name}</h3>
+                {hobby.description && <p class="muted">{hobby.description}</p>}
+              </li>
+            )
+          })}
         </ul>
       </section>
     )}
-    <section aria-labelledby="contact-heading">
+
+    <section class="card contact-card" aria-labelledby="contact-heading">
       <h2 id="contact-heading">Get in touch</h2>
+      <p class="muted">
+        Always happy to connect about senior engineering, architecture, or technical leadership
+        roles.
+      </p>
       <Actions links={profile.links} />
       <WhatsAppContact />
     </section>
@@ -41,21 +177,184 @@ const profile = await getProfile()
 </BaseLayout>
 
 <style>
-  .page {
+  .about-hero {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--line);
     padding-block: var(--space-6);
   }
+  .identity {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin-bottom: var(--space-4);
+  }
+  h1 {
+    margin-bottom: var(--space-1);
+  }
+  .eyebrow {
+    color: var(--accent-strong);
+  }
+  .location {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+  }
   .lead {
+    max-width: var(--prose-width);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+  .page {
+    padding-block: var(--space-6);
+    display: grid;
+    gap: var(--space-6);
+  }
+  .about-grid {
+    display: grid;
+    gap: var(--space-5);
+    align-items: start;
+  }
+  @media (min-width: 54rem) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1.55fr) minmax(18rem, 1fr);
+    }
+  }
+  .story-card h2,
+  .sidebar h2,
+  .contact-card h2 {
     font-size: var(--step-1);
   }
-  section {
-    margin-top: var(--space-6);
+  .pillars {
+    list-style: none;
+    margin: var(--space-5) 0 0;
+    padding: var(--space-4) 0 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: var(--space-3);
   }
-  h2 {
-    font-size: var(--step-1);
+  .pillars li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
   }
-  .plain {
+  .pillars strong {
+    display: block;
+    font-size: var(--step-0);
+    margin-bottom: 0.1rem;
+  }
+  .pillars .muted {
+    display: block;
+    font-size: var(--step--1);
+  }
+  .pillar-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .sidebar {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .card-footer-link {
+    margin: var(--space-4) 0 0;
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+  .card-footer-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+  .card-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--accent-strong);
+    margin-bottom: var(--space-3);
+  }
+  .card-heading h2 {
+    margin: 0;
+    color: var(--ink);
+  }
+  .language-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .language-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-block: var(--space-1);
+    border-bottom: 1px solid var(--bg-sunken);
+  }
+  .language-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .language-name {
+    font-weight: 600;
+  }
+  .section-sub {
+    margin: 0;
+  }
+  .hobbies-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+  .hobby-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+  }
+  .hobby-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent);
+  }
+  .hobby-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    margin-bottom: var(--space-1);
+  }
+  .hobby-card h3 {
+    margin: 0;
+    font-size: var(--step-1);
+  }
+  .hobby-card p {
+    margin: 0;
+    font-size: var(--step--1);
+  }
+  .contact-card {
+    background: var(--accent-soft);
+    border-color: transparent;
   }
 </style>

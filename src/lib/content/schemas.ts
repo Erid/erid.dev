@@ -41,7 +41,14 @@ export const profileSchema = z.object({
   location: z.string().min(1),
   introduction: z.string().min(1),
   biography: optional(z.string()),
-  coreTechnologies: textList,
+  hobbies: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        description: optional(z.string()),
+      }),
+    )
+    .default([]),
   links: labeledLinks,
   languages: z
     .array(z.object({ name: z.string().min(1), proficiency: z.string().min(1) }))
@@ -49,6 +56,15 @@ export const profileSchema = z.object({
   // Path relative to src/assets.
   portrait: optional(z.string()),
   portraitAlt: optional(z.string()),
+})
+
+export const skillSchema = z.object({
+  name: z.string().min(1),
+  description: optional(z.string()),
+})
+
+export const skillsSchema = z.object({
+  skills: z.array(skillSchema).min(1),
 })
 
 export const experienceSchema = z.object({
@@ -125,10 +141,11 @@ export const resumeSchema = z.object({
     )
     .min(1),
   education: z.array(z.string().min(1)).default([]),
-  skills: textList,
 })
 
 export type Profile = z.infer<typeof profileSchema>
+export type Skill = z.infer<typeof skillSchema>
+export type Skills = z.infer<typeof skillsSchema>
 export type Experience = z.infer<typeof experienceSchema>
 export type Education = z.infer<typeof educationSchema>
 export type Project = z.infer<typeof projectSchema>

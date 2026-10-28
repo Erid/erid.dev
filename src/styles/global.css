@@ -65,6 +65,37 @@ body {
 
 main {
   flex: 1;
+  view-transition-name: main-content;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(main-content) {
+  animation: 120ms ease-out both page-fade-out;
+}
+
+::view-transition-new(main-content) {
+  animation: 180ms cubic-bezier(0.22, 1, 0.36, 1) both page-fade-in;
+}
+
+::view-transition-group(nav-indicator) {
+  animation-duration: 180ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
 }
 
 h1,
@@ -252,6 +283,10 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+
   *,
   *::before,
   *::after {

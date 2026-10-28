@@ -55,8 +55,9 @@ test('résumé uses its own bullets when present, otherwise the role contributio
     education: ['school'],
   })
 
-  const model = buildResume(resume, experience, education, WEBSITE)
+  const model = buildResume(resume, experience, education, [{ name: 'TypeScript' }], WEBSITE)
   assert.equal(model.website, WEBSITE)
+  assert.deepEqual(model.skills, ['TypeScript'])
   assert.deepEqual(
     model.roles.map((r) => r.bullets),
     [['Résumé wording'], ['From the role']],
@@ -71,7 +72,6 @@ test('renderResumeDocx generates a valid .docx archive from the résumé model',
     headline: 'Senior Full Stack Engineer',
     location: 'Costa Rica',
     introduction: 'Intro',
-    coreTechnologies: ['TypeScript'],
     links: [{ label: 'GitHub', url: 'https://github.com/Erid' }],
     languages: [{ name: 'English', proficiency: 'Full professional proficiency' }],
   })
@@ -80,7 +80,6 @@ test('renderResumeDocx generates a valid .docx archive from the résumé model',
       summary: 'Summary text',
       roles: [{ experience: 'one', bullets: ['Shipped software'] }],
       education: ['school'],
-      skills: ['TypeScript', 'React'],
     }),
     {
       one: experienceSchema.parse({
@@ -99,6 +98,7 @@ test('renderResumeDocx generates a valid .docx archive from the résumé model',
         start: '2010',
       }),
     },
+    [{ name: 'TypeScript' }, { name: 'React' }],
     WEBSITE,
   )
 

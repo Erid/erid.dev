@@ -1,5 +1,5 @@
 import { formatRange } from '../content/dates.ts'
-import type { Education, Experience, Resume } from '../content/schemas.ts'
+import type { Education, Experience, Resume, Skill } from '../content/schemas.ts'
 
 export interface ResumeRole {
   id: string
@@ -34,6 +34,7 @@ export function buildResume(
   resume: Resume,
   experience: Record<string, Experience>,
   education: Record<string, Education>,
+  skills: readonly Skill[],
   website: string,
 ): ResumeModel {
   return {
@@ -67,6 +68,6 @@ export function buildResume(
         },
       ]
     }),
-    skills: resume.skills,
+    skills: skills.map((skill) => skill.name),
   }
 }

@@ -8,12 +8,19 @@ import Portrait from '../components/Portrait.astro'
 import ProjectCard from '../components/ProjectCard.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { formatDay } from '../lib/content/dates.ts'
-import { getExperience, getPosts, getProfile, getProjects } from '../lib/content/queries.ts'
+import {
+  getExperience,
+  getPosts,
+  getProfile,
+  getProjects,
+  getSkills,
+} from '../lib/content/queries.ts'
 
 const GLANCE_ROLE_COUNT = 3
 
-const profile = await getProfile()
-const [experience, allProjects, posts] = await Promise.all([
+const [profile, skills, experience, allProjects, posts] = await Promise.all([
+  getProfile(),
+  getSkills(),
   getExperience(),
   getProjects(),
   getPosts(),
@@ -30,7 +37,7 @@ const structuredData = {
     jobTitle: profile.headline,
     url: Astro.site?.href,
     sameAs: profile.links.map((link) => link.url),
-    knowsAbout: profile.coreTechnologies,
+    knowsAbout: skills.map((skill) => skill.name),
   },
 }
 ---
@@ -56,8 +63,8 @@ const structuredData = {
       </div>
       <p class="lead">{profile.introduction}</p>
       <ul class="chips stack" aria-label="Core technologies">
-        {profile.coreTechnologies.map((tech) => (
-          <li class="chip">{tech}</li>
+        {skills.map((skill) => (
+          <li class="chip">{skill.name}</li>
         ))}
       </ul>
       <p class="muted">Open to senior and lead engineering and architecture roles.</p>

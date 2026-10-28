@@ -9,6 +9,7 @@ import {
   profileSchema,
   projectSchema,
   resumeSchema,
+  skillsSchema,
 } from '../src/lib/content/schemas.ts'
 import { validateContent } from '../src/lib/content/validate.ts'
 
@@ -17,6 +18,7 @@ const contentDir = join(root, 'content')
 const problems: string[] = []
 
 const profile = readFile('profile.yaml', profileSchema)
+const skills = readFile('skills.yaml', skillsSchema)
 const resume = readFile('resume.yaml', resumeSchema)
 const experience = readDirectory('experience', '.yaml', experienceSchema)
 const education = readDirectory('education', '.yaml', educationSchema)
@@ -42,8 +44,8 @@ if (problems.length > 0) {
   process.exit(1)
 }
 console.log(
-  `Content OK: ${Object.keys(experience).length} experience, ${Object.keys(education).length} education, ` +
-    `${Object.keys(projects).length} projects, ${Object.keys(posts).length} posts.`,
+  `Content OK: ${skills?.skills.length ?? 0} skills, ${Object.keys(experience).length} experience, ` +
+    `${Object.keys(education).length} education, ${Object.keys(projects).length} projects, ${Object.keys(posts).length} posts.`,
 )
 
 function readFile<T extends z.ZodType>(path: string, schema: T): z.infer<T> | undefined {

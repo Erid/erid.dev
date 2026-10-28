@@ -1,38 +1,50 @@
-summary: Senior full stack engineer with 15+ years of experience building web and mobile products.
-  Combines hands-on engineering with technical leadership as a team lead, software architect, and
-  CTO. Uses AI tools for implementation while directing architecture, reviewing changes, and
-  validating behavior.
+summary: >-
+  Senior full stack engineer with 15+ years of experience building web and
+  mobile products. Combines hands-on engineering with technical leadership as a
+  team lead, software architect, and CTO. Uses AI tools for implementation while
+  directing architecture, reviewing changes, and validating behavior.
 roles:
   - experience: empat-speech
     bullets:
-      - Built a speech therapy platform from the ground up, combining live video, interactive games,
-        session data collection, and progress analysis.
-      - Designed external PII storage and SQS synchronization with dead-letter queue recovery, plus
-        API-level access controls for student therapy sessions.
-      - Built production LLM workflows for visual stories and clinical reports, with structured
-        outputs, pre-calculated metrics, and references to source sessions.
+      - >-
+        Built a speech therapy platform from the ground up, combining live
+        video, interactive games, session data collection, and progress
+        analysis.
+      - >-
+        Designed external PII storage and SQS synchronization with dead-letter
+        queue recovery, plus API-level access controls for student therapy
+        sessions.
+      - >-
+        Built production LLM workflows for visual stories and clinical reports,
+        with structured outputs, pre-calculated metrics, and references to
+        source sessions.
   - experience: catch-health
+    bullets: []
   - experience: clevertech
+    bullets: []
   - experience: rematter
+    bullets: []
   - experience: officespace-software
+    bullets: []
   - experience: gopato
+    bullets: []
   - experience: sbr-software-architect
+    bullets: []
   - experience: sbr-technical-lead
+    bullets: []
   - experience: eleadertech
+    bullets: []
   - experience: sbr-web-developer
     bullets:
       - Developed and maintained dynamic websites.
   - experience: avantica
     bullets:
-      - Maintained employee time and cost tracking software for payroll and billing.
+      - >-
+        Maintained employee time and cost tracking software for payroll and
+        billing.
   - experience: itecsa
+    bullets: []
   - experience: bosz-digital
+    bullets: []
 education:
   - cenfotec
-skills:
-  - React / React Native
-  - TypeScript / Node.js
-  - GraphQL / PostgreSQL
-  - AWS / SST
-  - Playwright / Storybook
-  - Software Architecture

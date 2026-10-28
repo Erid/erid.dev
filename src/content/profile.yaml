@@ -1,14 +1,30 @@
 name: Érid Baldioceda
 headline: Senior Full Stack Engineer
 location: Escazú, Costa Rica
-introduction: I build web and mobile products from architecture through delivery, combining hands-on
-  engineering with experience as a team lead, software architect, and CTO.
-coreTechnologies:
-  - React
-  - TypeScript
-  - Node.js
-  - GraphQL
-  - AWS
+introduction: >-
+  I build web and mobile products from architecture through delivery, combining
+  hands-on engineering with experience as a team lead, software architect, and
+  CTO.
+biography: >-
+  I've been hooked on software development since I was young. I enjoy exploring
+  new technologies, building projects, and experimenting with tools that help me
+  work smarter and faster.
+
+
+  I also use AI tools to help implement software, while guiding architectural
+  decisions and reviewing and validating the result.
+
+
+  Collaboration is a big part of what I enjoy about the work. I've helped create
+  products from scratch and worked across engineering, architecture, and team
+  leadership.
+hobbies:
+  - name: Reading
+    description: Diving into books to unwind and explore new worlds and ideas.
+  - name: Gaming
+    description: Playing video games for the strategy, storytelling, and shared fun with friends.
+  - name: Camping
+    description: Unplugging outdoors, pitching a tent, and recharging in nature.
 links:
   - label: GitHub
     url: https://github.com/Erid
@@ -19,19 +35,7 @@ languages:
     proficiency: Full professional proficiency
   - name: Spanish
     proficiency: Native or bilingual proficiency
+  - name: 日本語
+    proficiency: Beginner
 portrait: images/erid-baldioceda-portrait.jpg
 portraitAlt: Érid Baldioceda smiling at the camera, with short curly hair dyed red and blue
-biography: >-
-  I've been hooked on software development since I was young. I enjoy exploring new technologies,
-  building projects, and experimenting with tools that help me work smarter and faster.
-
-
-  I also use AI tools to help implement software, while guiding architectural decisions and
-  reviewing and validating the result.
-
-
-  Collaboration is a big part of what I enjoy about the work. I've helped create products from
-  scratch and worked across engineering, architecture, and team leadership.
-
-
-  Outside software, I enjoy reading, gaming, and camping.
