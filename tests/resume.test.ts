@@ -1,6 +1,12 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { formatDate, formatDay, formatRange } from '../src/lib/content/dates.ts'
+import {
+  formatApproximateDuration,
+  formatDate,
+  formatDay,
+  formatRange,
+  formatRoleDuration,
+} from '../src/lib/content/dates.ts'
 import {
   educationSchema,
   experienceSchema,
@@ -17,6 +23,12 @@ test('date labels keep the precision they were given', () => {
   assert.equal(formatDate('2011'), '2011')
   assert.equal(formatRange('2023-12'), 'Dec 2023 – Present')
   assert.equal(formatRange('2022-06', '2022-09'), 'Jun 2022 – Sep 2022')
+  assert.equal(formatRoleDuration('2022-06', '2022-09'), '4 mos')
+  assert.equal(formatRoleDuration('2022-09', '2023-12'), '1 yr 4 mos')
+  assert.equal(formatRoleDuration('2023-12', undefined, '2026-10'), '2 yrs 11 mos')
+  assert.equal(formatApproximateDuration(101), '~8 yrs')
+  assert.equal(formatApproximateDuration(46), '~4 yrs')
+  assert.equal(formatApproximateDuration(12), '~1 yr')
   assert.equal(formatDay('2026-10-07'), 'Oct 7, 2026')
 })
 
@@ -55,9 +67,17 @@ test('résumé uses its own bullets when present, otherwise the role contributio
     education: ['school'],
   })
 
-  const model = buildResume(resume, experience, education, [{ name: 'TypeScript' }], WEBSITE)
+  const model = buildResume(
+    resume,
+    experience,
+    education,
+    [{ name: 'TypeScript' }],
+    WEBSITE,
+    '2021-01',
+  )
   assert.equal(model.website, WEBSITE)
   assert.deepEqual(model.skills, ['TypeScript'])
+  assert.equal(model.roles[0]?.duration, '1 yr 1 mo')
   assert.deepEqual(
     model.roles.map((r) => r.bullets),
     [['Résumé wording'], ['From the role']],

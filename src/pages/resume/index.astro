@@ -1,5 +1,6 @@
 ---
 import ContactEmail from '../../components/ContactEmail.astro'
+import Portrait from '../../components/Portrait.astro'
 import ResumeDownload from '../../components/ResumeDownload.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import {
@@ -29,93 +30,128 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
   description={`Résumé of ${name}, ${profile.headline}: experience, education, and core skills.`}
 >
   <div class="container page">
-    <header class="top">
-      <div>
-        <h1>{name}</h1>
-        <p class="headline">{profile.headline}</p>
-        <ul class="contact" aria-label="Location and contact links">
-          <li class="muted">{profile.location}</li>
-          <li>
-            <a href={resume.website}>{resume.website}</a>
-          </li>
-          {profile.links.map((link) => (
-            <li>
-              <a href={link.url} rel="me noopener">
-                {link.label}
-              </a>
-            </li>
-          ))}
-          {hasContactEmail && (
-            <li>
-              <ContactEmail variant="inline" />
-            </li>
+    <div class="resume-sheet">
+      <header class="top">
+        <div class="identity">
+          {profile.portrait && (
+            <div class="portrait-wrap">
+              <Portrait path={profile.portrait} alt={profile.portraitAlt ?? ''} size={92} />
+            </div>
           )}
-        </ul>
+          <div class="identity-text">
+            <h1>{name}</h1>
+            <p class="headline">{profile.headline}</p>
+            <div class="contact" aria-label="Location and contact links">
+              <ul class="contact-row">
+                <li class="muted">{profile.location}</li>
+                {hasContactEmail && (
+                  <li>
+                    <ContactEmail variant="inline" />
+                  </li>
+                )}
+              </ul>
+              <ul class="contact-row">
+                <li>
+                  <a href={resume.website}>{resume.website}</a>
+                </li>
+                {profile.links.map((link) => (
+                  <li>
+                    <a href={link.url} rel="me noopener">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <ResumeDownload align="end" />
+      </header>
+
+      <section class="summary-section" aria-labelledby="summary-heading">
+        <h2 id="summary-heading" class="summary-heading">
+          Summary
+        </h2>
+        <p class="summary-prose">{resume.summary}</p>
+      </section>
+
+      <div class="resume-columns">
+        <div class="main-column">
+          <section class="experience-section" aria-labelledby="experience-heading">
+            <h2 id="experience-heading">Experience</h2>
+            <div class="timeline">
+              {resume.roles.map((role) => (
+                <article class="role">
+                  <header class="role-header">
+                    <div class="role-top">
+                      <h3>{role.title}</h3>
+                      <div class="role-dates">
+                        <span class="range">{role.range}</span>
+                        <span class="duration-pill">{role.duration}</span>
+                      </div>
+                    </div>
+                    <p class="role-company">
+                      <span class="employer">{role.employer}</span>
+                      {role.location && <span class="location"> · {role.location}</span>}
+                    </p>
+                  </header>
+                  <ul>
+                    {role.bullets.map((bullet) => (
+                      <li>{bullet}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <aside class="side-column" aria-label="Core skills, education, and languages">
+          {resume.skillDetails.length > 0 && (
+            <section class="side-section" aria-labelledby="skills-heading">
+              <h2 id="skills-heading">Core skills</h2>
+              <ul class="skill-list">
+                {resume.skillDetails.map((skill) => (
+                  <li class="skill-item">
+                    <span class="skill-name">{skill.name}</span>
+                    {skill.duration && <span class="skill-duration">{skill.duration}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {resume.education.length > 0 && (
+            <section class="side-section" aria-labelledby="education-heading">
+              <h2 id="education-heading">Education</h2>
+              <div class="edu-list">
+                {resume.education.map((entry) => (
+                  <div class="edu-item">
+                    <p class="edu-qualification">{entry.qualification}</p>
+                    <p class="edu-institution">{entry.institution}</p>
+                    <p class="edu-range muted">{entry.range}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {profile.languages.length > 0 && (
+            <section class="side-section" aria-labelledby="languages-heading">
+              <h2 id="languages-heading">Languages</h2>
+              <ul class="language-list">
+                {profile.languages.map((language) => (
+                  <li class="language-item">
+                    <span class="language-name">{language.name}</span>
+                    <span class="language-level muted">{language.proficiency}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </aside>
       </div>
-      <ResumeDownload align="end" />
-    </header>
-
-    <section aria-labelledby="summary-heading">
-      <h2 id="summary-heading">Summary</h2>
-      <p class="prose">{resume.summary}</p>
-    </section>
-
-    {resume.skills.length > 0 && (
-      <section aria-labelledby="skills-heading">
-        <h2 id="skills-heading">Core skills</h2>
-        <ul class="chips">
-          {resume.skills.map((skill) => (
-            <li class="chip">{skill}</li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    <section aria-labelledby="experience-heading">
-      <h2 id="experience-heading">Experience</h2>
-      {resume.roles.map((role) => (
-        <article class="role">
-          <h3>
-            {role.title}, {role.employer}
-          </h3>
-          <p class="muted meta">
-            {role.range}
-            {role.location && ` · ${role.location}`}
-          </p>
-          <ul>
-            {role.bullets.map((bullet) => (
-              <li>{bullet}</li>
-            ))}
-          </ul>
-        </article>
-      ))}
-    </section>
-
-    {resume.education.length > 0 && (
-      <section aria-labelledby="education-heading">
-        <h2 id="education-heading">Education</h2>
-        {resume.education.map((entry) => (
-          <p>
-            <strong>{entry.institution}</strong>, {entry.qualification}
-            <span class="muted"> · {entry.range}</span>
-          </p>
-        ))}
-      </section>
-    )}
-
-    {profile.languages.length > 0 && (
-      <section aria-labelledby="languages-heading">
-        <h2 id="languages-heading">Languages</h2>
-        <ul class="plain">
-          {profile.languages.map((language) => (
-            <li>
-              {language.name}
-              <span class="muted"> · {language.proficiency}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
+    </div>
   </div>
 </BaseLayout>
 
@@ -123,24 +159,70 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
   .page {
     padding-block: var(--space-6);
   }
+
+  .resume-sheet {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--accent);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+
   .top {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-4);
-    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--line);
   }
+
+  .identity {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex: 1 1 24rem;
+    min-width: 0;
+  }
+
+  .portrait-wrap {
+    flex-shrink: 0;
+  }
+
+  .portrait-wrap :global(.portrait) {
+    width: clamp(4.75rem, 9.5vw, 5.75rem);
+    border-width: 2px;
+    border-color: var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .identity-text {
+    min-width: 0;
+  }
+
   .top h1 {
-    margin-bottom: var(--space-1);
+    margin-bottom: 0.1rem;
+    font-size: clamp(1.75rem, 1.45rem + 1.4vw, 2.35rem);
+    letter-spacing: -0.02em;
   }
+
   .headline {
     margin: 0 0 var(--space-2);
-    color: var(--ink-muted);
+    color: var(--accent-strong);
     font-size: var(--step-1);
     font-weight: 600;
   }
+
   .contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: var(--step--1);
+  }
+
+  .contact-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -148,117 +230,486 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     list-style: none;
     margin: 0;
     padding: 0;
-    font-size: var(--step--1);
   }
-  .contact li {
+
+  .contact-row li {
     display: inline-flex;
     align-items: center;
   }
-  .contact li + li::before {
+
+  .contact-row li:not(:last-child)::after {
     content: '·';
-    margin-inline: 0.55rem;
+    margin-inline: 0.5rem;
     color: var(--ink-muted);
   }
-  section {
-    margin-top: var(--space-6);
+
+  .summary-section {
+    margin-top: var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg);
+    border-inline-start: 3px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   }
-  h2 {
-    font-size: var(--step-1);
+
+  .summary-heading {
+    margin: 0 0 var(--space-1);
+    padding: 0;
+    border: 0;
+    color: var(--accent-strong);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .summary-prose {
+    margin: 0;
+    max-width: none;
+    line-height: 1.55;
+  }
+
+  .resume-columns {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-5);
+    align-items: start;
+  }
+
+  @media (min-width: 52rem) {
+    .top {
+      flex-wrap: nowrap;
+    }
+
+    .resume-columns {
+      grid-template-columns: minmax(0, 1fr) 18.5rem;
+      gap: var(--space-6);
+    }
+  }
+
+  .experience-section h2,
+  .side-section h2 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
     padding-bottom: var(--space-2);
+    margin-bottom: var(--space-4);
     border-bottom: 2px solid var(--accent);
   }
+
+  .timeline {
+    position: relative;
+    padding-inline-start: 1.25rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 3px;
+    top: 0.45rem;
+    bottom: 0.45rem;
+    width: 2px;
+    background: var(--line);
+  }
+
   .role {
-    margin-bottom: var(--space-5);
+    position: relative;
+    padding-bottom: var(--space-5);
   }
+
+  .role:last-child {
+    padding-bottom: 0;
+  }
+
+  .role::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: calc(-1.25rem);
+    top: 0.38rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--surface);
+  }
+
+  .role-header {
+    margin-bottom: var(--space-2);
+  }
+
+  .role-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-3);
+  }
+
   .role h3 {
+    font-size: var(--step-1);
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .role-company {
+    margin: 0.1rem 0 0;
     font-size: var(--step-0);
-    margin-bottom: 0;
+    line-height: 1.35;
   }
-  .meta {
-    margin: 0 0 var(--space-2);
+
+  .employer {
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+
+  .location {
+    color: var(--ink-muted);
     font-size: var(--step--1);
+    font-weight: 400;
   }
+
+  .role-dates {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .range {
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+
+  .duration-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.55rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    font-size: 0.76rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
   .role ul {
     margin: 0;
-    padding-left: 1.2rem;
+    padding-inline-start: 1.15rem;
   }
-  .plain {
+
+  .role li {
+    margin-bottom: 0.25rem;
+  }
+
+  .role li::marker {
+    color: var(--accent);
+  }
+
+  .side-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .side-section {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
+  }
+
+  .side-section h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .skill-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .skill-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: 0.35rem 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-size: var(--step--1);
+  }
+
+  .skill-name {
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .skill-duration {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    padding: 0.08rem 0.45rem;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .edu-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .edu-item p {
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .edu-qualification {
+    font-weight: 700;
+    color: var(--ink);
+    font-size: var(--step--1);
+  }
+
+  .edu-institution {
+    color: var(--ink-muted);
+    font-weight: 500;
+    font-size: var(--step--1);
+  }
+
+  .edu-range {
+    font-size: 0.78rem;
+    margin-top: 0.1rem !important;
+  }
+
+  .language-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .language-item {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--step--1);
+    line-height: 1.35;
+  }
+
+  .language-name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .language-level {
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 38rem) {
+    .identity {
+      align-items: flex-start;
+    }
   }
 
   @media print {
     .page {
       padding-block: 0;
     }
-    .top {
-      margin-bottom: 0.7rem;
+
+    .resume-sheet {
+      border: 0;
+      border-top: 3px solid var(--accent);
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0.35rem 0 0;
+      background: transparent;
     }
+
+    .top {
+      padding-bottom: 0.45rem;
+      margin-bottom: 0;
+    }
+
+    .identity {
+      gap: 0.65rem;
+    }
+
+    .portrait-wrap :global(.portrait) {
+      width: 52pt;
+      height: 52pt;
+      border-width: 1.5px;
+      box-shadow: none;
+    }
+
     .top h1 {
       color: var(--accent-strong);
-      font-size: 19pt;
+      font-size: 17.5pt;
+      margin-bottom: 0.05rem;
+    }
+
+    .headline {
+      font-size: 10pt;
+      margin-bottom: 0.15rem;
+    }
+
+    .contact {
+      font-size: 8.5pt;
+      gap: 0.08rem;
+    }
+
+    .summary-section {
+      margin-top: 0.45rem;
+      padding: 0.3rem 0.55rem;
+      background: var(--bg);
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .summary-heading {
+      font-size: 7.5pt;
       margin-bottom: 0.1rem;
     }
-    .headline {
-      font-size: 10.5pt;
-      margin-bottom: 0.25rem;
-    }
-    .contact {
+
+    .summary-prose {
       font-size: 9pt;
+      line-height: 1.38;
     }
-    section {
-      margin-top: 0.75rem;
+
+    .resume-columns {
+      grid-template-columns: minmax(0, 1fr) 2.25in;
+      gap: 0.25in;
+      margin-top: 0.5rem;
     }
-    h2 {
-      font-size: 11pt;
-      padding-bottom: 0.15rem;
-      margin-bottom: 0.4rem;
+
+    .experience-section h2,
+    .side-section h2 {
+      font-size: 8.5pt;
+      padding-bottom: 0.12rem;
+      margin-bottom: 0.35rem;
       border-bottom-width: 1.5px;
       break-after: avoid;
       page-break-after: avoid;
     }
-    .prose {
-      max-width: none;
+
+    .timeline {
+      padding-inline-start: 0.7rem;
+    }
+
+    .timeline::before {
+      inset-inline-start: 2.25px;
+      width: 1.5px;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .role {
+      padding-bottom: 0.42rem;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .role::before {
+      inset-inline-start: -0.7rem;
+      top: 0.25rem;
+      width: 6px;
+      height: 6px;
+      box-shadow: 0 0 0 2px #fff;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .role-header {
+      margin-bottom: 0.12rem;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    .role h3 {
+      font-size: 9.75pt;
       margin-bottom: 0;
     }
-    .role {
-      margin-bottom: 0.55rem;
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-    .role h3 {
-      font-size: 10pt;
-      break-after: avoid;
-      page-break-after: avoid;
-    }
-    .meta {
-      margin-bottom: 0.15rem;
+
+    .role-company {
       font-size: 8.75pt;
-      break-after: avoid;
-      page-break-after: avoid;
     }
+
+    .location {
+      font-size: 8.25pt;
+    }
+
+    .role-dates {
+      font-size: 8.25pt;
+      gap: 0.25rem;
+    }
+
+    .duration-pill {
+      font-size: 7.5pt;
+      padding: 0.05rem 0.38rem;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
     .role ul {
-      padding-left: 1.1rem;
+      padding-inline-start: 0.95rem;
     }
+
     .role li {
-      margin-bottom: 0.08rem;
+      font-size: 8.85pt;
+      line-height: 1.34;
+      margin-bottom: 0.06rem;
     }
-    section[aria-labelledby='education-heading'],
-    section[aria-labelledby='skills-heading'],
-    section[aria-labelledby='languages-heading'] {
+
+    .side-column {
+      gap: 0.45rem;
+    }
+
+    .side-section {
+      padding: 0.4rem 0.5rem;
       break-inside: avoid;
       page-break-inside: avoid;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
     }
-    section[aria-labelledby='education-heading'] p {
-      margin-bottom: 0.25rem;
+
+    .skill-list {
+      gap: 0.2rem;
     }
-    .chips {
-      gap: 0.3rem;
+
+    .skill-item {
+      padding: 0.18rem 0.38rem;
+      font-size: 8.5pt;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
     }
-    .chip {
-      padding: 0.1rem 0.5rem;
-      font-size: 8.75pt;
+
+    .skill-duration {
+      font-size: 7.5pt;
+      padding: 0.04rem 0.32rem;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .edu-qualification,
+    .edu-institution,
+    .language-item {
+      font-size: 8.5pt;
+    }
+
+    .edu-range,
+    .language-level {
+      font-size: 7.75pt;
     }
   }
 </style>

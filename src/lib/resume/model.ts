@@ -1,5 +1,6 @@
-import { formatRange } from '../content/dates.ts'
+import { currentYearMonth, formatRange, formatRoleDuration } from '../content/dates.ts'
 import type { Education, Experience, Resume, Skill } from '../content/schemas.ts'
+import { buildSkillSummaries } from '../content/skills.ts'
 
 export interface ResumeRole {
   id: string
@@ -7,6 +8,7 @@ export interface ResumeRole {
   employer: string
   location: string | undefined
   range: string
+  duration: string
   bullets: string[]
   technologies: string[]
 }
@@ -18,12 +20,18 @@ export interface ResumeEducation {
   range: string
 }
 
+export interface ResumeSkill {
+  name: string
+  duration: string | undefined
+}
+
 export interface ResumeModel {
   website: string
   summary: string
   roles: ResumeRole[]
   education: ResumeEducation[]
   skills: string[]
+  skillDetails: ResumeSkill[]
 }
 
 /**
@@ -36,7 +44,13 @@ export function buildResume(
   education: Record<string, Education>,
   skills: readonly Skill[],
   website: string,
+  nowMonth: string = currentYearMonth(),
 ): ResumeModel {
+  const publishedExperience = Object.entries(experience)
+    .filter(([, entry]) => entry.published)
+    .map(([id, data]) => ({ id, data }))
+  const skillSummaries = buildSkillSummaries(skills, publishedExperience, [], nowMonth)
+
   return {
     website,
     summary: resume.summary,
@@ -50,6 +64,7 @@ export function buildResume(
           employer: entry.employer,
           location: entry.location,
           range: formatRange(entry.start, entry.end),
+          duration: formatRoleDuration(entry.start, entry.end, nowMonth),
           bullets: role.bullets.length > 0 ? role.bullets : entry.contributions,
           technologies: entry.technologies,
         },
@@ -69,5 +84,9 @@ export function buildResume(
       ]
     }),
     skills: skills.map((skill) => skill.name),
+    skillDetails: skillSummaries.map((summary) => ({
+      name: summary.name,
+      duration: summary.totalMonths > 0 ? summary.approximateDuration : undefined,
+    })),
   }
 }

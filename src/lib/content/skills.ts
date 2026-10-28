@@ -1,5 +1,14 @@
-import { formatRange } from './dates.ts'
+import {
+  currentYearMonth,
+  formatApproximateDuration,
+  formatDuration,
+  formatRange,
+  roleDurationMonths,
+  toMonthInterval,
+} from './dates.ts'
 import type { Entry, Experience, Project, Skill } from './schemas.ts'
+
+export { formatApproximateDuration, formatDuration }
 
 export interface SkillRoleSummary {
   id: string
@@ -19,6 +28,7 @@ export interface SkillSummary {
   description: string | undefined
   totalMonths: number
   totalDuration: string
+  approximateDuration: string
   roles: SkillRoleSummary[]
 }
 
@@ -43,8 +53,7 @@ export function buildSkillSummaries(
     const totalMonths = sumMergedIntervals(intervals)
 
     const roles: SkillRoleSummary[] = matching.map(({ id, data }) => {
-      const [startIdx, endExclusive] = toMonthInterval(data.start, data.end ?? nowMonth)
-      const months = Math.max(1, endExclusive - startIdx)
+      const months = roleDurationMonths(data.start, data.end, nowMonth)
       const hasRelatedProjectStudy = projects.some(
         (project) => project.data.relatedExperience === id && project.data.caseStudy.published,
       )
@@ -70,20 +79,10 @@ export function buildSkillSummaries(
       description: skill.description,
       totalMonths,
       totalDuration: formatDuration(totalMonths),
+      approximateDuration: formatApproximateDuration(totalMonths),
       roles,
     }
   })
-}
-
-/** Formats a month count into a concise recruiter-friendly duration such as "8 yrs 5 mos". */
-export function formatDuration(totalMonths: number): string {
-  const months = Math.max(0, Math.floor(totalMonths))
-  if (months === 0) return 'Less than 1 mo'
-  const years = Math.floor(months / 12)
-  const rem = months % 12
-  const yearPart = years > 0 ? `${years} ${years === 1 ? 'yr' : 'yrs'}` : ''
-  const monthPart = rem > 0 ? `${rem} ${rem === 1 ? 'mo' : 'mos'}` : ''
-  return [yearPart, monthPart].filter(Boolean).join(' ')
 }
 
 /** Merges overlapping or contiguous [startMonth, endMonthExclusive) intervals and sums their span. */
@@ -108,28 +107,8 @@ export function sumMergedIntervals(intervals: readonly (readonly [number, number
   return total
 }
 
-function currentYearMonth(now: Date = new Date()): string {
-  const year = now.getUTCFullYear()
-  const month = String(now.getUTCMonth() + 1).padStart(2, '0')
-  return `${year}-${month}`
-}
-
 function normalizeTech(value: string): string {
   return value.trim().toLowerCase()
-}
-
-/** Converts inclusive YYYY-MM bounds to a half-open month index interval [start, end + 1). */
-function toMonthInterval(start: string, end: string): [number, number] {
-  const startIdx = parseYearMonth(start)
-  const endIdx = Math.max(startIdx, parseYearMonth(end))
-  return [startIdx, endIdx + 1]
-}
-
-function parseYearMonth(value: string): number {
-  const [yearStr, monthStr] = value.split('-')
-  const year = Number(yearStr)
-  const month = Number(monthStr ?? '1')
-  return year * 12 + (month - 1)
 }
 
 function slugifySkill(name: string): string {

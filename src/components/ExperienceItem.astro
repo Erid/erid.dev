@@ -1,6 +1,6 @@
 ---
 import ArrowRightIcon from '@lucide/astro/icons/arrow-right'
-import { formatRange } from '../lib/content/dates.ts'
+import { formatRange, formatRoleDuration } from '../lib/content/dates.ts'
 import { getProjects } from '../lib/content/queries.ts'
 import type { Experience } from '../lib/content/schemas.ts'
 
@@ -17,12 +17,16 @@ const relatedCaseStudies = (await getProjects()).filter(
   ({ data }) => data.relatedExperience === id && data.caseStudy.published,
 )
 const detailHref = role.caseStudy.published ? `/experience/${id}/` : undefined
+const duration = formatRoleDuration(role.start, role.end)
 const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
 ---
 
 <article id={`role-${id}`} class="role">
   <div class="when">
     <p class="range">{formatRange(role.start, role.end)}</p>
+    <p class="duration">
+      <span class="chip chip-quiet duration-badge">{duration}</span>
+    </p>
     {meta && <p class="muted meta">{meta}</p>}
   </div>
   <div class="what">
@@ -71,17 +75,27 @@ const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
     margin: 0;
     font-weight: 600;
   }
+  .duration {
+    margin: var(--space-1) 0;
+  }
+  .duration-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid var(--line);
+  }
   .meta {
     margin: 0;
     font-size: var(--step--1);
   }
   h3 {
-    margin-bottom: 0;
+    margin-bottom: 0.15rem;
   }
   .employer {
     margin: 0 0 var(--space-3);
-    color: var(--accent-strong);
-    font-weight: 600;
+    color: var(--ink-muted);
+    font-size: var(--step-0);
+    font-weight: 500;
   }
   .description {
     margin: 0 0 var(--space-3);

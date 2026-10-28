@@ -171,7 +171,11 @@ async function verifyRenderedResumeDom(
     }
   }
   for (const role of resume.roles) {
-    if (!bodyText.includes(role.employer) || !bodyText.includes(role.title)) {
+    if (
+      !bodyText.includes(role.employer) ||
+      !bodyText.includes(role.title) ||
+      !bodyText.includes(role.duration)
+    ) {
       throw new Error(`Résumé DOM is missing role "${role.title}, ${role.employer}"`)
     }
   }

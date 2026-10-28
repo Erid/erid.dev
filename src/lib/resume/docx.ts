@@ -60,7 +60,7 @@ export async function renderResumeDocx({
         }),
       ],
     }),
-    buildContactParagraph(profile, resume.website, contactEmail),
+    ...buildContactParagraphs(profile, resume.website, contactEmail),
     sectionHeading('Summary'),
     new Paragraph({
       spacing: { after: 160, line: 276 },
@@ -68,12 +68,15 @@ export async function renderResumeDocx({
     }),
   ]
 
-  if (resume.skills.length > 0) {
+  if (resume.skillDetails.length > 0) {
+    const skillLabels = resume.skillDetails.map((skill) =>
+      skill.duration ? `${skill.name} (${skill.duration})` : skill.name,
+    )
     children.push(
       sectionHeading('Core skills'),
       new Paragraph({
         spacing: { after: 140, line: 276 },
-        children: [bodyRun(resume.skills.join(' · '))],
+        children: [bodyRun(skillLabels.join(' · '))],
       }),
     )
   }
@@ -120,30 +123,36 @@ export async function renderResumeDocx({
   return Buffer.from(await Packer.toBuffer(doc))
 }
 
-function buildContactParagraph(
+function buildContactParagraphs(
   profile: Profile,
   website: string,
   contactEmail: string | undefined,
-): Paragraph {
-  const parts: ParagraphChild[][] = [
-    [mutedRun(profile.location)],
+): Paragraph[] {
+  const directRow: ParagraphChild[] = [mutedRun(profile.location)]
+  if (contactEmail) {
+    directRow.push(mutedRun(' · '), linkRun(contactEmail, `mailto:${contactEmail}`))
+  }
+
+  const linkParts: ParagraphChild[][] = [
     [linkRun(website, website)],
     ...profile.links.map((link) => [linkRun(link.label, link.url)]),
   ]
-  if (contactEmail) {
-    parts.push([linkRun(contactEmail, `mailto:${contactEmail}`)])
+  const linksRow: ParagraphChild[] = []
+  for (const [index, part] of linkParts.entries()) {
+    if (index > 0) linksRow.push(mutedRun(' · '))
+    linksRow.push(...part)
   }
 
-  const children: ParagraphChild[] = []
-  for (const [index, part] of parts.entries()) {
-    if (index > 0) children.push(mutedRun(' · '))
-    children.push(...part)
-  }
-
-  return new Paragraph({
-    spacing: { after: 200 },
-    children,
-  })
+  return [
+    new Paragraph({
+      spacing: { after: 30 },
+      children: directRow,
+    }),
+    new Paragraph({
+      spacing: { after: 200 },
+      children: linksRow,
+    }),
+  ]
 }
 
 function sectionHeading(title: string): Paragraph {
@@ -167,7 +176,7 @@ function sectionHeading(title: string): Paragraph {
 }
 
 function buildRoleParagraphs(role: ResumeRole): Paragraph[] {
-  const meta = role.location ? `${role.range} · ${role.location}` : role.range
+  const meta = [role.range, role.duration, role.location].filter(Boolean).join(' · ')
   return [
     new Paragraph({
       heading: HeadingLevel.HEADING_2,
@@ -175,11 +184,18 @@ function buildRoleParagraphs(role: ResumeRole): Paragraph[] {
       spacing: { before: 120, after: 20 },
       children: [
         new TextRun({
-          text: `${role.title}, ${role.employer}`,
+          text: role.title,
           bold: true,
           font: FONT,
-          size: 21,
+          size: 22,
           color: COLOR_INK,
+        }),
+        new TextRun({
+          text: `  ·  ${role.employer}`,
+          bold: false,
+          font: FONT,
+          size: 20,
+          color: COLOR_MUTED,
         }),
       ],
     }),

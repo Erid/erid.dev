@@ -37,7 +37,7 @@ const summaries = buildSkillSummaries(skills, experience, projects)
           <button
             type="button"
             class="chip chip-skill"
-            aria-label={`${skill.name} (${skill.totalDuration} across ${skill.roles.length} ${skill.roles.length === 1 ? 'position' : 'positions'}) — view details`}
+            aria-label={`${skill.name} (${skill.approximateDuration} across ${skill.roles.length} ${skill.roles.length === 1 ? 'position' : 'positions'}) — view details`}
             {...invokerAttrs}
           >
             <span>{skill.name}</span>
@@ -83,7 +83,7 @@ const summaries = buildSkillSummaries(skills, experience, projects)
               </span>
               <div>
                 <span class="stat-label">Total experience</span>
-                <strong class="stat-value">{skill.totalDuration}</strong>
+                <strong class="stat-value">{skill.approximateDuration}</strong>
               </div>
             </div>
             <div class="stat">
