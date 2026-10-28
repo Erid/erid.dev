@@ -1,0 +1,32 @@
+---
+import MessageCircleIcon from '@lucide/astro/icons/message-circle'
+import { encodeContact, normalizeWhatsAppNumber } from '../lib/contact.ts'
+// Renders nothing when CONTACT_WHATSAPP is not configured; the number never appears in the repo.
+const number = normalizeWhatsAppNumber(import.meta.env.CONTACT_WHATSAPP)
+const encoded = encodeContact(number)
+---
+
+{encoded && (
+  <whatsapp-contact data-number={encoded}>
+    <a class="button" href="https://www.whatsapp.com/" rel="noopener noreferrer" data-whatsapp>
+      <MessageCircleIcon size={18} aria-hidden="true" /> Chat on WhatsApp
+    </a>
+  </whatsapp-contact>
+)}
+<script>
+  class WhatsAppContact extends HTMLElement {
+    connectedCallback() {
+      const link = this.querySelector<HTMLAnchorElement>('[data-whatsapp]')
+      if (link && this.dataset.number)
+        link.href = 'https://wa.me/' + [...atob(this.dataset.number)].reverse().join('')
+    }
+  }
+  if (!customElements.get('whatsapp-contact'))
+    customElements.define('whatsapp-contact', WhatsAppContact)
+</script>
+<style>
+  whatsapp-contact {
+    display: block;
+    margin-top: var(--space-3);
+  }
+</style>

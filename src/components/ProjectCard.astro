@@ -20,12 +20,13 @@ const caseStudyHref = project.caseStudy.published ? `/projects/${id}/` : undefin
   {image && (
     <Image src={resolveImage(image.src)} alt={image.alt} width={640} loading="lazy" class="shot" />
   )}
+  <p class="kind">{project.relatedExperience ? 'Professional case study' : 'Personal project'}</p>
   <h3>{project.title}</h3>
   {project.role && <p class="muted role">{project.role}</p>}
   <p>{project.summary}</p>
   {project.technologies.length > 0 && (
     <ul class="chips" aria-label="Technologies">
-      {project.technologies.map((tech) => (
+      {project.technologies.slice(0, 4).map((tech) => (
         <li class="chip chip-quiet">{tech}</li>
       ))}
     </ul>
@@ -59,6 +60,12 @@ const caseStudyHref = project.caseStudy.published ? `/projects/${id}/` : undefin
 </article>
 
 <style>
+  .kind {
+    font-size: var(--step--1);
+    color: var(--accent-strong);
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+  }
   .project {
     display: flex;
     flex-direction: column;

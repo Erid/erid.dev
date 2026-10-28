@@ -24,7 +24,7 @@ function main(): void {
   checkEditorExclusion(files)
   checkDrafts(files)
   for (const page of pages) checkPage(page, files)
-  checkContactEmail(pages)
+  checkContactDetails(pages)
 
   if (problems.length > 0) {
     console.error(`Build verification failed:\n${problems.map((p) => `- ${p}`).join('\n')}`)
@@ -117,13 +117,15 @@ function resolves(target: string, files: string[]): boolean {
   return files.includes(`${target.replace(/\/$/, '')}/index.html`)
 }
 
-function checkContactEmail(pages: string[]): void {
-  const email = process.env['CONTACT_EMAIL']
-  const needles = ['href="mailto:', ...(email ? [email] : [])]
+function checkContactDetails(pages: string[]): void {
+  const secrets = [process.env['CONTACT_EMAIL'], process.env['CONTACT_WHATSAPP']].flatMap(
+    (value) => (value ? [value, value.replace(/\D/g, '')] : []),
+  )
+  const needles = ['href="mailto:', 'href="https://wa.me/', ...secrets.filter((s) => s.length > 5)]
   for (const page of pages) {
     const html = readFileSync(join(distDir, page), 'utf8')
     for (const needle of needles) {
-      if (html.includes(needle)) problems.push(`${page} exposes the contact email (${needle})`)
+      if (html.includes(needle)) problems.push(`${page} exposes a contact detail (${needle})`)
     }
   }
 }

@@ -1,28 +1,16 @@
 # Content status and gaps
 
-Imported from the private LinkedIn extraction (kept in the gitignored `profile/` folder) on
-2026-10-27. Wording is paraphrased from the résumé summary, not copied from LinkedIn.
+Reviewed October 28, 2026. Private source material remains in the gitignored profile/ folder.
 
-## Imported
+## Present
 
-- All 11 observed roles, with month-precision dates and verified employment type/location where shown.
-- Education (year-only dates), languages, core technologies, and the LinkedIn public URL.
-- A résumé selection listing all 11 roles in reverse-chronological order.
+All 13 roles, education, languages, portrait, GitHub and LinkedIn links, four engineering write-ups, and a shared web/PDF/Word résumé model. Visible identity uses Érid; URLs and handles retain Erid.
 
-## Deliberately not imported
+## Awaiting personal input
 
-LinkedIn analytics and follower counts, open-to-work preferences, the third-party recommendation
-text, internal LinkedIn identifiers, and the verbatim role descriptions.
+- Remote/time-zone preferences.
+- WhatsApp is approved and displayed in contact sections. Encoding is only a basic scraping deterrent.
 
-## Needs your input
+## Visuals
 
-- Biography for the about page (`biography` in the profile is blank).
-- Public contact links (email, GitHub) — only LinkedIn is present.
-- A headshot and alt text, if wanted.
-- Full skills list (LinkedIn reports 45; only the top four plus SST and Software Architecture were verified).
-- Certifications and standalone projects: none were displayed; that does not mean none exist.
-- Employment type and location for roles where LinkedIn showed none.
-- Résumé selection and length (about two pages proposed), and any résumé-specific bullets.
-- Technology lists per role were taken from role descriptions and visible skill previews; please check them.
-- Collections for projects, certifications, and posts are not created yet; they will be added when real content exists.
-
+The three SVG overview diagrams are conceptual illustrations, not product screenshots. Replace their image references in project YAML with approved screenshots when ready. Preserve descriptive alt text and avoid private client information.

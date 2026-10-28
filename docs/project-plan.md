@@ -1,11 +1,11 @@
 # erid.dev — project plan
 
-Status: **Draft for Erid's review. Implementation has not started.**
+Status: **Implemented; retained as the historical design plan.**
 
 Prepared: October 27, 2026. Target: `/Users/erid/Development/erid.dev`.
 Repository: `git@github.com:Erid/erid.dev.git`.
 
-The checkout currently contains only Git metadata, with no commits or project files. No existing parent `AGENTS.md` instructions were found in the inspected path. This plan defines the proposed implementation; it does not authorize publishing, changing DNS, or transferring domains.
+This document records the original planning decisions. The site is implemented and published. Current behavior and operating instructions live in README.md, development.md, architecture.md, and deployment.md. Historical proposals below are not a current task list or publication authorization.
 
 ## 1. Product goal and agreed decisions
 
@@ -474,7 +474,7 @@ These do not prevent approving the architecture and foundation work:
 
 Approved planning choices from this conversation: Approachable Professionalism with recruiter-focused summaries and optional deeper stories (revising the earlier photography/storytelling emphasis), English only, MIT code licensing with separate personal-content rights, and TS7 with the TypeScript 6 API compatibility arrangement.
 
-Remaining approval request: approve or amend this implementation plan. Approval starts local implementation through the reviewable milestones; actual publication and DNS cutover remain explicit later actions.
+Implementation is complete. Further publication and DNS changes require authorization.
 
 ## 15. Source notes
 

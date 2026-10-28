@@ -65,13 +65,7 @@ export async function renderResumeDocx({
       spacing: { after: 160, line: 276 },
       children: [bodyRun(resume.summary)],
     }),
-    sectionHeading('Experience'),
-    ...resume.roles.flatMap(buildRoleParagraphs),
   ]
-
-  if (resume.education.length > 0) {
-    children.push(sectionHeading('Education'), ...resume.education.map(buildEducationParagraph))
-  }
 
   if (resume.skills.length > 0) {
     children.push(
@@ -81,6 +75,12 @@ export async function renderResumeDocx({
         children: [bodyRun(resume.skills.join(' · '))],
       }),
     )
+  }
+
+  children.push(sectionHeading('Experience'), ...resume.roles.flatMap(buildRoleParagraphs))
+
+  if (resume.education.length > 0) {
+    children.push(sectionHeading('Education'), ...resume.education.map(buildEducationParagraph))
   }
 
   if (profile.languages.length > 0) {

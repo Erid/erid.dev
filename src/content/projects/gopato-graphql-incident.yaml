@@ -1,9 +1,7 @@
 entry: gopato-graphql-incident
 title: Resolving a Peak-Hour GraphQL Subscription Incident
-summary: >-
-  Diagnosed and patched a live launch-period order service overload at GoPato caused by a GraphQL
-  subscription filter feedback loop, then introduced automated stress testing to prevent fan-out
-  regressions.
+summary: Resolved a launch-period GraphQL subscription overload in a delivery platform. Added
+  automated stress testing to catch future fan-out regressions.
 role: Chief Technology Officer · GoPato
 technologies:
   - GraphQL
@@ -19,27 +17,53 @@ outcomes:
     connection feedback loop on every new order.
   - Shipped a live fix that restored order flow within minutes, followed by stress testing to catch
     subscription fan-out issues before production.
-images: []
+images:
+  - src: images/gopato-graphql-incident-overview.svg
+    alt: 'Conceptual overview: Observe overload → Fix subscription → Stress test'
 relatedExperience: gopato
 caseStudy:
   published: true
-  challenge: |-
-    During launch and peak traffic hours at GoPato, our operations agents noticed that customer orders were not being picked up and delivery drivers could not accept incoming orders.
+  challenge: >-
+    During launch and peak traffic hours at GoPato, our operations agents noticed that customer
+    orders were not being picked up and delivery drivers could not accept incoming orders.
 
-    Inspecting our monitoring dashboard showed that the order service was severely overloaded, even though the rest of the platform remained operational thanks to our microservices boundaries. Because we were in the middle of launching, every minute of degraded order flow risked leaving customers and drivers with a poor first impression.
-  contribution: |-
+
+    Inspecting our monitoring dashboard showed that the order service was severely overloaded, even
+    though the rest of the platform remained operational thanks to our microservices boundaries.
+    Because we were in the middle of launching, every minute of degraded order flow risked leaving
+    customers and drivers with a poor first impression.
+  contribution: >-
     As CTO, I led both the immediate incident response and the live root-cause investigation:
 
-    To buy breathing room for the live system, I first scaled up the number of order service instances. However, resource usage continued climbing rapidly—horizontal scaling alone was not going to hold for long.
 
-    Using Apollo's GraphQL monitoring tooling, I inspected live connection and operation metrics while the overload was happening. The telemetry revealed that certain GraphQL subscriptions were firing at an unexpectedly high rate. Tracing those subscriptions in the codebase uncovered the root cause: the subscription filter logic was not evaluating as originally expected and was creating a feedback loop where every new order triggered a cascade of additional connections and subscription updates.
+    To buy breathing room for the live system, I first scaled up the number of order service
+    instances. However, resource usage continued climbing rapidly—horizontal scaling alone was not
+    going to hold for long.
 
-    I wrote and deployed a targeted patch to fix the subscription filter behavior and break the feedback loop, then worked with the team post-incident to integrate stress testing into our workflow.
-  decisions: |-
-    When the overload hit during peak launch traffic, the immediate decision was to scale order service instances first to reduce customer impact while keeping the system live so we could observe real telemetry rather than guessing at the cause offline.
 
-    Having service isolation (microservices) and dedicated GraphQL connection observability (Apollo tooling) proved decisive: the rest of the platform stayed up while telemetry pointed directly to subscription fan-out rather than database or REST endpoint bottlenecks.
-  outcomes: |-
-    Deploying the subscription filter patch resolved the overload within minutes and restored normal order pickup and driver acceptance. Adding stress testing afterward ensured that high-concurrency subscription behavior was validated before future releases reached production.
+    Using Apollo's GraphQL monitoring tooling, I inspected live connection and operation metrics
+    while the overload was happening. The telemetry revealed that certain GraphQL subscriptions were
+    firing at an unexpectedly high rate. Tracing those subscriptions in the codebase uncovered the
+    root cause: the subscription filter logic was not evaluating as originally expected and was
+    creating a feedback loop where every new order triggered a cascade of additional connections and
+    subscription updates.
+
+
+    I wrote and deployed a targeted patch to fix the subscription filter behavior and break the
+    feedback loop, then worked with the team post-incident to integrate stress testing into our
+    workflow.
+  decisions: >-
+    When the overload hit during peak launch traffic, the immediate decision was to scale order
+    service instances first to reduce customer impact while keeping the system live so we could
+    observe real telemetry rather than guessing at the cause offline.
+
+
+    Having service isolation (microservices) and dedicated GraphQL connection observability (Apollo
+    tooling) proved decisive: the rest of the platform stayed up while telemetry pointed directly to
+    subscription fan-out rather than database or REST endpoint bottlenecks.
+  outcomes:
+    Deploying the subscription filter patch resolved the overload within minutes and restored
+    normal order pickup and driver acceptance. Adding stress testing afterward ensured that
+    high-concurrency subscription behavior was validated before future releases reached production.
 featured: true
 published: true

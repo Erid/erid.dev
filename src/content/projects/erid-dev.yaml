@@ -1,8 +1,7 @@
 entry: erid.dev
 title: erid.dev (this website)
-summary: >-
-  A static, recruiter-focused portfolio and résumé pipeline where a local-only Keystatic editor
-  writes validated YAML and Markdown files that build into plain HTML and a matching résumé PDF.
+summary: Built a static professional website and a shared content pipeline for web, PDF, and Word
+  résumés. Includes a local editor and automated publication checks.
 role: Creator & Maintainer
 date: 2026-10
 technologies:
@@ -19,24 +18,51 @@ outcomes:
   - Strict schema, reference, date-precision, and asset checks run alongside the native TypeScript 7
     compiler in CI.
 repositoryUrl: https://github.com/Erid/erid.dev
-images: []
+images:
+  - src: images/erid-dev-overview.svg
+    alt: 'Conceptual overview: Local content → Validated build → Web · PDF · Word'
 caseStudy:
   published: true
-  challenge: |-
-    Most developer portfolios either hardcode copy inside components—making updates tedious and allowing the web résumé and downloadable PDF to drift apart—or introduce a hosted CMS, database, and runtime server for content that only changes when its author edits it.
+  challenge: >-
+    Most developer portfolios either hardcode copy inside components—making updates tedious and
+    allowing the web résumé and downloadable PDF to drift apart—or introduce a hosted CMS, database,
+    and runtime server for content that only changes when its author edits it.
 
-    The goal for erid.dev was to optimize for a recruiter's ten-second scan (role, core stack, work history, proof of shipped work, and a direct PDF résumé download) while keeping the authoring workflow local, reproducible, and static in production.
-  contribution: |-
-    I designed and implemented the repository as a single pnpm package built with Astro and TypeScript 7:
 
-    Content lives in portable YAML and Markdown files under src/content/ and is validated by shared Zod schemas and a cross-reference checker (pnpm content:check) that verifies résumé role IDs, date precision, case-study completeness, and image existence.
+    The goal for erid.dev was to optimize for a recruiter's ten-second scan (role, core stack, work
+    history, proof of shipped work, and a direct PDF résumé download) while keeping the authoring
+    workflow local, reproducible, and static in production.
+  contribution: >-
+    I designed and implemented the repository as a single pnpm package built with Astro and
+    TypeScript 7:
 
-    During local development (pnpm dev), Keystatic mounts at /keystatic in local storage mode so records can be edited through forms that write directly to the working tree. Production builds omit the Keystatic and React integrations entirely, shipping static HTML and CSS with zero hydrated framework runtime.
-  decisions: |-
-    Keeping the editor strictly local-only eliminated OAuth apps, hosted admin endpoints, and database state while preserving a structured editing UI when wanted and clean Git diffs before every commit.
 
-    To adopt the native TypeScript 7 compiler early without breaking ESLint or Astro's template checker, the project pairs @typescript/native (TS 7) for compiler checks with the documented @typescript/typescript6 compatibility package for tools that still consume the TypeScript 6 JavaScript API.
-  outcomes: |-
-    The site builds in under a second into static assets with a verified content graph, protects the contact email from raw HTML scrapers without a backend form service, and serves as a clean, inspectable code sample in its own right.
+    Content lives in portable YAML and Markdown files under src/content/ and is validated by shared
+    Zod schemas and a cross-reference checker (pnpm content:check) that verifies résumé role IDs,
+    date precision, case-study completeness, and image existence.
+
+
+    During local development (pnpm dev), Keystatic mounts at /keystatic in local storage mode so
+    records can be edited through forms that write directly to the working tree. Production builds
+    omit the Keystatic and React integrations entirely, shipping static HTML and CSS with zero
+    hydrated framework runtime.
+
+
+    I used AI tools to help implement this site while directing the plan and architecture, guiding
+    changes, reviewing the resulting code, and checking behavior through automated tests and visual
+    review.
+  decisions: >-
+    Keeping the editor strictly local-only eliminated OAuth apps, hosted admin endpoints, and
+    database state while preserving a structured editing UI when wanted and clean Git diffs before
+    every commit.
+
+
+    To adopt the native TypeScript 7 compiler early without breaking ESLint or Astro's template
+    checker, the project pairs @typescript/native (TS 7) for compiler checks with the documented
+    @typescript/typescript6 compatibility package for tools that still consume the TypeScript 6
+    JavaScript API.
+  outcomes: The site builds in under a second into static assets with a verified content graph,
+    protects the contact email from raw HTML scrapers without a backend form service, and serves as
+    a clean, inspectable code sample in its own right.
 featured: true
 published: true

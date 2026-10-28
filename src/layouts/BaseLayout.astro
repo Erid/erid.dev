@@ -22,7 +22,7 @@ const [projects, posts] = await Promise.all([getProjects(), getPosts()])
 const nav = [
   { href: '/', label: 'Home' },
   { href: '/experience/', label: 'Experience' },
-  ...(projects.length > 0 ? [{ href: '/projects/', label: 'Projects' }] : []),
+  ...(projects.length > 0 ? [{ href: '/projects/', label: 'Work' }] : []),
   ...(posts.length > 0 ? [{ href: '/writing/', label: 'Writing' }] : []),
   { href: '/about/', label: 'About' },
   { href: '/resume/', label: 'Résumé' },

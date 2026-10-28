@@ -2,6 +2,7 @@
 
 Staging deploys are manual. Production deploys automatically on every push to `main` through
 `.github/workflows/deploy-production.yml`, after `pnpm check` passes. Pull requests only run CI.
+Pushing to `main` therefore publishes the resulting site. Only push there with publication authorization.
 DNS changes are always a separate, explicit action.
 
 The workflow uses a GitHub `production` environment with the secrets `CLOUDFLARE_API_TOKEN`,
@@ -19,8 +20,7 @@ required reviewers to that environment if you want an approval gate.
 
 1. `pnpm check`
 2. `pnpm exec sst deploy --stage staging` (or run the manual **Deploy staging** workflow).
-   SST runs `pnpm build`, so the site and PDF come from the same revision. Staging uses a generated
-   `workers.dev` address and no custom domain.
+   SST runs `pnpm build`, so the site and PDF come from the same revision. Staging requires its own `SITE_DOMAIN` and binds that domain; use a separate staging hostname.
 3. Review the site and the PDF at the printed URL; unknown paths must return a real 404.
 
 ## Domain and production cutover

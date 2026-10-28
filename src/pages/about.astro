@@ -1,4 +1,5 @@
 ---
+import WhatsAppContact from '../components/WhatsAppContact.astro'
 import Actions from '../components/Actions.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { getProfile } from '../lib/content/queries.ts'
@@ -11,9 +12,9 @@ const profile = await getProfile()
   description={`About ${profile.name}: background, working style, and languages.`}
 >
   <div class="container page">
-    <h1>About</h1>
+    <h1>Hi, I’m {profile.name.split(' ')[0]}.</h1>
+    <p class="lead">Based in {profile.location}.</p>
     <div class="prose">
-      <p class="lead">{profile.introduction}</p>
       {profile.biography?.split(/\n{2,}/).map((paragraph) => (
         <p>{paragraph}</p>
       ))}
@@ -34,6 +35,7 @@ const profile = await getProfile()
     <section aria-labelledby="contact-heading">
       <h2 id="contact-heading">Get in touch</h2>
       <Actions links={profile.links} />
+      <WhatsAppContact />
     </section>
   </div>
 </BaseLayout>

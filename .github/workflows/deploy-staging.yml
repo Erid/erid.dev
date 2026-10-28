@@ -21,6 +21,7 @@ jobs:
       CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
       SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
       CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+      CONTACT_WHATSAPP: ${{ secrets.CONTACT_WHATSAPP }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

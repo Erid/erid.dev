@@ -41,6 +41,7 @@ const { role, studies } = Astro.props
     <h1>
       {role.title}, {role.employer}
     </h1>
+    <p class="prose">{role.contributions.join(' ')}</p>
     {role.caseStudy.published && <CaseStudy study={role.caseStudy} />}
     {studies.map((study) => (
       <article class="study-block">
@@ -48,7 +49,7 @@ const { role, studies } = Astro.props
           <a href={`/projects/${study.id}/`}>{study.data.title}</a>
         </h2>
         <p class="lead prose">{study.data.summary}</p>
-        <CaseStudy study={study.data.caseStudy} />
+        <a href={`/projects/${study.id}/`}>Read case study</a>
       </article>
     ))}
   </div>

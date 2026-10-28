@@ -56,6 +56,17 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
       <p class="prose">{resume.summary}</p>
     </section>
 
+    {resume.skills.length > 0 && (
+      <section aria-labelledby="skills-heading">
+        <h2 id="skills-heading">Core skills</h2>
+        <ul class="chips">
+          {resume.skills.map((skill) => (
+            <li class="chip">{skill}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
     <section aria-labelledby="experience-heading">
       <h2 id="experience-heading">Experience</h2>
       {resume.roles.map((role) => (
@@ -85,17 +96,6 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
             <span class="muted"> · {entry.range}</span>
           </p>
         ))}
-      </section>
-    )}
-
-    {resume.skills.length > 0 && (
-      <section aria-labelledby="skills-heading">
-        <h2 id="skills-heading">Core skills</h2>
-        <ul class="chips">
-          {resume.skills.map((skill) => (
-            <li class="chip">{skill}</li>
-          ))}
-        </ul>
       </section>
     )}
 
@@ -161,7 +161,7 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
   h2 {
     font-size: var(--step-1);
     padding-bottom: var(--space-2);
-    border-bottom: 2px solid var(--line);
+    border-bottom: 2px solid var(--accent);
   }
   .role {
     margin-bottom: var(--space-5);
@@ -192,6 +192,7 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
       margin-bottom: 0.7rem;
     }
     .top h1 {
+      color: var(--accent-strong);
       font-size: 19pt;
       margin-bottom: 0.1rem;
     }

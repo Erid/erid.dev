@@ -1,5 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro'
+import { Image } from 'astro:assets'
+import { resolveImage } from '../../lib/images.ts'
 import ArrowLeftIcon from '@lucide/astro/icons/arrow-left'
 import CodeIcon from '@lucide/astro/icons/code'
 import ExternalLinkIcon from '@lucide/astro/icons/external-link'
@@ -83,6 +85,11 @@ const { project, relatedRole } = Astro.props
         )}
       </ul>
     )}
+    {project.images.map((image) => (
+      <figure>
+        <Image src={resolveImage(image.src)} alt={image.alt} width={960} loading="lazy" />
+      </figure>
+    ))}
     {project.outcomes.length > 0 && (
       <aside class="card outcomes prose" aria-labelledby="highlights-heading">
         <h2 id="highlights-heading">Key takeaways</h2>

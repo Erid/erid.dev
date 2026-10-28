@@ -32,6 +32,7 @@ jobs:
       - run: pnpm check
         env:
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+          CONTACT_WHATSAPP: ${{ secrets.CONTACT_WHATSAPP }}
       # Credentials are scoped to this step only. SST runs `pnpm build` itself, which regenerates the
       # site and PDF together from this commit.
       - run: pnpm exec sst deploy --stage production
@@ -39,3 +40,4 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+          CONTACT_WHATSAPP: ${{ secrets.CONTACT_WHATSAPP }}

@@ -2,7 +2,7 @@
 import CheckIcon from '@lucide/astro/icons/check'
 import CopyIcon from '@lucide/astro/icons/copy'
 import MailIcon from '@lucide/astro/icons/mail'
-import { encodeEmail } from '../lib/contact.ts'
+import { encodeContact } from '../lib/contact.ts'
 
 interface Props {
   /** 'button' renders a pill with mailto + copy action; 'inline' renders a plain text link. */
@@ -12,7 +12,7 @@ interface Props {
 const { variant = 'button' } = Astro.props
 
 // Renders nothing when CONTACT_EMAIL is not configured, so a build never ships a dead control.
-const encoded = encodeEmail(import.meta.env.CONTACT_EMAIL)
+const encoded = encodeContact(import.meta.env.CONTACT_EMAIL)
 ---
 
 {encoded &&

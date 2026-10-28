@@ -1,16 +1,14 @@
-name: Erid Baldioceda
+name: Érid Baldioceda
 headline: Senior Full Stack Engineer
-location: Costa Rica
-introduction: >-
-  Senior full stack engineer who builds web and mobile products from initial architecture through
-  delivery, with a background that includes technical leadership, software architecture, and
-  serving as a CTO.
+location: Escazú, Costa Rica
+introduction: I build web and mobile products from architecture through delivery, combining hands-on
+  engineering with experience as a team lead, software architect, and CTO.
 coreTechnologies:
   - React
+  - TypeScript
   - Node.js
   - GraphQL
-  - TypeScript
-  - SST
+  - AWS
 links:
   - label: GitHub
     url: https://github.com/Erid
@@ -22,4 +20,18 @@ languages:
   - name: Spanish
     proficiency: Native or bilingual proficiency
 portrait: images/erid-baldioceda-portrait.jpg
-portraitAlt: Erid Baldioceda smiling at the camera, with short curly hair dyed red and blue
+portraitAlt: Érid Baldioceda smiling at the camera, with short curly hair dyed red and blue
+biography: >-
+  I've been hooked on software development since I was young. I enjoy exploring new technologies,
+  building projects, and experimenting with tools that help me work smarter and faster.
+
+
+  I also use AI tools to help implement software, while guiding architectural decisions and
+  reviewing and validating the result.
+
+
+  Collaboration is a big part of what I enjoy about the work. I've helped create products from
+  scratch and worked across engineering, architecture, and team leadership.
+
+
+  Outside software, I enjoy reading, gaming, and camping.

@@ -26,4 +26,4 @@ export function siteUrl(domain: string): string {
   return `https://${domain}`
 }
 
-export const SITE_NAME = 'Erid Baldioceda'
+export const SITE_NAME = 'Érid Baldioceda'

@@ -1,12 +1,16 @@
-summary: >-
-  Senior full stack engineer with experience spanning software development roles since 2012,
-  including CTO, software architect, and development team lead. Builds web and mobile products
-  from initial architecture through delivery, with experience in healthcare, speech therapy,
-  recycling, workspace management, and delivery platforms. Core technologies include React,
-  Node.js, GraphQL, and TypeScript, with experience in AWS infrastructure, automated testing,
-  real-time communication, payments, and mobile subscriptions.
+summary: Senior full stack engineer with 15+ years of experience building web and mobile products.
+  Combines hands-on engineering with technical leadership as a team lead, software architect, and
+  CTO. Uses AI tools for implementation while directing architecture, reviewing changes, and
+  validating behavior.
 roles:
   - experience: empat-speech
+    bullets:
+      - Built a speech therapy platform from the ground up, combining live video, interactive games,
+        session data collection, and progress analysis.
+      - Designed external PII storage and SQS synchronization with dead-letter queue recovery, plus
+        API-level access controls for student therapy sessions.
+      - Built production LLM workflows for visual stories and clinical reports, with structured
+        outputs, pre-calculated metrics, and references to source sessions.
   - experience: catch-health
   - experience: clevertech
   - experience: rematter
@@ -16,13 +20,19 @@ roles:
   - experience: sbr-technical-lead
   - experience: eleadertech
   - experience: sbr-web-developer
+    bullets:
+      - Developed and maintained dynamic websites.
   - experience: avantica
+    bullets:
+      - Maintained employee time and cost tracking software for payroll and billing.
+  - experience: itecsa
+  - experience: bosz-digital
 education:
   - cenfotec
 skills:
-  - React.js
-  - Node.js
-  - GraphQL
-  - TypeScript
+  - React / React Native
+  - TypeScript / Node.js
+  - GraphQL / PostgreSQL
+  - AWS / SST
+  - Playwright / Storybook
   - Software Architecture
-  - SST

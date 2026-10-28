@@ -28,11 +28,7 @@ const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
   <div class="what">
     <h3>{role.title}</h3>
     <p class="employer">{role.employer}</p>
-    <ul class="contributions">
-      {role.contributions.map((item) => (
-        <li>{item}</li>
-      ))}
-    </ul>
+    <p class="description">{role.contributions.slice(0, compact ? 1 : undefined).join(' ')}</p>
     {!compact && role.technologies.length > 0 && (
       <ul class="chips" aria-label="Technologies">
         {role.technologies.map((tech) => (
@@ -87,13 +83,10 @@ const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
     color: var(--accent-strong);
     font-weight: 600;
   }
-  .contributions {
+  .description {
     margin: 0 0 var(--space-3);
-    padding-left: 1.2rem;
   }
-  .contributions li + li {
-    margin-top: var(--space-1);
-  }
+
   .stories {
     display: flex;
     flex-direction: column;
