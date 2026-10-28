@@ -6,13 +6,19 @@ end: 2016-08
 location: Santa Ana, Costa Rica
 employmentType: Full-time
 contributions:
-  - Provided technical leadership for a product release with an established deadline.
-  - Introduced React as the main rendering library and a Node.js and GraphQL microservices
-    architecture.
+  - >-
+    Provided technical leadership for a product release with an established
+    deadline.
+  - >-
+    Introduced React as the main rendering library and a Node.js and GraphQL
+    microservices architecture.
 technologies:
   - React
   - Node.js
   - GraphQL
   - Software Architecture
+  - PostgreSQL
 links: []
+caseStudy:
+  published: false
 published: true

@@ -4,11 +4,15 @@ title: Chief Technology Officer
 start: 2017-06
 end: 2018-05
 location: Cartago, Costa Rica
+employmentType: ''
 contributions:
-  - Hired and led a team that built a delivery platform from scratch, including customer and
-    driver mobile applications and an internal management web application.
-  - Defined architecture and UX, built a real-time microservices platform, explored C++ drone
-    navigation integration, and worked with stakeholders.
+  - >-
+    Hired and led a team that built a delivery platform from scratch, including
+    customer and driver mobile applications and an internal management web
+    application.
+  - >-
+    Defined architecture and UX, built a real-time microservices platform,
+    explored C++ drone navigation integration, and worked with stakeholders.
 technologies:
   - React
   - React Native
@@ -18,5 +22,10 @@ technologies:
   - C++
   - PostGIS
   - Software Architecture
+  - AWS
+  - Docker
+  - PostgreSQL
 links: []
+caseStudy:
+  published: false
 published: true

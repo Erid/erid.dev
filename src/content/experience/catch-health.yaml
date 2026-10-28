@@ -4,9 +4,12 @@ title: Sr. Full Stack Engineer
 start: 2022-09
 end: 2023-12
 location: Remote
+employmentType: ''
 contributions:
   - Developed a healthcare platform with real-time communication and payments.
-  - Worked across a TypeScript frontend and a Node.js, GraphQL, Hasura, and Prisma backend.
+  - >-
+    Worked across a TypeScript frontend and a Node.js, GraphQL, Hasura, and
+    Prisma backend.
 technologies:
   - React
   - Preact
@@ -19,5 +22,9 @@ technologies:
   - GraphQL
   - Hasura
   - Prisma
+  - Software Architecture
+  - Cursor
 links: []
+caseStudy:
+  published: false
 published: true

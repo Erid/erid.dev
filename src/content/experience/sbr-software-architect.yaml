@@ -6,9 +6,12 @@ end: 2017-06
 location: Santa Ana, Costa Rica
 employmentType: Full-time
 contributions:
-  - Guided architecture and development across teams, improving maintainability, performance,
-    engineering processes, and standards.
-  - Worked on database- and language-agnostic microservices shared across multiple applications.
+  - >-
+    Guided architecture and development across teams, improving maintainability,
+    performance, engineering processes, and standards.
+  - >-
+    Worked on database- and language-agnostic microservices shared across
+    multiple applications.
 technologies:
   - Node.js
   - GraphQL
@@ -16,10 +19,12 @@ technologies:
   - Redux
   - PostgreSQL
   - InfluxDB
-  - Bosum
   - Ruby
   - AWS
   - WebSocket
   - Software Architecture
+  - Kafka
 links: []
+caseStudy:
+  published: false
 published: true

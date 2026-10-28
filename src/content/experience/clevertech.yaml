@@ -19,6 +19,7 @@ technologies:
   - Prisma
   - GraphQL
   - TypeScript
+  - PostgreSQL
 links: []
 caseStudy:
   published: false

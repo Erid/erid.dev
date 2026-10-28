@@ -17,5 +17,8 @@ technologies:
   - SST
   - AWS
   - Software Architecture
+  - PostgreSQL
+  - LLM
+  - Cursor
 links: []
 published: true
