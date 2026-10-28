@@ -1,0 +1,59 @@
+---
+import Actions from '../components/Actions.astro'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getProfile } from '../lib/content/queries.ts'
+
+const profile = await getProfile()
+---
+
+<BaseLayout
+  title="About"
+  description={`About ${profile.name}: background, working style, and languages.`}
+>
+  <div class="container page">
+    <h1>About</h1>
+    <div class="prose">
+      <p class="lead">{profile.introduction}</p>
+      {profile.biography?.split(/\n{2,}/).map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+    {profile.languages.length > 0 && (
+      <section aria-labelledby="languages-heading">
+        <h2 id="languages-heading">Languages</h2>
+        <ul class="plain">
+          {profile.languages.map((language) => (
+            <li>
+              {language.name}
+              <span class="muted"> · {language.proficiency}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+    <section aria-labelledby="contact-heading">
+      <h2 id="contact-heading">Get in touch</h2>
+      <Actions links={profile.links} />
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-6);
+  }
+  .lead {
+    font-size: var(--step-1);
+  }
+  section {
+    margin-top: var(--space-6);
+  }
+  h2 {
+    font-size: var(--step-1);
+  }
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

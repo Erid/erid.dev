@@ -1,0 +1,37 @@
+---
+import type { CaseStudy } from '../lib/content/schemas.ts'
+
+interface Props {
+  study: CaseStudy
+}
+
+const { study } = Astro.props
+
+// Order follows the plan: challenge, contribution, decisions and trade-offs, outcomes.
+const sections = [
+  { heading: 'The challenge', body: study.challenge },
+  { heading: 'My contribution', body: study.contribution },
+  { heading: 'Decisions and trade-offs', body: study.decisions },
+  { heading: 'Outcomes and lessons', body: study.outcomes },
+].filter((section) => section.body)
+---
+
+<div class="prose">
+  {sections.map((section) => (
+    <section>
+      <h2>{section.heading}</h2>
+      {section.body?.split(/\n{2,}/).map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </section>
+  ))}
+</div>
+
+<style>
+  section {
+    margin-bottom: var(--space-5);
+  }
+  h2 {
+    font-size: var(--step-1);
+  }
+</style>

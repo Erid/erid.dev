@@ -1,0 +1,21 @@
+entry: erid.dev
+title: erid.dev (this website)
+summary: >-
+  A static, content-driven portfolio site where a local-only editor writes content files that are
+  reviewed in Git, then built into plain HTML together with a generated résumé PDF.
+role: Designed and built the site end to end.
+date: 2026-10
+technologies:
+  - Astro
+  - TypeScript
+  - Keystatic
+  - SST
+  - Cloudflare
+outcomes: []
+repositoryUrl: https://github.com/Erid/erid.dev
+images: []
+caseStudy:
+  published: false
+featured: true
+# Placeholder: keep unpublished until the repository is public and the site has launched.
+published: false

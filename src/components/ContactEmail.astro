@@ -1,0 +1,42 @@
+---
+import Mail from '@lucide/astro/icons/mail'
+import { encodeEmail } from '../lib/contact.ts'
+
+// Renders nothing when CONTACT_EMAIL is not configured, so a build never ships a dead control.
+const encoded = encodeEmail(import.meta.env.CONTACT_EMAIL)
+---
+
+{encoded && (
+  <contact-email data-encoded={encoded}>
+    <button type="button" class="button" data-reveal>
+      <Mail size={18} aria-hidden="true" />
+      Show email address
+    </button>
+    <a class="button" data-link hidden />
+    <noscript>
+      <span class="muted">Email is revealed with JavaScript. Please use the links above.</span>
+    </noscript>
+  </contact-email>
+)}
+
+<script>
+  // The address is decoded only after a click, so it is never in the delivered HTML.
+  class ContactEmail extends HTMLElement {
+    connectedCallback() {
+      const button = this.querySelector<HTMLButtonElement>('[data-reveal]')
+      const link = this.querySelector<HTMLAnchorElement>('[data-link]')
+      const encoded = this.dataset.encoded
+      if (!button || !link || !encoded) return
+
+      button.addEventListener('click', () => {
+        const address = [...atob(encoded)].reverse().join('')
+        link.href = `mailto:${address}`
+        link.textContent = address
+        link.hidden = false
+        button.hidden = true
+        link.focus()
+      })
+    }
+  }
+  customElements.define('contact-email', ContactEmail)
+</script>

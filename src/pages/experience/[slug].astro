@@ -1,0 +1,47 @@
+---
+import type { GetStaticPaths } from 'astro'
+import ArrowLeft from '@lucide/astro/icons/arrow-left'
+import CaseStudy from '../../components/CaseStudy.astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { formatRange } from '../../lib/content/dates.ts'
+import { getExperience } from '../../lib/content/queries.ts'
+
+// Detail pages exist only for roles with a published case study.
+export const getStaticPaths = (async () => {
+  const experience = await getExperience()
+  return experience
+    .filter(({ data }) => data.caseStudy.published)
+    .map((entry) => ({ params: { slug: entry.id }, props: { role: entry.data } }))
+}) satisfies GetStaticPaths
+
+const { role } = Astro.props
+---
+
+<BaseLayout
+  title={`${role.title} at ${role.employer}`}
+  description={`Case study: ${role.title} at ${role.employer} (${formatRange(role.start, role.end)}).`}
+>
+  <div class="container page">
+    <p>
+      <a href="/experience/">
+        <ArrowLeft size={16} aria-hidden="true" /> All experience
+      </a>
+    </p>
+    <p class="eyebrow">{formatRange(role.start, role.end)}</p>
+    <h1>
+      {role.title}, {role.employer}
+    </h1>
+    <CaseStudy study={role.caseStudy} />
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-6);
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+</style>

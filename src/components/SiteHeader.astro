@@ -1,0 +1,104 @@
+---
+import FileDown from '@lucide/astro/icons/file-down'
+import { RESUME_PDF_PATH } from '../lib/site.ts'
+
+interface Props {
+  name: string
+  nav: { href: string; label: string }[]
+  currentPath: string
+}
+
+const { name, nav, currentPath } = Astro.props
+
+function isCurrent(href: string) {
+  return href === '/' ? currentPath === '/' : currentPath.startsWith(href)
+}
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a class="brand" href="/">
+      {name}
+    </a>
+    <a class="button button-primary download" href={RESUME_PDF_PATH} download>
+      <FileDown size={18} aria-hidden="true" />
+      <span>Résumé (PDF)</span>
+    </a>
+    <nav aria-label="Main">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    padding-block: var(--space-3);
+  }
+  .brand {
+    color: var(--ink);
+    font-weight: 700;
+    font-size: var(--step-1);
+    letter-spacing: -0.015em;
+    text-decoration: none;
+  }
+  nav {
+    /* On narrow screens the links form a second row; the PDF action stays in the first. */
+    order: 3;
+    flex-basis: 100%;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    display: inline-block;
+    padding-block: var(--space-2);
+    color: var(--ink-muted);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover {
+    color: var(--ink);
+  }
+  nav a[aria-current='page'] {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+  .download {
+    min-height: 2.5rem;
+  }
+
+  @media (min-width: 46rem) {
+    nav {
+      order: 0;
+      flex-basis: auto;
+      margin-left: auto;
+    }
+    .download {
+      order: 1;
+    }
+  }
+</style>

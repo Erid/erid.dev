@@ -67,4 +67,3 @@ test('date precision is enforced and empty optional fields count as absent', () 
   assert.equal(entry.end, undefined)
   assert.equal(entry.employmentType, undefined)
 })
-

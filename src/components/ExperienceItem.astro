@@ -1,0 +1,97 @@
+---
+import ArrowRight from '@lucide/astro/icons/arrow-right'
+import { formatRange } from '../lib/content/dates.ts'
+import type { Experience } from '../lib/content/schemas.ts'
+
+interface Props {
+  id: string
+  role: Experience
+  /** Compact entries omit the technology labels (used for the homepage overview). */
+  compact?: boolean
+}
+
+const { id, role, compact = false } = Astro.props
+
+// A detail link exists only when an approved case study is published for this role.
+const detailHref = role.caseStudy.published ? `/experience/${id}/` : undefined
+const meta = [role.location, role.employmentType].filter(Boolean).join(' · ')
+---
+
+<article class="role">
+  <div class="when">
+    <p class="range">{formatRange(role.start, role.end)}</p>
+    {meta && <p class="muted meta">{meta}</p>}
+  </div>
+  <div class="what">
+    <h3>{role.title}</h3>
+    <p class="employer">{role.employer}</p>
+    <ul class="contributions">
+      {role.contributions.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+    {!compact && role.technologies.length > 0 && (
+      <ul class="chips" aria-label="Technologies">
+        {role.technologies.map((tech) => (
+          <li class="chip chip-quiet">{tech}</li>
+        ))}
+      </ul>
+    )}
+    {detailHref && (
+      <p class="story">
+        <a href={detailHref}>
+          Read the case study <ArrowRight size={16} aria-hidden="true" />
+          <span class="visually-hidden">
+            for {role.title} at {role.employer}
+          </span>
+        </a>
+      </p>
+    )}
+  </div>
+</article>
+
+<style>
+  .role {
+    display: grid;
+    gap: var(--space-2) var(--space-5);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+  .range {
+    margin: 0;
+    font-weight: 600;
+  }
+  .meta {
+    margin: 0;
+    font-size: var(--step--1);
+  }
+  h3 {
+    margin-bottom: 0;
+  }
+  .employer {
+    margin: 0 0 var(--space-3);
+    color: var(--accent-strong);
+    font-weight: 600;
+  }
+  .contributions {
+    margin: 0 0 var(--space-3);
+    padding-left: 1.2rem;
+  }
+  .contributions li + li {
+    margin-top: var(--space-1);
+  }
+  .story {
+    margin: var(--space-3) 0 0;
+    font-weight: 600;
+  }
+  .story a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+  @media (min-width: 46rem) {
+    .role {
+      grid-template-columns: 11rem 1fr;
+    }
+  }
+</style>

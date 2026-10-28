@@ -1,0 +1,71 @@
+---
+import type { GetStaticPaths } from 'astro'
+import ArrowLeft from '@lucide/astro/icons/arrow-left'
+import Code from '@lucide/astro/icons/code'
+import ExternalLink from '@lucide/astro/icons/external-link'
+import CaseStudy from '../../components/CaseStudy.astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getProjects } from '../../lib/content/queries.ts'
+
+// Detail pages exist only for projects with a published case study.
+export const getStaticPaths = (async () => {
+  const projects = await getProjects()
+  return projects
+    .filter(({ data }) => data.caseStudy.published)
+    .map((entry) => ({ params: { slug: entry.id }, props: { project: entry.data } }))
+}) satisfies GetStaticPaths
+
+const { project } = Astro.props
+---
+
+<BaseLayout title={project.title} description={project.summary}>
+  <div class="container page">
+    <p>
+      <a href="/projects/">
+        <ArrowLeft size={16} aria-hidden="true" /> All projects
+      </a>
+    </p>
+    <h1>{project.title}</h1>
+    <p class="lead prose">{project.summary}</p>
+    {project.role && <p class="muted">{project.role}</p>}
+    <ul class="chips" aria-label="Technologies">
+      {project.technologies.map((tech) => (
+        <li class="chip chip-quiet">{tech}</li>
+      ))}
+    </ul>
+    <ul class="links">
+      {project.demoUrl && (
+        <li>
+          <a class="button" href={project.demoUrl} rel="noopener">
+            <ExternalLink size={16} aria-hidden="true" /> Live demo
+          </a>
+        </li>
+      )}
+      {project.repositoryUrl && (
+        <li>
+          <a class="button" href={project.repositoryUrl} rel="noopener">
+            <Code size={16} aria-hidden="true" /> View code
+          </a>
+        </li>
+      )}
+    </ul>
+    <CaseStudy study={project.caseStudy} />
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-6);
+  }
+  .lead {
+    font-size: var(--step-1);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: var(--space-4) 0 var(--space-6);
+    padding: 0;
+  }
+</style>

@@ -3,7 +3,9 @@ import { glob } from 'astro/loaders'
 import {
   educationSchema,
   experienceSchema,
+  postSchema,
   profileSchema,
+  projectSchema,
   resumeSchema,
 } from './lib/content/schemas.ts'
 
@@ -28,4 +30,14 @@ const education = defineCollection({
   schema: educationSchema,
 })
 
-export const collections = { profile, resume, experience, education }
+const projects = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/projects' }),
+  schema: projectSchema,
+})
+
+const posts = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/posts' }),
+  schema: postSchema,
+})
+
+export const collections = { profile, resume, experience, education, projects, posts }

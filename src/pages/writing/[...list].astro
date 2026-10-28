@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { formatDay } from '../../lib/content/dates.ts'
+import { getPosts, getProfile } from '../../lib/content/queries.ts'
+
+// With no published articles this route would be empty; it is not generated at all.
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  return posts.length > 0 ? [{ params: { list: undefined } }] : []
+}
+
+const profile = await getProfile()
+const posts = await getPosts()
+---
+
+<BaseLayout title="Writing" description={`Articles by ${profile.name} on software engineering.`}>
+  <div class="container page">
+    <h1>Writing</h1>
+    <ul class="posts">
+      {posts.map((post) => (
+        <li class="card">
+          <h2>
+            <a href={`/writing/${post.id}/`}>{post.data.title}</a>
+          </h2>
+          <p class="muted">{formatDay(post.data.publishedOn)}</p>
+          <p>{post.data.summary}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-6);
+  }
+  .posts {
+    display: grid;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: var(--prose-width);
+  }
+  h2 {
+    font-size: var(--step-1);
+    margin-bottom: var(--space-1);
+  }
+  p {
+    margin-bottom: var(--space-2);
+  }
+</style>

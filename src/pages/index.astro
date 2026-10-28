@@ -1,21 +1,154 @@
 ---
-import { getEntry } from 'astro:content'
+import ArrowRight from '@lucide/astro/icons/arrow-right'
+import MapPin from '@lucide/astro/icons/map-pin'
+import Actions from '../components/Actions.astro'
+import ExperienceItem from '../components/ExperienceItem.astro'
+import Portrait from '../components/Portrait.astro'
+import ProjectCard from '../components/ProjectCard.astro'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getExperience, getProfile, getProjects } from '../lib/content/queries.ts'
 
-const profile = await getEntry('profile', 'profile')
-if (!profile) throw new Error('Missing profile content: src/content/profile.yaml')
-const { name, headline } = profile.data
+const GLANCE_ROLE_COUNT = 5
+
+const profile = await getProfile()
+const experience = await getExperience()
+const featured = (await getProjects()).filter(({ data }) => data.featured)
+
+const description = `${profile.name}, ${profile.headline}. ${profile.introduction}`
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    name: profile.name,
+    jobTitle: profile.headline,
+    url: Astro.site?.href,
+    sameAs: profile.links.map((link) => link.url),
+    knowsAbout: profile.coreTechnologies,
+  },
+}
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{name}</title>
-  </head>
-  <body>
-    <main>
-      <h1>{name}</h1>
-      <p>{headline}</p>
-    </main>
-  </body>
-</html>
+<BaseLayout
+  title={`${profile.name} | ${profile.headline}`}
+  description={description}
+  isHome
+  structuredData={structuredData}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="identity">
+        {profile.portrait && <Portrait path={profile.portrait} alt={profile.portraitAlt ?? ''} />}
+        <div>
+          <p class="eyebrow">{profile.headline}</p>
+          <h1>{profile.name}</h1>
+          <p class="location muted">
+            <MapPin size={16} aria-hidden="true" /> {profile.location}
+          </p>
+        </div>
+      </div>
+      <p class="lead">{profile.introduction}</p>
+      <ul class="chips stack" aria-label="Core technologies">
+        {profile.coreTechnologies.map((tech) => (
+          <li class="chip">{tech}</li>
+        ))}
+      </ul>
+      <Actions links={profile.links} />
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="experience-heading">
+    <div class="section-header">
+      <h2 id="experience-heading">Experience at a glance</h2>
+      <a href="/experience/">
+        Full work history <ArrowRight size={16} aria-hidden="true" />
+      </a>
+    </div>
+    <div>
+      {experience.slice(0, GLANCE_ROLE_COUNT).map(({ id, data }) => (
+        <ExperienceItem id={id} role={data} compact />
+      ))}
+    </div>
+  </section>
+
+  {featured.length > 0 && (
+    <section class="section container" aria-labelledby="work-heading">
+      <div class="section-header">
+        <h2 id="work-heading">Selected work</h2>
+        <a href="/projects/">
+          All projects <ArrowRight size={16} aria-hidden="true" />
+        </a>
+      </div>
+      <div class="grid">
+        {featured.map(({ id, data }) => (
+          <ProjectCard id={id} project={data} />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="section container" aria-labelledby="about-heading">
+    <div class="card about">
+      <h2 id="about-heading">A little more about me</h2>
+      <p>Background, spoken languages, and ways to get in touch.</p>
+      <p>
+        <a href="/about/">
+          About me <ArrowRight size={16} aria-hidden="true" />
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="contact-heading">
+    <h2 id="contact-heading">Get in touch</h2>
+    <p class="muted">Open to senior and lead engineering and architecture roles.</p>
+    <Actions links={profile.links} />
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--line);
+    padding-block: var(--space-6);
+  }
+  .identity {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin-bottom: var(--space-4);
+  }
+  h1 {
+    margin-bottom: var(--space-1);
+  }
+  .eyebrow {
+    color: var(--accent-strong);
+  }
+  .location {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+  }
+  .lead {
+    max-width: var(--prose-width);
+    font-size: var(--step-1);
+    line-height: 1.5;
+  }
+  .stack {
+    margin-bottom: var(--space-5);
+  }
+  .grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+  .about {
+    background: var(--accent-soft);
+    border-color: transparent;
+  }
+  .about p:last-child {
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+</style>

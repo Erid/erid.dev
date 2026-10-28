@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets'
+import { resolveImage } from '../lib/images.ts'
+
+interface Props {
+  path: string
+  alt: string
+  /** Rendered edge length in CSS pixels. */
+  size?: number
+}
+
+const { path, alt, size = 128 } = Astro.props
+---
+
+<!-- The portrait sits in the opening view, so it is eager and high priority. -->
+<Image
+  src={resolveImage(path)}
+  alt={alt}
+  width={size}
+  height={size}
+  densities={[1, 2]}
+  loading="eager"
+  fetchpriority="high"
+  class="portrait"
+  style={`--size: ${size}px`}
+/>
+
+<style>
+  .portrait {
+    width: clamp(5rem, 16vw, var(--size));
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--surface);
+    box-shadow: var(--shadow-md);
+    flex-shrink: 0;
+  }
+</style>

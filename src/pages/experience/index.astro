@@ -1,0 +1,31 @@
+---
+import ExperienceItem from '../../components/ExperienceItem.astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getExperience, getProfile } from '../../lib/content/queries.ts'
+
+const profile = await getProfile()
+const experience = await getExperience()
+---
+
+<BaseLayout
+  title="Experience"
+  description={`Professional history of ${profile.name}: employers, roles, dates, and technologies.`}
+>
+  <div class="container page">
+    <h1>Experience</h1>
+    <p class="muted prose">
+      Roles are listed most recent first. Roles with a written case study link to it.
+    </p>
+    <div>
+      {experience.map(({ id, data }) => (
+        <ExperienceItem id={id} role={data} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-6);
+  }
+</style>

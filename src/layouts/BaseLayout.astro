@@ -1,0 +1,64 @@
+---
+import '../styles/global.css'
+import SiteFooter from '../components/SiteFooter.astro'
+import SiteHeader from '../components/SiteHeader.astro'
+import { getPosts, getProfile, getProjects } from '../lib/content/queries.ts'
+
+interface Props {
+  title: string
+  description: string
+  /** The homepage uses the bare site title. */
+  isHome?: boolean
+  /** Schema.org JSON-LD for the page, serialized into the head. */
+  structuredData?: Record<string, unknown>
+}
+
+const { title, description, isHome = false, structuredData } = Astro.props
+
+const profile = await getProfile()
+const [projects, posts] = await Promise.all([getProjects(), getPosts()])
+
+// Sections appear in navigation only when real published content exists.
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/experience/', label: 'Experience' },
+  ...(projects.length > 0 ? [{ href: '/projects/', label: 'Projects' }] : []),
+  ...(posts.length > 0 ? [{ href: '/writing/', label: 'Writing' }] : []),
+  { href: '/about/', label: 'About' },
+  { href: '/resume/', label: 'Résumé' },
+]
+
+const pageTitle = isHome ? title : `${title} | ${profile.name}`
+const canonical = new URL(Astro.url.pathname, Astro.site)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content={isHome ? 'profile' : 'website'} />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <SiteHeader name={profile.name} nav={nav} currentPath={Astro.url.pathname} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter name={profile.name} links={profile.links} />
+  </body>
+</html>

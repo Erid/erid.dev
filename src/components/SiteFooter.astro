@@ -1,0 +1,56 @@
+---
+interface Props {
+  name: string
+  links: { label: string; url: string }[]
+}
+
+const { name, links } = Astro.props
+---
+
+<footer class="site-footer">
+  <div class="container inner">
+    <p>
+      &copy; {new Date().getFullYear()} {name}
+    </p>
+    <ul>
+      {links.map((link) => (
+        <li>
+          <a href={link.url} rel="me noopener">
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="legal">Site code is MIT licensed. Content and images are all rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-7);
+    border-top: 1px solid var(--line);
+    background: var(--bg-sunken);
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+  }
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    padding-block: var(--space-5);
+    align-items: baseline;
+  }
+  p {
+    margin: 0;
+  }
+  ul {
+    display: flex;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .legal {
+    flex-basis: 100%;
+  }
+</style>

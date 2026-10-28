@@ -1,0 +1,54 @@
+---
+import type { GetStaticPaths } from 'astro'
+import { render } from 'astro:content'
+import ArrowLeft from '@lucide/astro/icons/arrow-left'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { formatDay } from '../../lib/content/dates.ts'
+import { getPosts } from '../../lib/content/queries.ts'
+
+// Drafts are filtered out by getPosts, so they never get a route.
+export const getStaticPaths = (async () => {
+  const posts = await getPosts()
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
+}) satisfies GetStaticPaths
+
+const { post } = Astro.props
+const { Content } = await render(post)
+---
+
+<BaseLayout title={post.data.title} description={post.data.summary}>
+  <article class="container page">
+    <p>
+      <a href="/writing/">
+        <ArrowLeft size={16} aria-hidden="true" /> All writing
+      </a>
+    </p>
+    <h1>{post.data.title}</h1>
+    <p class="muted">
+      <time datetime={post.data.publishedOn}>{formatDay(post.data.publishedOn)}</time>
+      {post.data.updatedOn && (
+        <span>
+          {' '}
+          · Updated <time datetime={post.data.updatedOn}>{formatDay(post.data.updatedOn)}</time>
+        </span>
+      )}
+    </p>
+    <div class="prose body">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-6);
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+  .body :global(h2) {
+    margin-top: var(--space-5);
+  }
+</style>

@@ -1,0 +1,170 @@
+---
+import FileDown from '@lucide/astro/icons/file-down'
+import ContactEmail from '../../components/ContactEmail.astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import {
+  getAllExperienceById,
+  getEducationById,
+  getProfile,
+  getResumeContent,
+} from '../../lib/content/queries.ts'
+import { RESUME_PDF_PATH } from '../../lib/site.ts'
+import { buildResume } from '../../lib/resume/model.ts'
+
+const profile = await getProfile()
+const resume = buildResume(
+  await getResumeContent(),
+  await getAllExperienceById(),
+  await getEducationById(),
+)
+---
+
+<BaseLayout
+  title="Résumé"
+  description={`Résumé of ${profile.name}, ${profile.headline}: experience, education, and core skills.`}
+>
+  <div class="container page">
+    <header class="top">
+      <div>
+        <h1>{profile.name}</h1>
+        <p class="muted">
+          {profile.headline} · {profile.location}
+        </p>
+      </div>
+      <a class="button button-primary" href={RESUME_PDF_PATH} download>
+        <FileDown size={18} aria-hidden="true" /> Download résumé (PDF)
+      </a>
+    </header>
+
+    <ul class="contact">
+      {profile.links.map((link) => (
+        <li>
+          <a href={link.url} rel="me noopener">
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <ContactEmail />
+      </li>
+    </ul>
+
+    <section aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Summary</h2>
+      <p class="prose">{resume.summary}</p>
+    </section>
+
+    <section aria-labelledby="experience-heading">
+      <h2 id="experience-heading">Experience</h2>
+      {resume.roles.map((role) => (
+        <article class="role">
+          <h3>
+            {role.title}, {role.employer}
+          </h3>
+          <p class="muted meta">
+            {role.range}
+            {role.location && ` · ${role.location}`}
+          </p>
+          <ul>
+            {role.bullets.map((bullet) => (
+              <li>{bullet}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </section>
+
+    {resume.education.length > 0 && (
+      <section aria-labelledby="education-heading">
+        <h2 id="education-heading">Education</h2>
+        {resume.education.map((entry) => (
+          <p>
+            <strong>{entry.institution}</strong>, {entry.qualification}
+            <span class="muted"> · {entry.range}</span>
+          </p>
+        ))}
+      </section>
+    )}
+
+    {resume.skills.length > 0 && (
+      <section aria-labelledby="skills-heading">
+        <h2 id="skills-heading">Core skills</h2>
+        <ul class="chips">
+          {resume.skills.map((skill) => (
+            <li class="chip">{skill}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {profile.languages.length > 0 && (
+      <section aria-labelledby="languages-heading">
+        <h2 id="languages-heading">Languages</h2>
+        <ul class="plain">
+          {profile.languages.map((language) => (
+            <li>
+              {language.name}
+              <span class="muted"> · {language.proficiency}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-6);
+  }
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+  .top h1 {
+    margin-bottom: var(--space-1);
+  }
+  .top p {
+    margin: 0;
+  }
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    list-style: none;
+    margin: 0 0 var(--space-5);
+    padding: 0;
+  }
+  section {
+    margin-top: var(--space-6);
+  }
+  h2 {
+    font-size: var(--step-1);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--line);
+  }
+  .role {
+    margin-bottom: var(--space-5);
+  }
+  .role h3 {
+    font-size: var(--step-0);
+    margin-bottom: 0;
+  }
+  .meta {
+    margin: 0 0 var(--space-2);
+    font-size: var(--step--1);
+  }
+  .role ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

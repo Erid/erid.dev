@@ -10,4 +10,3 @@ All personal content is © 2026 Erid Baldioceda, all rights reserved, and is not
 
 You may read this repository and learn from its structure. Please don't republish the content or
 present it as your own.
-

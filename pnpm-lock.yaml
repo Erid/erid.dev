@@ -23,6 +23,9 @@ importers:
       '@keystatic/core':
         specifier: 0.6.9
         version: 0.6.9(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)
+      '@lucide/astro':
+        specifier: 1.62.0
+        version: 1.62.0(astro@7.4.2(@types/node@26.6.5)(idb-keyval@6.3.0)(yaml@2.9.1))
       astro:
         specifier: 7.4.2
         version: 7.4.2(@types/node@26.6.5)(idb-keyval@6.3.0)(yaml@2.9.1)
@@ -671,6 +674,11 @@ packages:
 
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
+
+  '@lucide/astro@1.62.0':
+    resolution: {integrity: sha512-U/bcmjD2qaKtx242Cp86pplKT3jylJEh7X16JJk9tf8Aqasf+vlViYsuxjvQfhKM3Yi3J6RbXHgJWyAhBBwpeA==}
+    peerDependencies:
+      astro: ^4 || ^5 || ^6 || ^7
 
   '@markdoc/markdoc@0.4.0':
     resolution: {integrity: sha512-fSh4P3Y4E7oaKYc2oNzSIJVPDto7SMzAuQN1Iyx53UxzleA6QzRdNWRxmiPqtVDaDi5dELd2yICoG91csrGrAw==}
@@ -3488,6 +3496,10 @@ snapshots:
       keyv: 5.6.0
 
   '@keyv/serialize@1.1.1': {}
+
+  '@lucide/astro@1.62.0(astro@7.4.2(@types/node@26.6.5)(idb-keyval@6.3.0)(yaml@2.9.1))':
+    dependencies:
+      astro: 7.4.2(@types/node@26.6.5)(idb-keyval@6.3.0)(yaml@2.9.1)
 
   '@markdoc/markdoc@0.4.0(@types/react@19.3.0)(react@19.3.1)':
     optionalDependencies:

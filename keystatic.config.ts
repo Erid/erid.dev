@@ -17,6 +17,34 @@ const textList = (label: string) =>
     itemLabel: (props) => props.value || 'Item',
   })
 
+const imageRefs = (label: string) =>
+  fields.array(
+    fields.object({
+      src: fields.text({
+        label: 'Path relative to src/assets',
+        validation: { isRequired: true },
+      }),
+      alt: fields.text({ label: 'Alt text', validation: { isRequired: true } }),
+    }),
+    { label, itemLabel: (props) => props.fields.src.value || 'Image' },
+  )
+
+const caseStudy = () =>
+  fields.object(
+    {
+      published: fields.checkbox({
+        label: 'Publish case study page',
+        description: 'Leave off until the story is approved and complete.',
+        defaultValue: false,
+      }),
+      challenge: fields.text({ label: 'The challenge', multiline: true }),
+      contribution: fields.text({ label: 'My contribution', multiline: true }),
+      decisions: fields.text({ label: 'Decisions and trade-offs', multiline: true }),
+      outcomes: fields.text({ label: 'Verified outcomes and lessons', multiline: true }),
+    },
+    { label: 'Case study' },
+  )
+
 const monthPattern = {
   regex: /^\d{4}-(0[1-9]|1[0-2])$/,
   message: 'Use YYYY-MM, for example 2023-12',
@@ -122,7 +150,80 @@ export default config({
         contributions: textList('Concise contributions'),
         technologies: textList('Technologies'),
         links: links('Links'),
+        caseStudy: caseStudy(),
         published: fields.checkbox({ label: 'Published', defaultValue: true }),
+      },
+    }),
+    projects: collection({
+      label: 'Projects',
+      path: 'src/content/projects/*',
+      slugField: 'entry',
+      format: 'yaml',
+      schema: {
+        entry: fields.slug({ name: { label: 'Entry name (file name becomes the URL slug)' } }),
+        title: fields.text({ label: 'Title', validation: { isRequired: true } }),
+        summary: fields.text({
+          label: 'Summary (problem and contribution)',
+          multiline: true,
+          validation: { isRequired: true },
+        }),
+        role: fields.text({ label: 'My role' }),
+        date: fields.text({
+          label: 'Date (YYYY-MM, optional)',
+          validation: { pattern: monthPattern },
+        }),
+        technologies: textList('Technologies'),
+        outcomes: textList('Verified outcomes'),
+        demoUrl: fields.url({ label: 'Live demo URL' }),
+        repositoryUrl: fields.url({ label: 'Source repository URL' }),
+        images: imageRefs('Images'),
+        relatedExperience: fields.relationship({
+          label: 'Related experience',
+          collection: 'experience',
+        }),
+        caseStudy: caseStudy(),
+        featured: fields.checkbox({ label: 'Show on the homepage', defaultValue: false }),
+        published: fields.checkbox({
+          label: 'Published',
+          description: 'Unpublished projects do not appear anywhere on the site.',
+          defaultValue: false,
+        }),
+      },
+    }),
+    posts: collection({
+      label: 'Posts',
+      path: 'src/content/posts/*',
+      slugField: 'title',
+      // Plain .md files: Keystatic's rich text round-trips ordinary Markdown without custom tags.
+      format: { contentField: 'body' },
+      schema: {
+        title: fields.slug({ name: { label: 'Title' } }),
+        summary: fields.text({
+          label: 'Summary',
+          multiline: true,
+          validation: { isRequired: true },
+        }),
+        publishedOn: fields.text({
+          label: 'Publication date (YYYY-MM-DD)',
+          validation: {
+            isRequired: true,
+            pattern: { regex: /^\d{4}-\d{2}-\d{2}$/, message: 'Use YYYY-MM-DD' },
+          },
+        }),
+        updatedOn: fields.text({ label: 'Last updated (YYYY-MM-DD, optional)' }),
+        cover: fields.object(
+          {
+            src: fields.text({ label: 'Path relative to src/assets' }),
+            alt: fields.text({ label: 'Alt text' }),
+          },
+          { label: 'Cover image (optional)' },
+        ),
+        draft: fields.checkbox({
+          label: 'Draft',
+          description: 'Drafts are excluded from pages, RSS, the sitemap and the PDF.',
+          defaultValue: true,
+        }),
+        body: fields.markdoc({ label: 'Body', extension: 'md' }),
       },
     }),
     education: collection({

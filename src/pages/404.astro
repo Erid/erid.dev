@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="Page not found" description="This page does not exist.">
+  <div class="container page">
+    <h1>Page not found</h1>
+    <p class="prose">That address does not lead anywhere. Try one of these instead:</p>
+    <ul>
+      <li>
+        <a href="/">Home</a>
+      </li>
+      <li>
+        <a href="/experience/">Experience</a>
+      </li>
+      <li>
+        <a href="/resume/">Résumé</a>
+      </li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-6);
+  }
+</style>

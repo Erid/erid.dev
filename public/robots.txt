@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://erid.dev/sitemap-index.xml
+
