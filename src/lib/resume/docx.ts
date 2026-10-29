@@ -75,6 +75,10 @@ export async function renderResumeDocx({
     children.push(
       sectionHeading('Core skills'),
       new Paragraph({
+        spacing: { after: 60 },
+        children: [mutedRun('Approximate time across relevant roles.')],
+      }),
+      new Paragraph({
         spacing: { after: 140, line: 276 },
         children: [bodyRun(skillLabels.join(' · '))],
       }),

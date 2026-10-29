@@ -37,7 +37,7 @@ const summaries = buildSkillSummaries(skills, experience, projects)
           <button
             type="button"
             class="chip chip-skill"
-            aria-label={`${skill.name} (${skill.approximateDuration} across ${skill.roles.length} ${skill.roles.length === 1 ? 'position' : 'positions'}) — view details`}
+            aria-label={`${skill.name} (approximately ${skill.approximateDuration.replace('~', '')} across ${skill.roles.length} ${skill.roles.length === 1 ? 'position' : 'positions'}) — view details`}
             {...invokerAttrs}
           >
             <span>{skill.name}</span>
@@ -82,7 +82,7 @@ const summaries = buildSkillSummaries(skills, experience, projects)
                 <ClockIcon size={18} />
               </span>
               <div>
-                <span class="stat-label">Total experience</span>
+                <span class="stat-label">Approximate time across roles</span>
                 <strong class="stat-value">{skill.approximateDuration}</strong>
               </div>
             </div>
@@ -98,6 +98,10 @@ const summaries = buildSkillSummaries(skills, experience, projects)
               </div>
             </div>
           </div>
+
+          <p class="duration-note muted">
+            Estimated from the dates of roles using this skill; overlapping months are counted once.
+          </p>
 
           {skill.description && <p class="description">{skill.description}</p>}
 
@@ -322,6 +326,11 @@ const summaries = buildSkillSummaries(skills, experience, projects)
     display: block;
     font-size: var(--step-0);
     color: var(--ink);
+  }
+
+  .duration-note {
+    margin: 0;
+    font-size: var(--step--1);
   }
 
   .description {

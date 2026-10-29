@@ -110,6 +110,7 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
           {resume.skillDetails.length > 0 && (
             <section class="side-section" aria-labelledby="skills-heading">
               <h2 id="skills-heading">Core skills</h2>
+              <p class="skill-note muted">Approximate time across relevant roles.</p>
               <ul class="skill-list">
                 {resume.skillDetails.map((skill) => (
                   <li class="skill-item">
@@ -430,6 +431,11 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     margin-bottom: var(--space-3);
   }
 
+  .skill-note {
+    font-size: var(--step--1);
+    margin: 0 0 var(--space-3);
+  }
+
   .skill-list {
     list-style: none;
     margin: 0;
@@ -691,6 +697,11 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
       page-break-inside: avoid;
       print-color-adjust: exact;
       -webkit-print-color-adjust: exact;
+    }
+
+    .skill-note {
+      font-size: 8pt;
+      margin: 0 0 0.25rem;
     }
 
     .skill-list {

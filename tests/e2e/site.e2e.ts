@@ -116,7 +116,7 @@ describe('production site', () => {
 
     const dialog = page.locator('dialog#home-skill-react')
     assert.equal(await dialog.getAttribute('open'), '')
-    assert.match((await dialog.textContent()) ?? '', /Total experience/)
+    assert.match((await dialog.textContent()) ?? '', /Approximate time across roles/)
     assert.match((await dialog.textContent()) ?? '', /Empat Speech/)
 
     await page.keyboard.press('Escape')
