@@ -98,9 +98,9 @@ test('profile schedulingUrl accepts https URLs and normalizes empty values', () 
   }
   const parsedValid = profileSchema.parse({
     ...base,
-    schedulingUrl: 'https://calendar.app.google/X97p2dDzkeBMVbhf7',
+    schedulingUrl: 'https://meet.erid.dev',
   })
-  assert.equal(parsedValid.schedulingUrl, 'https://calendar.app.google/X97p2dDzkeBMVbhf7')
+  assert.equal(parsedValid.schedulingUrl, 'https://meet.erid.dev')
 
   const parsedEmpty = profileSchema.parse({ ...base, schedulingUrl: '' })
   assert.equal(parsedEmpty.schedulingUrl, undefined)
