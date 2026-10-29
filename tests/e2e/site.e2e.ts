@@ -2,7 +2,7 @@ import { spawn, type ChildProcess } from 'node:child_process'
 import { after, before, describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 import { chromium, type Browser } from 'playwright'
-import { RESUME_PDF_PATH } from '../../src/lib/site.ts'
+import { RESUME_DOCX_PATH, RESUME_PDF_PATH } from '../../src/lib/site.ts'
 
 const PORT = 4399
 const origin = `http://127.0.0.1:${PORT}`
@@ -121,6 +121,24 @@ describe('production site', () => {
 
     await page.keyboard.press('Escape')
     assert.equal(await dialog.getAttribute('open'), null)
+    await page.close()
+  })
+
+  it('opens the header résumé format dropdown above main content to download DOCX', async () => {
+    const page = await browser.newPage()
+    await page.goto(origin)
+    const headerDownload = page.locator('.site-header [data-resume-download]')
+    await headerDownload.locator('summary').click()
+
+    const docxLink = headerDownload.locator(`a[href="${RESUME_DOCX_PATH}"]`)
+    assert.ok(await docxLink.isVisible())
+
+    const isTopmost = await docxLink.evaluate((el) => {
+      const rect = el.getBoundingClientRect()
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
+      return Boolean(hit && el.contains(hit))
+    })
+    assert.equal(isTopmost, true, 'expected header dropdown panel to paint above <main>')
     await page.close()
   })
 })
