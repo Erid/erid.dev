@@ -73,7 +73,7 @@ const structuredData = {
       <div class="hero-skills">
         <CoreSkills idPrefix="home-skill" />
       </div>
-      <Actions links={profile.links} includeResume={false} />
+      <Actions links={profile.links} schedulingUrl={profile.schedulingUrl} includeResume={false} />
     </div>
   </section>
 
@@ -151,7 +151,7 @@ const structuredData = {
     <p class="muted">
       Open to senior engineering, software architecture, and technical leadership roles.
     </p>
-    <Actions links={profile.links} />
+    <Actions links={profile.links} schedulingUrl={profile.schedulingUrl} />
     <WhatsAppContact />
   </section>
 </BaseLayout>

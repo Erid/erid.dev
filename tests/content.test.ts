@@ -88,6 +88,29 @@ test('profile firstName and lastName format as fullName', () => {
   assert.equal(fullName(profile), 'Érid Baldioceda')
 })
 
+test('profile schedulingUrl accepts https URLs and normalizes empty values', () => {
+  const base = {
+    firstName: 'Érid',
+    lastName: 'Baldioceda',
+    headline: 'Senior Full Stack Engineer',
+    location: 'Costa Rica',
+    introduction: 'Intro',
+  }
+  const parsedValid = profileSchema.parse({
+    ...base,
+    schedulingUrl: 'https://calendar.app.google/X97p2dDzkeBMVbhf7',
+  })
+  assert.equal(parsedValid.schedulingUrl, 'https://calendar.app.google/X97p2dDzkeBMVbhf7')
+
+  const parsedEmpty = profileSchema.parse({ ...base, schedulingUrl: '' })
+  assert.equal(parsedEmpty.schedulingUrl, undefined)
+
+  const parsedNull = profileSchema.parse({ ...base, schedulingUrl: null })
+  assert.equal(parsedNull.schedulingUrl, undefined)
+
+  assert.throws(() => profileSchema.parse({ ...base, schedulingUrl: 'javascript:alert(1)' }))
+})
+
 test('projects sort by explicit order first, then by date and title', () => {
   const makeProject = (id: string, overrides: Record<string, unknown>) => ({
     id,

@@ -1,4 +1,5 @@
 ---
+import CalendarClockIcon from '@lucide/astro/icons/calendar-clock'
 import CodeIcon from '@lucide/astro/icons/code'
 import ExternalLinkIcon from '@lucide/astro/icons/external-link'
 import ContactEmail from './ContactEmail.astro'
@@ -6,13 +7,15 @@ import ResumeDownload from './ResumeDownload.astro'
 
 interface Props {
   links: { label: string; url: string }[]
+  schedulingUrl?: string | undefined
   includeResume?: boolean
 }
 
-const { links, includeResume = true } = Astro.props
+const { links, schedulingUrl, includeResume = true } = Astro.props
+const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
 ---
 
-<ul class="actions">
+<ul class="actions" role="list">
   {includeResume && (
     <li>
       <ResumeDownload />
@@ -30,9 +33,24 @@ const { links, includeResume = true } = Astro.props
       </a>
     </li>
   ))}
-  <li>
-    <ContactEmail />
-  </li>
+  {schedulingUrl && (
+    <li>
+      <a
+        class="button button-schedule"
+        href={schedulingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <CalendarClockIcon size={18} aria-hidden="true" />
+        Schedule a 1:1<span class="visually-hidden"> (opens in a new tab)</span>
+      </a>
+    </li>
+  )}
+  {hasContactEmail && (
+    <li>
+      <ContactEmail />
+    </li>
+  )}
 </ul>
 
 <style>
@@ -43,5 +61,11 @@ const { links, includeResume = true } = Astro.props
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+  .button-schedule :global(svg) {
+    color: var(--accent);
+  }
+  .button-schedule:hover {
+    border-color: var(--accent);
   }
 </style>

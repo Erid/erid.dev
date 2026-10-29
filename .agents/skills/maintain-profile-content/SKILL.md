@@ -35,6 +35,8 @@ names (`pnpm test` checks this).
   `draft` when ready.
 - **Update core skills:** edit `src/content/skills.yaml`; both the homepage and the résumé (web, PDF,
   and Word) read from this list.
+- **Update contact & scheduling:** edit `src/content/profile.yaml` to update `links` (GitHub, LinkedIn)
+  or `schedulingUrl` (Google Calendar, Calendly, etc.).
 - **Change the résumé:** edit `src/content/resume.yaml`; the website and PDF read the same model.
 
 ## Verify

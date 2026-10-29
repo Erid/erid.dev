@@ -5,7 +5,7 @@ import { z } from 'astro/zod'
 // keystatic.config.ts; tests/keystatic-schema.test.ts keeps the field names aligned.
 
 /** Keystatic saves untouched optional text fields as ''; treat that as "not provided". */
-const emptyToUndefined = (value: unknown) => (value === '' ? undefined : value)
+const emptyToUndefined = (value: unknown) => (value === '' || value === null ? undefined : value)
 
 function optional<T extends z.ZodType>(schema: T) {
   return z.preprocess(emptyToUndefined, schema.optional())
@@ -51,6 +51,7 @@ export const profileSchema = z.object({
     )
     .default([]),
   links: labeledLinks,
+  schedulingUrl: optional(url),
   languages: z
     .array(z.object({ name: z.string().min(1), proficiency: z.string().min(1) }))
     .default([]),

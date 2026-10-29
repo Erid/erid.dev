@@ -81,6 +81,11 @@ export default config({
           },
         ),
         links: links('Public links'),
+        schedulingUrl: fields.url({
+          label: '1:1 scheduling URL (Google Calendar, Calendly, etc., optional)',
+          description:
+            'Public appointment-schedule link shown in the homepage hero and contact sections.',
+        }),
         languages: fields.array(
           fields.object({
             name: fields.text({ label: 'Language', validation: { isRequired: true } }),
