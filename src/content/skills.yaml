@@ -29,3 +29,8 @@ skills:
       Defining system boundaries, PII isolation, microservices, and LLM
       pipelines while leading engineering teams from greenfield design through
       delivery.
+  - name: AI-assisted Development
+    description: >-
+      Planning, implementation, and unit and E2E testing with Cursor, guided by
+      reviewed plans and project-specific rules. Side-project experience with
+      Antigravity and Supabase MCP; GPT-assisted research into complex problems.

@@ -1,8 +1,8 @@
 summary: >-
   Senior full stack engineer with 15+ years of experience building web and
-  mobile products. Combines hands-on engineering with technical leadership as a
-  team lead, software architect, and CTO. Uses AI tools for implementation while
-  directing architecture, reviewing changes, and validating behavior.
+  mobile products, combining hands-on delivery with experience as a team lead,
+  software architect, and CTO. Uses AI-assisted development for planning,
+  implementation, and testing, with human review and project-specific context.
 roles:
   - experience: empat-speech
     bullets:
@@ -11,13 +11,16 @@ roles:
         video, interactive games, session data collection, and progress
         analysis.
       - >-
+        Used Cursor to draft plans for thorough team review, then implement
+        features and unit and E2E tests, guided by project-specific AI rules.
+      - >-
         Designed external PII storage and SQS synchronization with dead-letter
         queue recovery, plus API-level access controls for student therapy
         sessions.
       - >-
-        Built production LLM workflows for visual stories and clinical reports,
-        with structured outputs, pre-calculated metrics, and references to
-        source sessions.
+        Built production LLM workflows with Claude via AWS Bedrock for visual
+        stories and clinical reports, using structured outputs, pre-calculated
+        metrics, and source-session references.
   - experience: catch-health
     bullets: []
   - experience: clevertech

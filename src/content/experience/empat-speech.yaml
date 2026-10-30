@@ -8,6 +8,9 @@ contributions:
     gaming, data collection, and progress analysis.
   - Worked across architecture, DevOps, and LLM technologies, using Storybook and Playwright for
     consistency and regression prevention, and SST and AWS for infrastructure.
+  - Used Cursor to draft plans for thorough team review, then implement features and unit and
+    E2E tests, guided by project-specific AI rules.
+  - Built LLM workflows using primarily Claude models through the AWS Bedrock API.
 technologies:
   - TypeScript
   - React
@@ -20,5 +23,6 @@ technologies:
   - PostgreSQL
   - LLM
   - Cursor
+  - AI-assisted Development
 links: []
 published: true
