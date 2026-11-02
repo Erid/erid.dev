@@ -22,15 +22,47 @@ roles:
         stories and clinical reports, using structured outputs, pre-calculated
         metrics, and source-session references.
   - experience: catch-health
-    bullets: []
+    bullets:
+      - >-
+        Developed a healthcare platform with real-time communication and payments,
+        working across a TypeScript frontend and a Node.js, GraphQL, Hasura, and
+        Prisma backend.
+      - >-
+        Built React and Preact interfaces with Tailwind and Storybook to maintain
+        a consistent, reusable UI library.
+      - >-
+        Used Playwright to reach key application states during development and
+        test user flows for regressions.
   - experience: clevertech
-    bullets: []
+    bullets:
+      - >-
+        Developed web dashboards and a React and Ionic mobile application
+        deployed to the Apple App Store and Google Play Store.
+      - >-
+        Implemented in-app purchases and subscription validation across a
+        TypeScript frontend and a Node.js, GraphQL, and Prisma backend.
   - experience: rematter
-    bullets: []
+    bullets:
+      - >-
+        Developed web and mobile software for scrap metal recycling with React
+        and React Native, working on a Node.js and GraphQL backend with
+        Sequelize and PostgreSQL.
+      - >-
+        Used TypeScript and testing to support reliability, and Storybook to
+        develop reusable UI components.
   - experience: officespace-software
     bullets: []
   - experience: gopato
-    bullets: []
+    bullets:
+      - >-
+        Hired and led a team that built a delivery platform from scratch,
+        connecting customer and driver apps with store and logistics dashboards.
+      - >-
+        Defined architecture and UX and developed the platform with React,
+        React Native, Node.js, GraphQL, and microservices.
+      - >-
+        Built real-time driver tracking and PostGIS-based driver assignment,
+        with delivery duration estimates incorporating live traffic.
   - experience: sbr-software-architect
     bullets: []
   - experience: sbr-technical-lead

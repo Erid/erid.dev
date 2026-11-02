@@ -8,10 +8,11 @@ employmentType: Full-time
 contributions:
   - >-
     Developed mobile applications and web dashboards, including a React and
-    Ionic application deployed to the Apple Store and Google Play Store.
+    Ionic application deployed to the Apple App Store and Google Play Store.
   - >-
-    Implemented in-app purchases and subscription validation across frontend and
-    backend.
+    Implemented in-app purchases and subscription validation across a TypeScript
+    frontend and a Node.js, GraphQL, and Prisma backend.
+  - Collaborated directly with the client and development team daily.
 technologies:
   - React
   - Ionic

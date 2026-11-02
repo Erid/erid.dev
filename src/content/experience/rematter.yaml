@@ -6,8 +6,14 @@ end: 2022-05
 location: Remote
 employmentType: ''
 contributions:
-  - Developed web and mobile software for the scrap metal recycling industry.
-  - Used testing and Storybook to support stability and reusable components.
+  - >-
+    Developed web and mobile software for the scrap metal recycling industry
+    using React, React Native, Next.js, and Apollo GraphQL.
+  - >-
+    Worked on a Node.js and GraphQL backend with Sequelize and PostgreSQL.
+  - >-
+    Used TypeScript and testing to support reliability, and Storybook to
+    develop reusable UI components.
 technologies:
   - React
   - React Native

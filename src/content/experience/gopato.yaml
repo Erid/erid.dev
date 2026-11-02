@@ -7,12 +7,20 @@ location: Cartago, Costa Rica
 employmentType: ''
 contributions:
   - >-
-    Hired and led a team that built a delivery platform from scratch, including
-    customer and driver mobile applications and an internal management web
-    application.
+    Hired and led a team that built a delivery platform from scratch, spanning
+    customer and driver apps, store order tracking, and an internal logistics
+    dashboard with a live map of orders.
   - >-
-    Defined architecture and UX, built a real-time microservices platform,
-    explored C++ drone navigation integration, and worked with stakeholders.
+    Defined architecture and UX and developed the platform with React,
+    React Native, Node.js, GraphQL, and microservices. Delivered the customer
+    web app across browsers, a React Native shell, and Facebook Messenger.
+  - >-
+    Built real-time location tracking for the React Native driver app and used
+    PostGIS for driver assignment logic, with delivery duration estimates
+    incorporating real-time traffic.
+  - >-
+    Explored C++ drone navigation integration and worked with stakeholders on
+    product and technology decisions.
 technologies:
   - React
   - React Native

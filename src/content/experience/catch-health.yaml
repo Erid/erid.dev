@@ -8,8 +8,14 @@ employmentType: ''
 contributions:
   - Developed a healthcare platform with real-time communication and payments.
   - >-
-    Worked across a TypeScript frontend and a Node.js, GraphQL, Hasura, and
-    Prisma backend.
+    Developed backend functionality with Node.js, GraphQL, Hasura, and Prisma
+    in a TypeScript codebase.
+  - >-
+    Built interfaces with React, Preact, Next.js, and Tailwind, using Storybook
+    to maintain a consistent, reusable UI library.
+  - >-
+    Used Playwright to automate navigation to key application states during
+    development and test user flows for regressions.
 technologies:
   - React
   - Preact
