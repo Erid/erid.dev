@@ -9,6 +9,7 @@ import {
   projectSchema,
   resumeSchema,
 } from '../src/lib/content/schemas.ts'
+import { parseInlineCode, parseProseBlocks } from '../src/lib/content/prose.ts'
 import { buildSkillSummaries, formatDuration } from '../src/lib/content/skills.ts'
 import type { ContentSet } from '../src/lib/content/validate.ts'
 import { validateContent } from '../src/lib/content/validate.ts'
@@ -176,4 +177,51 @@ test('buildSkillSummaries merges overlapping and shared boundary months across r
   assert.equal(react.roles.length, 2)
   assert.equal(ts.totalMonths, 16)
   assert.equal(formatDuration(12), '1 yr')
+})
+
+test('parseInlineCode splits inline backtick spans and leaves plain text intact', () => {
+  assert.deepEqual(parseInlineCode('Run `pnpm content:check` in `src/content/`.'), [
+    { type: 'text', value: 'Run ' },
+    { type: 'code', value: 'pnpm content:check' },
+    { type: 'text', value: ' in ' },
+    { type: 'code', value: 'src/content/' },
+    { type: 'text', value: '.' },
+  ])
+  assert.deepEqual(parseInlineCode('No code here'), [{ type: 'text', value: 'No code here' }])
+})
+
+test('parseProseBlocks extracts fenced code blocks and paragraphs with inline code', () => {
+  const input = [
+    'First paragraph with `pnpm dev` and `/keystatic`.',
+    '',
+    '```sh',
+    'pnpm fix',
+    '',
+    'pnpm check',
+    '```',
+    '',
+    'Closing paragraph.',
+  ].join('\n')
+
+  assert.deepEqual(parseProseBlocks(input), [
+    {
+      type: 'paragraph',
+      segments: [
+        { type: 'text', value: 'First paragraph with ' },
+        { type: 'code', value: 'pnpm dev' },
+        { type: 'text', value: ' and ' },
+        { type: 'code', value: '/keystatic' },
+        { type: 'text', value: '.' },
+      ],
+    },
+    {
+      type: 'code',
+      language: 'sh',
+      code: 'pnpm fix\n\npnpm check',
+    },
+    {
+      type: 'paragraph',
+      segments: [{ type: 'text', value: 'Closing paragraph.' }],
+    },
+  ])
 })

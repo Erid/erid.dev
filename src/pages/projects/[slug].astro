@@ -3,11 +3,12 @@ import type { GetStaticPaths } from 'astro'
 import { Image } from 'astro:assets'
 import { resolveImage } from '../../lib/images.ts'
 import ArrowLeftIcon from '@lucide/astro/icons/arrow-left'
-import CodeIcon from '@lucide/astro/icons/code'
 import ExternalLinkIcon from '@lucide/astro/icons/external-link'
 import CaseStudy from '../../components/CaseStudy.astro'
+import GithubIcon from '../../components/GithubIcon.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { formatDate, formatRange } from '../../lib/content/dates.ts'
+import { parseInlineCode } from '../../lib/content/prose.ts'
 import { getAllExperienceById, getProjects } from '../../lib/content/queries.ts'
 
 // Detail pages exist only for projects with a published case study.
@@ -79,7 +80,7 @@ const { project, relatedRole } = Astro.props
         {project.repositoryUrl && (
           <li>
             <a class="button" href={project.repositoryUrl} rel="noopener">
-              <CodeIcon size={16} aria-hidden="true" /> View code
+              <GithubIcon size={16} aria-hidden="true" /> View code
             </a>
           </li>
         )}
@@ -95,7 +96,11 @@ const { project, relatedRole } = Astro.props
         <h2 id="highlights-heading">Key takeaways</h2>
         <ul>
           {project.outcomes.map((outcome) => (
-            <li>{outcome}</li>
+            <li>
+              {parseInlineCode(outcome).map((segment) =>
+                segment.type === 'code' ? <code>{segment.value}</code> : segment.value,
+              )}
+            </li>
           ))}
         </ul>
       </aside>

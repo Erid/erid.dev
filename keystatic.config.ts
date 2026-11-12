@@ -37,10 +37,30 @@ const caseStudy = () =>
         description: 'Leave off until the story is approved and complete.',
         defaultValue: false,
       }),
-      challenge: fields.text({ label: 'The challenge', multiline: true }),
-      contribution: fields.text({ label: 'My contribution', multiline: true }),
-      decisions: fields.text({ label: 'Decisions and trade-offs', multiline: true }),
-      outcomes: fields.text({ label: 'Verified outcomes and lessons', multiline: true }),
+      challenge: fields.text({
+        label: 'The challenge',
+        description:
+          'Separate paragraphs with a blank line. Wrap inline code in `backticks` and code blocks in ``` fences.',
+        multiline: true,
+      }),
+      contribution: fields.text({
+        label: 'My contribution',
+        description:
+          'Separate paragraphs with a blank line. Wrap inline code in `backticks` and code blocks in ``` fences.',
+        multiline: true,
+      }),
+      decisions: fields.text({
+        label: 'Decisions and trade-offs',
+        description:
+          'Separate paragraphs with a blank line. Wrap inline code in `backticks` and code blocks in ``` fences.',
+        multiline: true,
+      }),
+      outcomes: fields.text({
+        label: 'Verified outcomes and lessons',
+        description:
+          'Separate paragraphs with a blank line. Wrap inline code in `backticks` and code blocks in ``` fences.',
+        multiline: true,
+      }),
     },
     { label: 'Case study' },
   )

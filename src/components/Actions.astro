@@ -1,8 +1,8 @@
 ---
 import CalendarClockIcon from '@lucide/astro/icons/calendar-clock'
-import CodeIcon from '@lucide/astro/icons/code'
 import ExternalLinkIcon from '@lucide/astro/icons/external-link'
 import ContactEmail from './ContactEmail.astro'
+import GithubIcon from './GithubIcon.astro'
 import ResumeDownload from './ResumeDownload.astro'
 
 interface Props {
@@ -25,7 +25,7 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     <li>
       <a class="button" href={link.url} rel="me noopener">
         {link.label === 'GitHub' ? (
-          <CodeIcon size={18} aria-hidden="true" />
+          <GithubIcon size={18} aria-hidden="true" />
         ) : (
           <ExternalLinkIcon size={18} aria-hidden="true" />
         )}

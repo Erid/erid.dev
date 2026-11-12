@@ -1,4 +1,5 @@
 ---
+import { parseProseBlocks } from '../lib/content/prose.ts'
 import type { CaseStudy } from '../lib/content/schemas.ts'
 
 interface Props {
@@ -13,16 +14,28 @@ const sections = [
   { heading: 'My contribution', body: study.contribution },
   { heading: 'Decisions and trade-offs', body: study.decisions },
   { heading: 'Outcomes and lessons', body: study.outcomes },
-].filter((section) => section.body)
+].filter((section): section is { heading: string; body: string } => Boolean(section.body))
 ---
 
 <div class="prose">
   {sections.map((section) => (
     <section>
       <h2>{section.heading}</h2>
-      {section.body?.split(/\n{2,}/).map((paragraph) => (
-        <p>{paragraph}</p>
-      ))}
+      {parseProseBlocks(section.body).map((block) =>
+        block.type === 'code' ? (
+          <pre
+            tabindex="0"
+            role="region"
+            aria-label={block.language ? `${block.language} code snippet` : 'Code snippet'}
+          ><code data-language={block.language || undefined}>{block.code}</code></pre>
+        ) : (
+          <p>
+            {block.segments.map((segment) =>
+              segment.type === 'code' ? <code>{segment.value}</code> : segment.value,
+            )}
+          </p>
+        ),
+      )}
     </section>
   ))}
 </div>

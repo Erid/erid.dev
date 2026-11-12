@@ -30,20 +30,20 @@ caseStudy:
     and runtime server for content that only changes when its author edits it.
 
 
-    The goal for erid.dev was to optimize for a recruiter's ten-second scan (role, core stack, work
+    The goal for `erid.dev` was to optimize for a recruiter's ten-second scan (role, core stack, work
     history, proof of shipped work, and a direct PDF résumé download) while keeping the authoring
     workflow local, reproducible, and static in production.
   contribution: >-
-    I designed and implemented the repository as a single pnpm package built with Astro and
+    I designed and implemented the repository as a single `pnpm` package built with Astro and
     TypeScript 7:
 
 
-    Content lives in portable YAML and Markdown files under src/content/ and is validated by shared
-    Zod schemas and a cross-reference checker (pnpm content:check) that verifies résumé role IDs,
+    Content lives in portable YAML and Markdown files under `src/content/` and is validated by shared
+    Zod schemas and a cross-reference checker (`pnpm content:check`) that verifies résumé role IDs,
     date precision, case-study completeness, and image existence.
 
 
-    During local development (pnpm dev), Keystatic mounts at /keystatic in local storage mode so
+    During local development (`pnpm dev`), Keystatic mounts at `/keystatic` in local storage mode so
     records can be edited through forms that write directly to the working tree. Production builds
     omit the Keystatic and React integrations entirely, shipping static HTML and CSS with zero
     hydrated framework runtime.
@@ -59,8 +59,8 @@ caseStudy:
 
 
     To adopt the native TypeScript 7 compiler early without breaking ESLint or Astro's template
-    checker, the project pairs @typescript/native (TS 7) for compiler checks with the documented
-    @typescript/typescript6 compatibility package for tools that still consume the TypeScript 6
+    checker, the project pairs `@typescript/native` (TS 7) for compiler checks with the documented
+    `@typescript/typescript6` compatibility package for tools that still consume the TypeScript 6
     JavaScript API.
   outcomes: The site builds in under a second into static assets with a verified content graph,
     protects the contact email from raw HTML scrapers without a backend form service, and serves as

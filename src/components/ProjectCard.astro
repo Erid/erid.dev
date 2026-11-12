@@ -1,10 +1,10 @@
 ---
 import ArrowRightIcon from '@lucide/astro/icons/arrow-right'
-import CodeIcon from '@lucide/astro/icons/code'
 import ExternalLinkIcon from '@lucide/astro/icons/external-link'
 import { Image } from 'astro:assets'
 import { resolveImage } from '../lib/images.ts'
 import type { Project } from '../lib/content/schemas.ts'
+import GithubIcon from './GithubIcon.astro'
 
 interface Props {
   id: string
@@ -43,7 +43,7 @@ const caseStudyHref = project.caseStudy.published ? `/projects/${id}/` : undefin
     {project.repositoryUrl && (
       <li>
         <a class="button" href={project.repositoryUrl} rel="noopener">
-          <CodeIcon size={16} aria-hidden="true" /> View code
+          <GithubIcon size={16} aria-hidden="true" /> View code
           <span class="visually-hidden">for {project.title}</span>
         </a>
       </li>
