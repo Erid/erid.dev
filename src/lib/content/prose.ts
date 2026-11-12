@@ -63,4 +63,3 @@ function pushParagraphs(blocks: ProseBlock[], chunk: string): void {
     blocks.push({ type: 'paragraph', segments: parseInlineCode(trimmed) })
   }
 }
-

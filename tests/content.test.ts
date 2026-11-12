@@ -80,18 +80,18 @@ test('date precision is enforced and empty optional fields count as absent', () 
 
 test('profile firstName and lastName format as fullName', () => {
   const profile = profileSchema.parse({
-    firstName: 'Érid',
+    firstName: 'Erid',
     lastName: 'Baldioceda',
     headline: 'Senior Full Stack Engineer',
     location: 'Costa Rica',
     introduction: 'Intro',
   })
-  assert.equal(fullName(profile), 'Érid Baldioceda')
+  assert.equal(fullName(profile), 'Erid Baldioceda')
 })
 
 test('profile schedulingUrl accepts https URLs and normalizes empty values', () => {
   const base = {
-    firstName: 'Érid',
+    firstName: 'Erid',
     lastName: 'Baldioceda',
     headline: 'Senior Full Stack Engineer',
     location: 'Costa Rica',

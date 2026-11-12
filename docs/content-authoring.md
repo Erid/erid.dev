@@ -21,7 +21,7 @@ open gaps are tracked in [content-gaps.md](content-gaps.md).
 - Experience: a short description of the product and contribution; deeper stories remain linked.
 - Résumé: concise, specific contribution bullets; spend more space on recent relevant work.
 - Case studies: explain the challenge, personal contribution, trade-offs, and verified outcomes.
-- About: first-person background and interests supplied by Érid, rather than another résumé.
+- About: first-person background and interests supplied by Erid, rather than another résumé.
 
 Project and case-study records share the Work index. Professional work is identified by its related experience; personal work has no employer association. The SVG overview images are replaceable conceptual illustrations.
 
