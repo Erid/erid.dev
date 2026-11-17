@@ -10,9 +10,10 @@ contributions:
     Developed and maintained software using .NET, Oracle SQL, and Android
     technologies, and advised clients on applications.
 technologies:
-  - .NET
+  - .NET Framework
   - Oracle SQL
   - Android
+  - Tableau
 links: []
 caseStudy:
   published: false

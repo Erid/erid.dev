@@ -30,6 +30,7 @@ technologies:
   - Prisma
   - Software Architecture
   - Cursor
+  - tRPC
 links: []
 caseStudy:
   published: false

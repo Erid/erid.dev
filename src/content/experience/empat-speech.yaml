@@ -1,10 +1,12 @@
-entry: Empat Speech — Full Stack Engineer
+entry: Empat Speech — Founding Engineer
 employer: Empat Speech
-title: Full Stack Engineer
+title: Founding Engineer
 start: 2023-12
 end: 2026-11
 location: Remote
 contributions:
+  - First engineering hire, responsible for establishing the platform's architecture, technical foundations,
+    and engineering practices, while leading hands-on full-stack development.
   - Built a speech therapy platform from the ground up, combining video communication, online
     gaming, data collection, and progress analysis.
   - Worked across architecture, DevOps, and LLM technologies, using Storybook and Playwright for
@@ -16,6 +18,7 @@ technologies:
   - TypeScript
   - React
   - Node.js
+  - GraphQL
   - Storybook
   - Playwright
   - SST
@@ -25,5 +28,6 @@ technologies:
   - LLM
   - Cursor
   - AI-assisted Development
+  - tRPC
 links: []
 published: true

@@ -7,6 +7,9 @@ roles:
   - experience: empat-speech
     bullets:
       - >-
+        First engineering hire, responsible for establishing the platform's architecture, technical foundations,
+        and engineering practices, while leading hands-on full-stack development.
+      - >-
         Built a speech therapy platform from the ground up, combining live
         video, interactive games, session data collection, and progress
         analysis.
