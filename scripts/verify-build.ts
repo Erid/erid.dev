@@ -51,7 +51,8 @@ function checkRequiredFiles(files: string[]): void {
     RESUME_DOCX_PATH,
     '/robots.txt',
     '/sitemap-index.xml',
-    '/favicon.svg',
+    '/favicon.png',
+    '/apple-touch-icon.png',
   ]
   for (const path of required) {
     if (!files.includes(path)) problems.push(`Missing required file ${path}`)

@@ -60,7 +60,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site)
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <meta property="og:type" content={isHome ? 'profile' : 'website'} />
     <meta property="og:site_name" content={name} />
     <meta property="og:title" content={pageTitle} />
