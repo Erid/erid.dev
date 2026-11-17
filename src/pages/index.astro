@@ -17,6 +17,7 @@ import {
   getSkills,
 } from '../lib/content/queries.ts'
 import { fullName } from '../lib/content/schemas.ts'
+import { buildHomeDescription } from '../lib/social-preview.ts'
 
 const GLANCE_ROLE_COUNT = 3
 
@@ -30,7 +31,7 @@ const [profile, skills, experience, allProjects, posts] = await Promise.all([
 const name = fullName(profile)
 const featured = allProjects.filter(({ data }) => data.featured)
 
-const description = `${name}, ${profile.headline}. ${profile.introduction}`
+const description = buildHomeDescription(profile, skills)
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'ProfilePage',

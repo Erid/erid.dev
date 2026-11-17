@@ -25,10 +25,7 @@ const resume = buildResume(
 const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
 ---
 
-<BaseLayout
-  title="Résumé"
-  description={`Résumé of ${name}, ${profile.headline}: experience, education, and core skills.`}
->
+<BaseLayout title="Résumé" description={`Résumé of ${name}, ${profile.headline}.`}>
   <div class="container page">
     <div class="resume-sheet">
       <header class="top">

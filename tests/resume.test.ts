@@ -15,6 +15,11 @@ import {
 } from '../src/lib/content/schemas.ts'
 import { renderResumeDocx } from '../src/lib/resume/docx.ts'
 import { buildResume } from '../src/lib/resume/model.ts'
+import {
+  buildHomeDescription,
+  buildSocialImageAlt,
+  renderSocialCardHtml,
+} from '../src/lib/social-preview.ts'
 
 const WEBSITE = 'https://example.test'
 
@@ -130,4 +135,55 @@ test('renderResumeDocx generates a valid .docx archive from the résumé model',
   assert.equal(buffer[2], 0x03)
   assert.equal(buffer[3], 0x04)
   assert.ok(buffer.includes(Buffer.from('word/document.xml')))
+})
+
+test('social preview helpers lead with core skills and render the 1200x630 card HTML', () => {
+  const profile = profileSchema.parse({
+    firstName: 'Erid',
+    lastName: 'Baldioceda',
+    headline: 'Senior Full Stack & AI Engineer',
+    location: 'Escazú, Costa Rica',
+    introduction: 'I build web and mobile products from architecture through delivery.',
+    links: [{ label: 'GitHub', url: 'https://github.com/Erid' }],
+    languages: [{ name: 'English', proficiency: 'Full professional proficiency' }],
+  })
+  const skills = [{ name: 'React' }, { name: 'TypeScript' }, { name: 'Node.js' }]
+  const description = buildHomeDescription(profile, skills)
+  assert.equal(
+    description,
+    '15+ years building web and mobile products. React, TypeScript, Node.js.',
+  )
+  assert.ok(!description.startsWith('Erid Baldioceda'))
+
+  const alt = buildSocialImageAlt(profile, skills)
+  assert.match(alt, /Erid Baldioceda — Senior Full Stack & AI Engineer/)
+  assert.match(alt, /React, TypeScript, Node\.js/)
+
+  const model = buildResume(
+    resumeSchema.parse({
+      summary: 'Senior full stack engineer with 15+ years of experience.',
+      roles: [{ experience: 'one', bullets: ['Shipped software'] }],
+      education: [],
+    }),
+    {
+      one: experienceSchema.parse({
+        entry: 'Acme — Engineer',
+        employer: 'Acme',
+        title: 'Engineer',
+        start: '2020-01',
+        end: '2023-12',
+        contributions: ['Contribution'],
+        technologies: ['React', 'TypeScript'],
+      }),
+    },
+    {},
+    skills,
+    WEBSITE,
+    '2024-01',
+  )
+
+  const html = renderSocialCardHtml({ profile, resume: model })
+  assert.match(html, /Erid Baldioceda/)
+  assert.match(html, /Senior Full Stack &amp; AI Engineer/)
+  assert.match(html, /TypeScript/)
 })

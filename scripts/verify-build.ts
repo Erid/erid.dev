@@ -1,6 +1,14 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
-import { RESUME_DOCX_PATH, RESUME_PDF_PATH, requireSiteDomain, siteUrl } from '../src/lib/site.ts'
+import {
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_PATH,
+  OG_IMAGE_WIDTH,
+  RESUME_DOCX_PATH,
+  RESUME_PDF_PATH,
+  requireSiteDomain,
+  siteUrl,
+} from '../src/lib/site.ts'
 
 const distDir = join(import.meta.dirname, '..', 'dist')
 const problems: string[] = []
@@ -49,6 +57,7 @@ function checkRequiredFiles(files: string[]): void {
     '/resume/index.html',
     RESUME_PDF_PATH,
     RESUME_DOCX_PATH,
+    OG_IMAGE_PATH,
     '/robots.txt',
     '/sitemap-index.xml',
     '/favicon.png',
@@ -59,6 +68,13 @@ function checkRequiredFiles(files: string[]): void {
   }
   if (files.includes(RESUME_PDF_PATH) && statSync(join(distDir, RESUME_PDF_PATH)).size < 10_000) {
     problems.push('Résumé PDF is suspiciously small')
+  }
+  if (files.includes(OG_IMAGE_PATH)) {
+    const ogSize = statSync(join(distDir, OG_IMAGE_PATH)).size
+    if (ogSize < 10_000) problems.push('Open Graph preview image is suspiciously small')
+    if (ogSize > 300 * 1024) {
+      problems.push('Open Graph preview image exceeds WhatsApp 300 KB threshold')
+    }
   }
 }
 
@@ -101,6 +117,21 @@ function checkPage(page: string, files: string[]): void {
   }
   if (!isNotFound && !html.includes(`<link rel="canonical" href="${SITE_URL}`)) {
     problems.push(`${page} has no canonical URL on ${SITE_URL}`)
+  }
+  if (!html.includes(`<meta property="og:image" content="${SITE_URL}${OG_IMAGE_PATH}"`)) {
+    problems.push(`${page} is missing absolute og:image on ${SITE_URL}${OG_IMAGE_PATH}`)
+  }
+  if (!html.includes(`<meta property="og:image:width" content="${OG_IMAGE_WIDTH}"`)) {
+    problems.push(`${page} is missing og:image:width`)
+  }
+  if (!html.includes(`<meta property="og:image:height" content="${OG_IMAGE_HEIGHT}"`)) {
+    problems.push(`${page} is missing og:image:height`)
+  }
+  if (!/<meta property="og:image:alt" content="[^"]+"/.test(html)) {
+    problems.push(`${page} is missing og:image:alt`)
+  }
+  if (!html.includes('<meta name="twitter:card" content="summary_large_image"')) {
+    problems.push(`${page} is missing summary_large_image twitter:card`)
   }
   if ((html.match(/<h1[\s>]/g) ?? []).length !== 1) problems.push(`${page} needs exactly one h1`)
   for (const match of html.matchAll(/<img\b(?![^>]*\balt=)[^>]*>/g)) {

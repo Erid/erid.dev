@@ -2,7 +2,7 @@ import { spawn, type ChildProcess } from 'node:child_process'
 import { after, before, describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 import { chromium, type Browser } from 'playwright'
-import { RESUME_DOCX_PATH, RESUME_PDF_PATH } from '../../src/lib/site.ts'
+import { OG_IMAGE_PATH, RESUME_DOCX_PATH, RESUME_PDF_PATH } from '../../src/lib/site.ts'
 
 const PORT = 4399
 const origin = `http://127.0.0.1:${PORT}`
@@ -33,6 +33,22 @@ describe('production site', () => {
     const response = await page.request.get(`${origin}${RESUME_PDF_PATH}`)
     assert.equal(response.status(), 200)
     assert.match(response.headers()['content-type'] ?? '', /pdf/)
+    await page.close()
+  })
+
+  it('exposes the custom Open Graph preview image and skill-rich description', async () => {
+    const page = await browser.newPage()
+    await page.goto(origin)
+    const ogImage = await page.locator('meta[property="og:image"]').getAttribute('content')
+    assert.ok(ogImage?.endsWith(OG_IMAGE_PATH))
+    const ogDescription = await page
+      .locator('meta[property="og:description"]')
+      .getAttribute('content')
+    assert.match(ogDescription ?? '', /React, TypeScript, Node\.js/)
+    assert.ok((ogDescription?.length ?? 0) <= 120)
+    const response = await page.request.get(`${origin}${OG_IMAGE_PATH}`)
+    assert.equal(response.status(), 200)
+    assert.match(response.headers()['content-type'] ?? '', /image\/png/)
     await page.close()
   })
 

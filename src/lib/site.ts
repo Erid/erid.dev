@@ -4,6 +4,11 @@ export const RESUME_PDF_PATH = '/resume/erid-baldioceda.pdf'
 /** Public path of the generated résumé Word document; the build pipeline writes the file here. */
 export const RESUME_DOCX_PATH = '/resume/erid-baldioceda.docx'
 
+/** Public path of the generated 1200×630 Open Graph preview image; the build pipeline writes it here. */
+export const OG_IMAGE_PATH = '/og-image.png'
+export const OG_IMAGE_WIDTH = 1200
+export const OG_IMAGE_HEIGHT = 630
+
 /**
  * Reads the single source of truth for where the site is served. Every consumer (Astro's `site`,
  * SST, the résumé, robots.txt, build verification) derives from `SITE_DOMAIN`, so staging and

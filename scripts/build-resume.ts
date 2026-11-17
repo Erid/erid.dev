@@ -15,11 +15,21 @@ import {
 } from '../src/lib/content/schemas.ts'
 import { renderResumeDocx } from '../src/lib/resume/docx.ts'
 import { buildResume, type ResumeModel } from '../src/lib/resume/model.ts'
-import { RESUME_DOCX_PATH, RESUME_PDF_PATH, requireSiteDomain, siteUrl } from '../src/lib/site.ts'
+import {
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_PATH,
+  OG_IMAGE_WIDTH,
+  RESUME_DOCX_PATH,
+  RESUME_PDF_PATH,
+  requireSiteDomain,
+  siteUrl,
+} from '../src/lib/site.ts'
+import { renderSocialCardHtml } from '../src/lib/social-preview.ts'
 
 const rootDir = join(import.meta.dirname, '..')
 const distDir = join(rootDir, 'dist')
 const contentDir = join(rootDir, 'src', 'content')
+const assetsDir = join(rootDir, 'src', 'assets')
 
 const MIME_TYPES: Record<string, string> = {
   '.css': 'text/css; charset=utf-8',
@@ -38,8 +48,8 @@ const MIME_TYPES: Record<string, string> = {
 await main()
 
 /**
- * Generates and verifies the résumé PDF and Word (.docx) files inside dist/ from the local build
- * output and normalized content model.
+ * Generates and verifies the résumé PDF, Word (.docx), and Open Graph social preview (.png)
+ * artifacts inside dist/ from the local build output and normalized content model.
  */
 async function main(): Promise<void> {
   const resumeHtmlPath = join(distDir, 'resume', 'index.html')
@@ -52,16 +62,18 @@ async function main(): Promise<void> {
   const resumeContent = readContentFile('resume.yaml', resumeSchema)
   const experience = readContentDirectory('experience', '.yaml', experienceSchema)
   const education = readContentDirectory('education', '.yaml', educationSchema)
+  const domain = requireSiteDomain(process.env)
   const resume = buildResume(
     resumeContent,
     experience,
     education,
     skillsContent.skills,
-    siteUrl(requireSiteDomain(process.env)),
+    siteUrl(domain),
   )
 
   const pdfOutPath = join(distDir, RESUME_PDF_PATH)
   const docxOutPath = join(distDir, RESUME_DOCX_PATH)
+  const ogOutPath = join(distDir, OG_IMAGE_PATH)
   mkdirSync(join(distDir, 'resume'), { recursive: true })
 
   const docxBuffer = await renderResumeDocx({
@@ -71,16 +83,24 @@ async function main(): Promise<void> {
   })
   writeFileSync(docxOutPath, docxBuffer)
 
-  await renderPdfFromBuiltSite(pdfOutPath, fullName(profile), resume)
+  const socialCardHtml = renderSocialCardHtml({
+    profile,
+    resume,
+    portraitDataUri: readAssetDataUri(profile.portrait),
+  })
+
+  await renderPdfAndSocialCard(pdfOutPath, ogOutPath, fullName(profile), resume, socialCardHtml)
 
   const pdfPages = verifyPdfArtifact(pdfOutPath, resume.website, profile.links)
   verifyDocxArtifact(docxOutPath)
+  verifySocialImageArtifact(ogOutPath)
 
   const pdfKb = (statSync(pdfOutPath).size / 1024).toFixed(1)
   const docxKb = (statSync(docxOutPath).size / 1024).toFixed(1)
+  const ogKb = (statSync(ogOutPath).size / 1024).toFixed(1)
   console.log(
-    `Résumé artifacts ready: ${RESUME_PDF_PATH} (${pdfPages} pages, ${pdfKb} KB), ` +
-      `${RESUME_DOCX_PATH} (${docxKb} KB).`,
+    `Résumé & social artifacts ready: ${RESUME_PDF_PATH} (${pdfPages} pages, ${pdfKb} KB), ` +
+      `${RESUME_DOCX_PATH} (${docxKb} KB), ${OG_IMAGE_PATH} (${ogKb} KB).`,
   )
 }
 
@@ -102,10 +122,20 @@ function readContentDirectory<T extends z.ZodType>(
   return entries
 }
 
-async function renderPdfFromBuiltSite(
+function readAssetDataUri(relativePath: string | undefined): string | undefined {
+  if (!relativePath) return undefined
+  const fullPath = join(assetsDir, relativePath)
+  const ext = extname(fullPath).toLowerCase()
+  const mime = ext === '.jpg' || ext === '.jpeg' ? 'image/jpeg' : (MIME_TYPES[ext] ?? 'image/png')
+  return `data:${mime};base64,${readFileSync(fullPath).toString('base64')}`
+}
+
+async function renderPdfAndSocialCard(
   pdfOutPath: string,
+  ogOutPath: string,
   expectedName: string,
   resume: ResumeModel,
+  socialCardHtml: string,
 ): Promise<void> {
   const { server, origin } = await startStaticServer(distDir)
   const browser = await chromium.launch()
@@ -141,6 +171,22 @@ async function renderPdfFromBuiltSite(
       printBackground: true,
       preferCSSPageSize: true,
     })
+
+    const socialContext = await browser.newContext({
+      viewport: { width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT },
+      deviceScaleFactor: 1,
+    })
+    const socialPage = await socialContext.newPage()
+    await socialPage.setContent(socialCardHtml, { waitUntil: 'load' })
+    await socialPage.evaluate(async () => {
+      await document.fonts.ready
+    })
+    await socialPage.screenshot({
+      path: ogOutPath,
+      type: 'png',
+      clip: { x: 0, y: 0, width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT },
+    })
+    await socialContext.close()
   } finally {
     await browser.close()
     await closeServer(server)
@@ -267,5 +313,31 @@ function verifyDocxArtifact(docxPath: string): void {
     bytes[3] !== 0x04
   ) {
     throw new Error(`Invalid .docx archive at ${docxPath}`)
+  }
+}
+
+function verifySocialImageArtifact(pngPath: string): void {
+  const bytes = readFileSync(pngPath)
+  // PNG signature (\x89PNG\r\n\x1a\n) followed by an IHDR chunk with big-endian width and height.
+  if (
+    bytes.length < 24 ||
+    bytes[0] !== 0x89 ||
+    bytes[1] !== 0x50 ||
+    bytes[2] !== 0x4e ||
+    bytes[3] !== 0x47
+  ) {
+    throw new Error(`Invalid PNG header at ${pngPath}`)
+  }
+  const width = bytes.readUInt32BE(16)
+  const height = bytes.readUInt32BE(20)
+  if (width !== OG_IMAGE_WIDTH || height !== OG_IMAGE_HEIGHT) {
+    throw new Error(
+      `Expected ${OG_IMAGE_PATH} to be ${OG_IMAGE_WIDTH}x${OG_IMAGE_HEIGHT}, got ${width}x${height}`,
+    )
+  }
+  if (bytes.length > 300 * 1024) {
+    throw new Error(
+      `${OG_IMAGE_PATH} exceeds WhatsApp's 300 KB link-preview threshold (${bytes.length} bytes)`,
+    )
   }
 }
