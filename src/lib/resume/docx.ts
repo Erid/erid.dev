@@ -69,15 +69,9 @@ export async function renderResumeDocx({
   ]
 
   if (resume.skillDetails.length > 0) {
-    const skillLabels = resume.skillDetails.map((skill) =>
-      skill.duration ? `${skill.name} (${skill.duration})` : skill.name,
-    )
+    const skillLabels = resume.skillDetails.map((skill) => skill.name)
     children.push(
       sectionHeading('Core skills'),
-      new Paragraph({
-        spacing: { after: 60 },
-        children: [mutedRun('Approximate time across relevant roles.')],
-      }),
       new Paragraph({
         spacing: { after: 140, line: 276 },
         children: [bodyRun(skillLabels.join(' · '))],
@@ -163,7 +157,7 @@ function sectionHeading(title: string): Paragraph {
   return new Paragraph({
     heading: HeadingLevel.HEADING_1,
     keepNext: true,
-    spacing: { before: 220, after: 100 },
+    spacing: { before: 120, after: 80 },
     border: {
       bottom: { color: COLOR_LINE, space: 4, style: BorderStyle.SINGLE, size: 8 },
     },
@@ -180,12 +174,12 @@ function sectionHeading(title: string): Paragraph {
 }
 
 function buildRoleParagraphs(role: ResumeRole): Paragraph[] {
-  const meta = [role.range, role.duration, role.location].filter(Boolean).join(' · ')
+  const meta = [role.range, role.location].filter(Boolean).join(' · ')
   return [
     new Paragraph({
       heading: HeadingLevel.HEADING_2,
       keepNext: true,
-      spacing: { before: 120, after: 20 },
+      spacing: { before: 80, after: 20 },
       children: [
         new TextRun({
           text: role.title,
@@ -211,8 +205,9 @@ function buildRoleParagraphs(role: ResumeRole): Paragraph[] {
     ...role.bullets.map(
       (bullet, index) =>
         new Paragraph({
-          bullet: { level: 0 },
-          spacing: { after: index === role.bullets.length - 1 ? 120 : 40, line: 264 },
+          ...(role.bullets.length > 1 ? { bullet: { level: 0 } } : {}),
+          keepNext: index < role.bullets.length - 1,
+          spacing: { after: index === role.bullets.length - 1 ? 80 : 30, line: 240 },
           children: [bodyRun(bullet)],
         }),
     ),

@@ -73,41 +73,11 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
       </section>
 
       <div class="resume-columns">
-        <div class="main-column">
-          <section class="experience-section" aria-labelledby="experience-heading">
-            <h2 id="experience-heading">Experience</h2>
-            <div class="timeline">
-              {resume.roles.map((role) => (
-                <article class="role">
-                  <header class="role-header">
-                    <div class="role-top">
-                      <h3>{role.title}</h3>
-                      <div class="role-dates">
-                        <span class="range">{role.range}</span>
-                        <span class="duration-pill">{role.duration}</span>
-                      </div>
-                    </div>
-                    <p class="role-company">
-                      <span class="employer">{role.employer}</span>
-                      {role.location && <span class="location"> · {role.location}</span>}
-                    </p>
-                  </header>
-                  <ul>
-                    {role.bullets.map((bullet) => (
-                      <li>{bullet}</li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-          </section>
-        </div>
-
         <aside class="side-column" aria-label="Core skills, education, and languages">
           {resume.skillDetails.length > 0 && (
             <section class="side-section" aria-labelledby="skills-heading">
               <h2 id="skills-heading">Core skills</h2>
-              <p class="skill-note muted">Approximate time across relevant roles.</p>
+
               <ul class="skill-list">
                 {resume.skillDetails.map((skill) => (
                   <li class="skill-item">
@@ -116,7 +86,6 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
                     >
                       {skill.name}
                     </span>
-                    {skill.duration && <span class="skill-duration">{skill.duration}</span>}
                   </li>
                 ))}
               </ul>
@@ -152,6 +121,38 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
             </section>
           )}
         </aside>
+        <div class="main-column">
+          <section class="experience-section" aria-labelledby="experience-heading">
+            <h2 id="experience-heading">Experience</h2>
+            <div class="timeline">
+              {resume.roles.map((role) => (
+                <article class="role">
+                  <header class="role-header">
+                    <div class="role-top">
+                      <h3>{role.title}</h3>
+                      <div class="role-dates">
+                        <span class="range">{role.range}</span>
+                      </div>
+                    </div>
+                    <p class="role-company">
+                      <span class="employer">{role.employer}</span>
+                      {role.location && <span class="location"> · {role.location}</span>}
+                    </p>
+                  </header>
+                  {role.bullets.length === 1 ? (
+                    <p class="role-description">{role.bullets[0]}</p>
+                  ) : (
+                    <ul>
+                      {role.bullets.map((bullet) => (
+                        <li>{bullet}</li>
+                      ))}
+                    </ul>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   </div>
@@ -284,6 +285,14 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
 
     .resume-columns {
       grid-template-columns: minmax(0, 1fr) 18.5rem;
+      .main-column {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .side-column {
+        grid-column: 2;
+        grid-row: 1;
+      }
       gap: var(--space-6);
     }
   }
@@ -386,16 +395,8 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     font-weight: 500;
   }
 
-  .duration-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.1rem 0.55rem;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent-strong);
-    font-size: 0.76rem;
-    font-weight: 600;
-    white-space: nowrap;
+  .role-description {
+    margin: 0;
   }
 
   .role ul {
@@ -428,11 +429,6 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     margin-bottom: var(--space-3);
   }
 
-  .skill-note {
-    font-size: var(--step--1);
-    margin: 0 0 var(--space-3);
-  }
-
   .skill-list {
     list-style: none;
     margin: 0;
@@ -463,18 +459,6 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
   .skill-name-compact {
     font-size: 0.8rem;
     letter-spacing: -0.01em;
-  }
-
-  .skill-duration {
-    flex-shrink: 0;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--accent-strong);
-    background: var(--accent-soft);
-    padding: 0.08rem 0.45rem;
-    border-radius: 999px;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
   }
 
   .edu-list {
@@ -601,9 +585,12 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     }
 
     .resume-columns {
-      grid-template-columns: minmax(0, 1fr) 2.25in;
-      gap: 0.25in;
+      display: block;
       margin-top: 0.5rem;
+    }
+
+    .experience-section > h2 {
+      display: flow-root;
     }
 
     .experience-section h2,
@@ -628,6 +615,7 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     }
 
     .role {
+      display: flow-root;
       padding-bottom: 0.42rem;
       break-inside: avoid;
       page-break-inside: avoid;
@@ -667,17 +655,11 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
       gap: 0.25rem;
     }
 
-    .duration-pill {
-      font-size: 7.5pt;
-      padding: 0.05rem 0.38rem;
-      print-color-adjust: exact;
-      -webkit-print-color-adjust: exact;
-    }
-
     .role ul {
       padding-inline-start: 0.95rem;
     }
 
+    .role-description,
     .role li {
       font-size: 8.85pt;
       line-height: 1.34;
@@ -685,6 +667,9 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     }
 
     .side-column {
+      float: right;
+      width: 2.05in;
+      margin: 0 0 0.5rem 0.25in;
       gap: 0.45rem;
     }
 
@@ -694,11 +679,6 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
       page-break-inside: avoid;
       print-color-adjust: exact;
       -webkit-print-color-adjust: exact;
-    }
-
-    .skill-note {
-      font-size: 8pt;
-      margin: 0 0 0.25rem;
     }
 
     .skill-list {
@@ -716,13 +696,6 @@ const hasContactEmail = Boolean(import.meta.env.CONTACT_EMAIL)
     .skill-name-compact {
       font-size: 7.5pt;
       letter-spacing: -0.015em;
-    }
-
-    .skill-duration {
-      font-size: 7.4pt;
-      padding: 0.04rem 0.32rem;
-      print-color-adjust: exact;
-      -webkit-print-color-adjust: exact;
     }
 
     .edu-qualification,

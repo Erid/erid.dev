@@ -220,7 +220,7 @@ async function verifyRenderedResumeDom(
     if (
       !bodyText.includes(role.employer) ||
       !bodyText.includes(role.title) ||
-      !bodyText.includes(role.duration)
+      !bodyText.includes(role.range)
     ) {
       throw new Error(`Résumé DOM is missing role "${role.title}, ${role.employer}"`)
     }

@@ -6,13 +6,11 @@ end: 2021-09
 location: Escazú, Costa Rica
 employmentType: Full-time
 contributions:
-  - >-
-    Led the core development team in Costa Rica for a facilities and workspace
-    management application, combining development and management
-    responsibilities.
-  - >-
-    Worked on a visual floorplan application using React and Pixi.js, backed by
-    a Ruby on Rails GraphQL API.
+  - Led a core development team of approximately six people, partnering with the CTO, Design, and
+    other engineering teams to turn requirements into production features with a focus on quality
+    and performance.
+  - Built features for a visual floorplan application using React and Pixi.js, backed by a Ruby on
+    Rails GraphQL API.
 technologies:
   - React
   - Pixi.js

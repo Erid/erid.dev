@@ -7,6 +7,8 @@ location: Remote
 employmentType: ''
 contributions:
   - >-
+    Improved perceived responsiveness and reduced redundant network requests through client-side caching, optimistic UI updates, and request batching.
+  - >-
     Developed web and mobile software for the scrap metal recycling industry
     using React, React Native, Next.js, and Apollo GraphQL.
   - >-

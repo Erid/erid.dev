@@ -5,15 +5,18 @@ start: 2023-12
 end: 2026-11
 location: Remote
 contributions:
-  - First engineering hire, responsible for establishing the platform's architecture, technical foundations,
-    and engineering practices, while leading hands-on full-stack development.
-  - Built a speech therapy platform from the ground up, combining video communication, online
-    gaming, data collection, and progress analysis.
-  - Worked across architecture, DevOps, and LLM technologies, using Storybook and Playwright for
-    consistency and regression prevention, and SST and AWS for infrastructure.
-  - Used Cursor to draft plans for thorough team review, then implement features and unit and
-    E2E tests, guided by project-specific AI rules.
-  - Built LLM workflows using primarily Claude models through the AWS Bedrock API.
+  - First engineering hire; owned architecture, infrastructure, CI/CD, and full-stack delivery,
+    working directly with therapists, the CEO, and CTO to turn requirements and operational problems
+    into product improvements.
+  - Built a speech therapy platform used by approximately 10 therapists across an estimated 15
+    schools, combining live video, interactive games, session data collection, and progress
+    analysis.
+  - Built progress reporting and compliance workflows that reduced therapists’ time spent on those
+    tasks by an estimated 80%, freeing time for therapy.
+  - Built production LLM workflows with Claude via AWS Bedrock for visual stories and clinical
+    reports, using structured outputs, pre-calculated metrics, and source-session references.
+  - Designed external PII storage and SQS synchronization with dead-letter queue recovery, plus
+    API-level access controls for student therapy sessions.
 technologies:
   - TypeScript
   - React

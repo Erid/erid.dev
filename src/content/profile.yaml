@@ -1,11 +1,12 @@
 firstName: Erid
 lastName: Baldioceda
-headline: Senior Full Stack & AI Engineer
+headline: Full-Stack Engineer | Architecture & Product Delivery
 location: Escazú, Costa Rica
 introduction: >-
   I build web and mobile products from architecture through delivery, combining
   hands-on engineering with experience as a team lead, software architect, and
-  CTO. My regular workflow includes AI-assisted planning, implementation, and
+  CTO. I also build production LLM workflows with Claude and AWS Bedrock.
+  My regular workflow includes AI-assisted planning, implementation, and
   testing, guided by reviewed plans and project-specific rules.
 biography: >-
   I've been hooked on software development since I was young. I enjoy exploring
@@ -33,7 +34,7 @@ languages:
     proficiency: Full professional proficiency
   - name: Spanish
     proficiency: Native or bilingual proficiency
-  - name: 日本語
+  - name: Japanese
     proficiency: Beginner
 portrait: images/erid-baldioceda.jpeg
 portraitAlt: Erid looking to the right, with short curly hair and with an orange cat on his shoulders

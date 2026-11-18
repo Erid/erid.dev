@@ -1,71 +1,54 @@
-summary: >-
-  Senior full stack engineer with 15+ years of experience building web and
-  mobile products, combining hands-on delivery with experience as a team lead,
-  software architect, and CTO. Uses AI-assisted development for planning,
-  implementation, and testing, with human review and project-specific context.
+summary: Full-stack engineer with 15+ years building web and mobile products, including
+  first-engineer ownership, architecture, team leadership, and CTO experience. Built platforms from
+  the ground up and production LLM workflows with Claude and AWS Bedrock. Combines hands-on product
+  delivery with AI-assisted development.
 roles:
   - experience: empat-speech
     bullets:
-      - >-
-        First engineering hire, responsible for establishing the platform's architecture, technical foundations,
-        and engineering practices, while leading hands-on full-stack development.
-      - >-
-        Built a speech therapy platform from the ground up, combining live
-        video, interactive games, session data collection, and progress
+      - First engineering hire; owned architecture, infrastructure, CI/CD, and full-stack delivery,
+        working directly with therapists, the CEO, and CTO to turn requirements and operational
+        problems into product improvements.
+      - Built a speech therapy platform used by approximately 10 therapists across an estimated 15
+        schools, combining live video, interactive games, session data collection, and progress
         analysis.
-      - >-
-        Used Cursor to draft plans for thorough team review, then implement
-        features and unit and E2E tests, guided by project-specific AI rules.
-      - >-
-        Designed external PII storage and SQS synchronization with dead-letter
-        queue recovery, plus API-level access controls for student therapy
-        sessions.
-      - >-
-        Built production LLM workflows with Claude via AWS Bedrock for visual
-        stories and clinical reports, using structured outputs, pre-calculated
-        metrics, and source-session references.
+      - Built progress reporting and compliance workflows that reduced therapists’ time spent on
+        those tasks by an estimated 80%, freeing time for therapy.
+      - Built production LLM workflows with Claude via AWS Bedrock for visual stories and clinical
+        reports, using structured outputs, pre-calculated metrics, and source-session references.
+      - Designed external PII storage and SQS synchronization with dead-letter queue recovery, plus
+        API-level access controls for student therapy sessions.
   - experience: catch-health
     bullets:
-      - >-
-        Developed a healthcare platform with real-time communication and payments,
-        working across a TypeScript frontend and a Node.js, GraphQL, Hasura, and
-        Prisma backend.
-      - >-
-        Built React and Preact interfaces with Tailwind and Storybook to maintain
-        a consistent, reusable UI library.
-      - >-
-        Used Playwright to reach key application states during development and
-        test user flows for regressions.
+      - Developed a healthcare platform with real-time communication and payments, working across a
+        TypeScript frontend and a Node.js, GraphQL, Hasura, and Prisma backend.
+      - Built React and Preact interfaces with Tailwind and Storybook to maintain a consistent,
+        reusable UI library.
+      - Used Playwright to reach key application states during development and test user flows for
+        regressions.
   - experience: clevertech
     bullets:
-      - >-
-        Developed web dashboards and a React and Ionic mobile application
-        deployed to the Apple App Store and Google Play Store.
-      - >-
-        Implemented in-app purchases and subscription validation across a
-        TypeScript frontend and a Node.js, GraphQL, and Prisma backend.
+      - Developed web dashboards and a React and Ionic mobile application deployed to the Apple App
+        Store and Google Play Store.
+      - Implemented in-app purchases and subscription validation across a TypeScript frontend and a
+        Node.js, GraphQL, and Prisma backend.
   - experience: rematter
     bullets:
-      - >-
-        Developed web and mobile software for scrap metal recycling with React
-        and React Native, working on a Node.js and GraphQL backend with
-        Sequelize and PostgreSQL.
-      - >-
-        Used TypeScript and testing to support reliability, and Storybook to
-        develop reusable UI components.
+      - Developed web and mobile software for scrap metal recycling with React and React Native,
+        working on a Node.js and GraphQL backend with Sequelize and PostgreSQL.
+      - Improved perceived responsiveness and reduced redundant network requests through client-side caching, optimistic UI updates, and request batching.
   - experience: officespace-software
     bullets: []
   - experience: gopato
     bullets:
-      - >-
-        Hired and led a team that built a delivery platform from scratch,
-        connecting customer and driver apps with store and logistics dashboards.
-      - >-
-        Defined architecture and UX and developed the platform with React,
-        React Native, Node.js, GraphQL, and microservices.
-      - >-
-        Built real-time driver tracking and PostGIS-based driver assignment,
-        with delivery duration estimates incorporating live traffic.
+      - Hired three full-time developers, one part-time developer, and a full-time UX designer to
+        build a delivery platform spanning customer and driver apps, store order tracking, and
+        logistics dashboards.
+      - Owned architecture, infrastructure, delivery workflows, and live troubleshooting; shaped
+        product priorities with the CEO and marketing team while developing with React, React
+        Native, Node.js, and GraphQL.
+      - Supported an estimated 200–300 concurrent customers at peak hours, dozens of drivers, and
+        approximately 10 operations agents; built real-time tracking and PostGIS-based driver
+        assignment.
   - experience: sbr-software-architect
     bullets: []
   - experience: sbr-technical-lead
@@ -77,9 +60,7 @@ roles:
       - Developed and maintained dynamic websites.
   - experience: avantica
     bullets:
-      - >-
-        Maintained employee time and cost tracking software for payroll and
-        billing.
+      - Maintained employee time and cost tracking software for payroll and billing.
   - experience: itecsa
     bullets: []
   - experience: bosz-digital
